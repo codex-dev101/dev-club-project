@@ -1,46 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather App</title>
-  <link rel="icon" type="image/png" href="icon.png">
-  <link rel="stylesheet" href="style.css">
+  <title>Smart CBT Examination</title>
+  <!-- Google Fonts for clean, modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main class="container">
-    <section class="weather-card">
-      <header class="search-container">
-        <input type="text" id="cityInput" placeholder="Search City....">
-        <button id="searchBtn">🔍</button>
-        <div id="cityList" class="city-list"></div>
-      </header>
-      <p id="currentDateTime" class="date-time">Loading date.......</p>
-      <p id="currentLocation" class="location-text">Detecting your location...</p>
-      <h1 id="cityName"></h1>
-      <h2 id="temperature"></h2>
-      <p id="description">...</p>
-      <section class="weather-info">
-        <div class="info">
-          <h3>Humidity</h3>
-          <p id="humidity"></p>
+
+  <!-- Top Dark Navy Header -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <h1 class="exam-title">Smart CBT Examination</h1>
+
+      <!-- Timer Section -->
+      <div class="timer-container" id="timerContainer">
+        <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <div class="timer-text-group">
+          <span class="timer-label">Time Left</span>
+          <span class="timer-display" id="timerDisplay">00:45:00</span>
         </div>
-        <div class="info">
-          <h3>Wind</h3>
-          <p id="wind"></p>
+      </div>
+
+      <!-- Submit Exam Button -->
+      <button type="button" class="btn-submit-exam" id="btnSubmitExam">Submit Exam</button>
+    </div>
+  </header>
+
+  <!-- Main Exam Content Area -->
+  <main class="exam-main">
+    <div class="exam-card-wrapper">
+
+      <!-- Left Sidebar: Question Navigation -->
+      <aside class="sidebar-navigation">
+        <h2 class="nav-title">Question Navigation</h2>
+
+        <!-- Status Legend -->
+        <div class="legend-group">
+          <div class="legend-item">
+            <span class="legend-box answered"></span>
+            <span class="legend-label">Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box not-answered"></span>
+            <span class="legend-label">Not Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box marked"></span>
+            <span class="legend-label">Marked</span>
+          </div>
         </div>
-        <div class="info">
-          <h3>Feels Like</h3>
-          <p id="feelsLike"></p>
+
+        <!-- 50 Question Number Grid -->
+        <div class="question-grid" id="questionGrid">
+          <!-- Question buttons 1 to 50 will be generated dynamically by JavaScript -->
+        </div>
+
+        <!-- Review Marked Questions Button -->
+        <button type="button" class="btn-review-marked" id="btnReviewMarked">
+          <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <line x1="4" y1="22" x2="4" y2="15"></line>
+          </svg>
+          <span id="reviewMarkedText">Review Marked (0)</span>
+        </button>
+      </aside>
+
+      <!-- Right Main: Active Question Area -->
+      <section class="question-area" id="questionArea">
+        <!-- Question Meta Info -->
+        <div class="question-header">
+          <h2 class="question-count" id="questionCount">Question 1 of 50</h2>
+          <span class="question-marks" id="questionMarks">2 Marks</span>
+        </div>
+
+        <!-- Question Prompt -->
+        <div class="question-prompt" id="questionPrompt">
+          Loading question...
+        </div>
+
+        <!-- Options Container -->
+        <div class="options-list" id="optionsList">
+          <!-- Option cards inserted dynamically by JavaScript -->
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="bottom-actions">
+          <button type="button" class="btn-action btn-prev" id="btnPrev">
+            &larr; Previous
+          </button>
+          
+          <button type="button" class="btn-action btn-mark" id="btnMark">
+            <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+            <span id="markBtnText">Mark for Review</span>
+          </button>
+
+          <button type="button" class="btn-action btn-next" id="btnNext">
+            Next &rarr;
+          </button>
         </div>
       </section>
-      <h3 class="forecast-title">5-Day Forecast</h3>
-      <div id="forecast" class="forecast"></div>
-    </section>
-  </main>
-  <script src="script.js" type="module"></script>
-</body>
 
+    </div>
+  </main>
+
+  <!-- Submission Confirmation Modal -->
+  <div class="modal-overlay" id="submitModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Confirm Exam Submission</h3>
+      <p class="modal-subtitle">Are you sure you want to finish and submit your exam? Here is your summary:</p>
+
+      <div class="summary-stats">
+        <div class="stat-badge stat-answered">
+          <span class="stat-number" id="statAnswered">0</span>
+          <span class="stat-name">Answered</span>
+        </div>
+        <div class="stat-badge stat-unanswered">
+          <span class="stat-number" id="statUnanswered">50</span>
+          <span class="stat-name">Not Answered</span>
+        </div>
+        <div class="stat-badge stat-marked">
+          <span class="stat-number" id="statMarked">0</span>
+          <span class="stat-name">Marked</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit">Cancel & Continue</button>
+        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit">Yes, Submit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final Results & Score Modal/Screen -->
+  <div class="modal-overlay" id="resultsModal">
+    <div class="modal-card modal-results">
+      <div class="results-header">
+        <div class="result-badge-icon">🏆</div>
+        <h3 class="modal-title">Examination Completed!</h3>
+        <p class="modal-subtitle">Your exam has been automatically marked and scored.</p>
+      </div>
+
+      <div class="score-card">
+        <div class="score-circle">
+          <span class="score-percentage" id="resultPercentage">0%</span>
+          <span class="score-grade" id="resultGrade">Grade</span>
+        </div>
+        <div class="score-details">
+          <div class="score-row">
+            <span>Total Questions:</span>
+            <strong id="resultTotalQuestions">50</strong>
+          </div>
+          <div class="score-row">
+            <span>Correct Answers:</span>
+            <strong class="text-green" id="resultCorrect">0</strong>
+          </div>
+          <div class="score-row">
+            <span>Wrong Answers:</span>
+            <strong class="text-red" id="resultWrong">0</strong>
+          </div>
+          <div class="score-row">
+            <span>Unattempted:</span>
+            <strong class="text-gray" id="resultUnattempted">0</strong>
+          </div>
+          <div class="score-row score-total">
+            <span>Final Score:</span>
+            <strong id="resultTotalScore">0 / 100 Marks</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-confirm" id="btnRestartExam">Restart Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
 </html>

@@ -1,78 +1,191 @@
-import {
-  updateCurrentDate, searchCities, getCurrentLocation
-} from "./function.js";
-import { cityInput, cityList, searchBtn } from "./const.js";
+/**
+ * Smart CBT Examination - Main Application Entry (script.js)
+ * Modular orchestrator coordinating State, UI, Timer, Questions, and Grading.
+ */
 
-let searchTimeout;
+import { questions } from "./js/questions.js";
+import { 
+  state, 
+  setUserAnswer, 
+  toggleMarkQuestion, 
+  setCurrentIndex, 
+  resetState 
+} from "./js/state.js";
+import { 
+  startTimer, 
+  stopTimer, 
+  resetTimer 
+} from "./js/timer.js";
+import { calculateResults } from "./js/grading.js";
+import { 
+  elements, 
+  renderQuestionGrid, 
+  renderQuestion, 
+  updateGridState, 
+  updateMarkedCount, 
+  showSubmitModal, 
+  hideSubmitModal, 
+  showResultsModal, 
+  hideResultsModal 
+} from "./js/ui.js";
 
-try {
-  updateCurrentDate();
-} catch (error) {
-  console.error("Error running updateCurrentDate:", error);
+// ==========================================================================
+// App Controller & View Sync
+// ==========================================================================
+
+function updateView() {
+  const currentQ = questions[state.currentQuestionIndex];
+  const userChoice = state.userAnswers[state.currentQuestionIndex];
+  const isMarked = state.markedQuestionSet.has(state.currentQuestionIndex);
+
+  // 1. Render active question
+  renderQuestion(
+    currentQ,
+    state.currentQuestionIndex,
+    questions.length,
+    userChoice,
+    isMarked,
+    handleOptionSelect
+  );
+
+  // 2. Synchronize navigation matrix & marked counter
+  updateGridState(
+    questions.length,
+    state.userAnswers,
+    state.markedQuestionSet,
+    state.currentQuestionIndex
+  );
+  updateMarkedCount(state.markedQuestionSet.size);
 }
 
-if (cityInput) {
-  cityInput.addEventListener("input", function () {
-    try {
-      const city = cityInput.value.trim();
+// ==========================================================================
+// User Interaction Handlers
+// ==========================================================================
 
-      if (city === "") {
-        if (cityList) {
-          cityList.innerHTML = "";
-          cityList.style.display = "none";
-        }
-        return;
+function handleOptionSelect(optionIndex) {
+  setUserAnswer(state.currentQuestionIndex, optionIndex);
+  updateView();
+}
+
+function handleToggleMark() {
+  toggleMarkQuestion(state.currentQuestionIndex);
+  updateView();
+}
+
+function handleNavigate(index) {
+  if (setCurrentIndex(index)) {
+    updateView();
+  }
+}
+
+function handleNext() {
+  if (state.currentQuestionIndex < questions.length - 1) {
+    handleNavigate(state.currentQuestionIndex + 1);
+  } else {
+    handleOpenSubmitModal();
+  }
+}
+
+function handlePrev() {
+  if (state.currentQuestionIndex > 0) {
+    handleNavigate(state.currentQuestionIndex - 1);
+  }
+}
+
+function handleReviewMarked() {
+  if (state.markedQuestionSet.size === 0) {
+    alert("You have no questions marked for review.");
+    return;
+  }
+
+  const markedList = Array.from(state.markedQuestionSet).sort((a, b) => a - b);
+  let nextMarked = markedList.find(idx => idx > state.currentQuestionIndex);
+
+  if (nextMarked === undefined) {
+    nextMarked = markedList[0];
+  }
+
+  handleNavigate(nextMarked);
+}
+
+// ==========================================================================
+// Submission & Results
+// ==========================================================================
+
+function handleOpenSubmitModal() {
+  if (state.isExamSubmitted) return;
+
+  const answeredCount = state.userAnswers.filter(ans => ans !== null).length;
+  showSubmitModal(answeredCount, questions.length, state.markedQuestionSet.size);
+}
+
+function handleFinishExam() {
+  stopTimer();
+  state.isExamSubmitted = true;
+
+  const results = calculateResults(questions, state.userAnswers);
+  showResultsModal(results);
+}
+
+function handleRestartExam() {
+  hideResultsModal();
+  resetState();
+  resetTimer();
+  initApp();
+}
+
+// ==========================================================================
+// Initialization
+// ==========================================================================
+
+function initApp() {
+  renderQuestionGrid(questions.length, handleNavigate);
+  updateView();
+
+  // Start timer with tick and timeout callbacks
+  startTimer(
+    (formattedTime, secondsLeft) => {
+      elements.timerDisplay.textContent = formattedTime;
+      if (secondsLeft <= 300) {
+        elements.timerContainer.classList.add("warning");
+      } else {
+        elements.timerContainer.classList.remove("warning");
       }
-
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(function () {
-        try {
-          searchCities(city);
-        } catch (err) {
-          console.error("Error executing debounced searchCities:", err);
-        }
-      }, 300);
-    } catch (error) {
-      console.error("Error in cityInput input event listener:", error);
+    },
+    () => {
+      alert("Time is up! Your exam is being submitted automatically.");
+      handleFinishExam();
     }
-  });
+  );
 }
 
-if (searchBtn) {
-  searchBtn.addEventListener("click", function () {
-    try {
-      const city = cityInput ? cityInput.value.trim() : "";
-      if (city === "") {
-        alert("Please enter a city name.");
-        return;
-      }
-      searchCities(city);
-    } catch (error) {
-      console.error("Error in searchBtn click event listener:", error);
-    }
-  });
-}
+// ==========================================================================
+// Event Listeners Registration
+// ==========================================================================
+elements.btnNext.addEventListener("click", handleNext);
+elements.btnPrev.addEventListener("click", handlePrev);
+elements.btnMark.addEventListener("click", handleToggleMark);
+elements.btnReviewMarked.addEventListener("click", handleReviewMarked);
+elements.btnSubmitExam.addEventListener("click", handleOpenSubmitModal);
+elements.btnCancelSubmit.addEventListener("click", hideSubmitModal);
+elements.btnConfirmSubmit.addEventListener("click", handleFinishExam);
+elements.btnRestartExam.addEventListener("click", handleRestartExam);
 
-try {
-  getCurrentLocation();
-} catch (error) {
-  console.error("Error calling getCurrentLocation:", error);
-}
+// Keyboard Navigation
+document.addEventListener("keydown", (e) => {
+  if (state.isExamSubmitted || elements.submitModal.classList.contains("active")) return;
 
-document.addEventListener("click", function (event) {
-  try {
-    if (
-      cityList &&
-      cityInput &&
-      searchBtn &&
-      !cityList.contains(event.target) &&
-      !cityInput.contains(event.target) &&
-      !searchBtn.contains(event.target)
-    ) {
-      cityList.style.display = "none";
-    }
-  } catch (error) {
-    console.error("Error in document click event listener:", error);
+  if (e.key === "ArrowRight") {
+    handleNext();
+  } else if (e.key === "ArrowLeft") {
+    handlePrev();
+  } else if (e.key === "m" || e.key === "M") {
+    handleToggleMark();
+  } else if (["1", "2", "3", "4"].includes(e.key)) {
+    const optIndex = parseInt(e.key, 10) - 1;
+    handleOptionSelect(optIndex);
   }
 });
 
+// Boot the application
+document.addEventListener("DOMContentLoaded", initApp);
