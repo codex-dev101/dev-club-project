@@ -5,9 +5,9 @@ By using Git and GitHub, each team member has a full local copy of the project o
 🏗️ 1. The Recommended Branching Strategy (Stages)
 Instead of everyone pushing directly to main, professional development teams use a 3-tier branch structure:
 
-[ main ]          <-- Production Stage (Live, stable code for users/presentation)
+[ main ] <-- Production Stage (Live, stable code for users/presentation)
    ↑ (Merge when tested)
-[ dev ] (or staging) <-- Development Stage (Where team members combine their features)
+[ dev or staging ] <-- Development Stage (Where team members combine their features)
    ↑ (Pull Requests)
 [ feature/your-name-feature ] <-- Individual work branches for each team member
 main (Production): Clean, finished, working project.
