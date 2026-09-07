@@ -1,3 +1,4 @@
+import results from "results .js";
 import results from "./results.js";
 const resultsTable = document.getElementById("resultsTable");
 
@@ -10,7 +11,7 @@ results.forEach((result) => {
         <td>${result.score}</td>
         <td>${result.grade}</td>
         <td>
-            <button>View</button>
+            <button>View</button> 
         </td>
     `;
 
