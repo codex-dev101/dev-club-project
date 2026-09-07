@@ -5,21 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart CBT Examination</title>
-  <!-- Google Fonts for clean, modern typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="exams.css">
 </head>
 
 <body>
-
-  <!-- Top Dark Navy Header -->
   <header class="navbar">
     <div class="navbar-container">
       <h1 class="exam-title">Smart CBT Examination</h1>
 
-      <!-- Timer Section -->
       <div class="timer-container" id="timerContainer">
         <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -31,21 +25,16 @@
           <span class="timer-display" id="timerDisplay">00:45:00</span>
         </div>
       </div>
-
-      <!-- Submit Exam Button -->
       <button type="button" class="btn-submit-exam" id="btnSubmitExam">Submit Exam</button>
     </div>
   </header>
 
-  <!-- Main Exam Content Area -->
   <main class="exam-main">
     <div class="exam-card-wrapper">
 
-      <!-- Left Sidebar: Question Navigation -->
       <aside class="sidebar-navigation">
         <h2 class="nav-title">Question Navigation</h2>
 
-        <!-- Status Legend -->
         <div class="legend-group">
           <div class="legend-item">
             <span class="legend-box answered"></span>
@@ -61,12 +50,8 @@
           </div>
         </div>
 
-        <!-- 50 Question Number Grid -->
         <div class="question-grid" id="questionGrid">
-          <!-- Question buttons 1 to 50 will be generated dynamically by JavaScript -->
         </div>
-
-        <!-- Review Marked Questions Button -->
         <button type="button" class="btn-review-marked" id="btnReviewMarked">
           <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -77,25 +62,18 @@
         </button>
       </aside>
 
-      <!-- Right Main: Active Question Area -->
       <section class="question-area" id="questionArea">
-        <!-- Question Meta Info -->
         <div class="question-header">
           <h2 class="question-count" id="questionCount">Question 1 of 50</h2>
           <span class="question-marks" id="questionMarks">2 Marks</span>
         </div>
-
-        <!-- Question Prompt -->
         <div class="question-prompt" id="questionPrompt">
           Loading question...
         </div>
-
-        <!-- Options Container -->
         <div class="options-list" id="optionsList">
-          <!-- Option cards inserted dynamically by JavaScript -->
+
         </div>
 
-        <!-- Bottom Action Bar -->
         <div class="bottom-actions">
           <button type="button" class="btn-action btn-prev" id="btnPrev">
             &larr; Previous
@@ -119,7 +97,7 @@
     </div>
   </main>
 
-  <!-- Submission Confirmation Modal -->
+
   <div class="modal-overlay" id="submitModal">
     <div class="modal-card">
       <h3 class="modal-title">Confirm Exam Submission</h3>
@@ -191,7 +169,7 @@
     </div>
   </div>
 
-  <script type="module" src=exams.js"></script>
+  <script type="module" src="exams.js"></script>
 </body>
 
 </html>

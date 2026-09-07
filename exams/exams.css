@@ -32,7 +32,6 @@
     --radius-xl: 16px;
 }
 
-/* --- Base Resets --- */
 * {
     margin: 0;
     padding: 0;
@@ -49,9 +48,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ==========================================================================
-   Header / Navigation Bar
-   ========================================================================== */
+
 .navbar {
     background-color: var(--header-bg);
     color: #ffffff;
@@ -78,7 +75,7 @@ body {
     color: #ffffff;
 }
 
-/* Timer */
+
 .timer-container {
     display: flex;
     align-items: center;
@@ -133,7 +130,7 @@ body {
     color: #ffffff;
 }
 
-/* Top Submit Exam Button */
+
 .btn-submit-exam {
     background-color: transparent;
     color: #ffffff;
@@ -153,9 +150,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   Main Examination Container
-   ========================================================================== */
+
 .exam-main {
     flex: 1;
     display: flex;
@@ -177,9 +172,7 @@ body {
     border: 1px solid var(--border-light);
 }
 
-/* ==========================================================================
-   Left Sidebar: Question Navigation
-   ========================================================================== */
+
 .sidebar-navigation {
     background-color: #ffffff;
     border-right: 1px solid var(--border-light);
@@ -195,7 +188,6 @@ body {
     color: var(--text-dark);
 }
 
-/* Status Legend */
 .legend-group {
     display: flex;
     flex-direction: column;
@@ -234,7 +226,7 @@ body {
     font-weight: 500;
 }
 
-/* Question Grid Matrix (5 columns x 10 rows) */
+
 .question-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -245,7 +237,6 @@ body {
     padding-right: 0.25rem;
 }
 
-/* Custom Scrollbar for Grid */
 .question-grid::-webkit-scrollbar {
     width: 5px;
 }
@@ -276,7 +267,6 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-/* Status variants on grid buttons */
 .q-btn.state-answered {
     background-color: var(--color-answered);
     border-color: var(--color-answered);
@@ -289,13 +279,13 @@ body {
     color: #ffffff;
 }
 
-/* Active / Current selected question */
+
 .q-btn.state-current {
     outline: 2.5px solid var(--primary-navy);
     outline-offset: 2px;
 }
 
-/* Review Marked Button */
+
 .btn-review-marked {
     margin-top: auto;
     display: flex;
@@ -323,9 +313,7 @@ body {
     height: 16px;
 }
 
-/* ==========================================================================
-   Right Main Section: Active Question Display
-   ========================================================================== */
+
 .question-area {
     padding: 2.25rem 2.5rem;
     display: flex;
@@ -360,9 +348,7 @@ body {
     margin-bottom: 1.75rem;
 }
 
-/* ==========================================================================
-   Option Cards List
-   ========================================================================== */
+
 .options-list {
     display: flex;
     flex-direction: column;
@@ -389,14 +375,13 @@ body {
     transform: translateX(2px);
 }
 
-/* Selected option card state */
+
 .option-card.selected {
     background-color: var(--color-selected-bg);
     border-color: var(--color-selected-border);
     box-shadow: 0 0 0 1px var(--color-selected-border);
 }
 
-/* Custom Radio Indicator */
 .custom-radio {
     width: 20px;
     height: 20px;
@@ -445,9 +430,6 @@ body {
     font-weight: 600;
 }
 
-/* ==========================================================================
-   Bottom Action Bar
-   ========================================================================== */
 .bottom-actions {
     margin-top: auto;
     display: flex;
@@ -472,7 +454,6 @@ body {
     border: none;
 }
 
-/* Previous Button */
 .btn-prev {
     background-color: #ffffff;
     color: var(--text-dark);
@@ -489,7 +470,7 @@ body {
     cursor: not-allowed;
 }
 
-/* Mark for Review Button */
+
 .btn-mark {
     background-color: #f8fafc;
     color: #2563eb;
@@ -511,7 +492,7 @@ body {
     background-color: #ffedd5;
 }
 
-/* Next Button */
+
 .btn-next {
     background-color: var(--primary-navy);
     color: #ffffff;
@@ -522,9 +503,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   Modals & Popups
-   ========================================================================== */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -574,7 +552,7 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* Modal Summary Stats */
+
 .summary-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -658,9 +636,6 @@ body {
     background-color: #0f2b54;
 }
 
-/* ==========================================================================
-   Results Screen Styling
-   ========================================================================== */
 .modal-results {
     max-width: 520px;
 }
@@ -749,9 +724,6 @@ body {
     color: #64748b !important;
 }
 
-/* ==========================================================================
-   Responsive Adaptations
-   ========================================================================== */
 @media (max-width: 900px) {
     .exam-card-wrapper {
         grid-template-columns: 1fr;
