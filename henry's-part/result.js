@@ -10,7 +10,7 @@ results.forEach((result) => {
         <td>${result.score}</td>
         <td>${result.grade}</td>
         <td>
-            <button>View</button>
+            <button>View</button> 
         </td>
     `;
 
