@@ -1,23 +1,22 @@
-import results from "./results.js";
-const resultsTable = document.getElementById("resultsTable");
+fetch("./results.json")
+    .then(response => response.json())
+    .then(results => {
 
+        const table = document.querySelector("#resultTable");
 
-results.forEach((result) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${result.exam}</td>
-        <td>${result.date}</td>
-        <td>${result.score}</td>
-        <td>${result.grade}</td>
-        <td>
-            <button>View</button>
-        </td>
-    `;
+        results.forEach(result => {
 
-    resultsTable.appendChild(row);
-});
+            const row = document.createElement("tr");
 
+            row.innerHTML = `
+                <td>${result.name}</td>
+                <td>${result.exam}</td>
+                <td>${result.score}</td>
+            `;
 
+            table.appendChild(row);
+        });
+    });
 let grade;
 
 if (result.score >= 70) {
@@ -27,3 +26,4 @@ if (result.score >= 70) {
 } else {
     grade = "C";
 }
+   
