@@ -102,3 +102,4 @@ Save changes	git add . then git commit -m "Description of changes"
 Push feature to GitHub	git push -u origin feature/my-feature-name
 Would you like me to go ahead and create the dev branch and push it to GitHub for you right now so your team can start cloning and branching from it?
 
+git branch -r
