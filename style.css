@@ -12,18 +12,21 @@ body {
 
 .container {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     background: #031c3f;
-    padding: 0;
+    padding: 14px;
+    gap: 14px;
+    align-items: stretch;
 }
 
 .left-side {
-    width: 48%;
-    min-height: 100vh;
+    flex: 1;
+    width: 50%;
+    min-height: auto;
     background: #031c3f;
     color: white;
-    padding: 35px 50px;
+    padding: 30px 45px;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -146,47 +149,49 @@ body {
 }
 
 .right-side {
-    width: 52%;
-    min-height: 100vh;
+    flex: 1;
+    width: 50%;
+    min-height: auto;
     background: white;
-    border-radius: 30px 0 0 30px;
-    padding: 35px 50px;
+    border-radius: 24px;
+    padding: 25px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .login-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 360px;
     text-align: center;
 }
 
 .login-card h1 {
     color: #071f43;
-    font-size: 28px;
-    margin-bottom: 8px;
+    font-size: 24px;
+    margin-bottom: 6px;
 }
 
 .login-card h1 span {
-    font-size: 26px;
+    font-size: 22px;
 }
 
 .subtitle {
     color: #697386;
-    font-size: 14px;
-    margin-bottom: 30px;
+    font-size: 13.5px;
+    margin-bottom: 22px;
 }
 
 .input-box {
     width: 100%;
-    height: 52px;
+    height: 46px;
     border: 1.5px solid #e0e5ec;
-    border-radius: 10px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
-    padding: 0 16px;
-    margin-bottom: 16px;
+    padding: 0 14px;
+    margin-bottom: 13px;
     background: white;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -197,9 +202,9 @@ body {
 }
 
 .input-icon {
-    font-size: 18px;
+    font-size: 16px;
     color: #718096;
-    margin-right: 14px;
+    margin-right: 12px;
     display: flex;
     align-items: center;
 }
@@ -208,7 +213,7 @@ body {
     width: 100%;
     border: none;
     outline: none;
-    font-size: 15px;
+    font-size: 14px;
     color: #333;
 }
 
@@ -218,7 +223,7 @@ body {
     border: none;
     outline: none;
     background: transparent;
-    font-size: 15px;
+    font-size: 14px;
     color: #333;
     cursor: pointer;
 }
@@ -229,20 +234,20 @@ body {
 
 .start-btn {
     width: 100%;
-    height: 52px;
+    height: 46px;
     border: none;
-    border-radius: 10px;
+    border-radius: 9px;
     background: #002554;
     color: white;
-    font-size: 16px;
+    font-size: 14.5px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     transition: 0.2s ease;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
 .start-btn:hover {
@@ -250,14 +255,14 @@ body {
 }
 
 .arrow {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .or {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin: 22px 0;
+    gap: 12px;
+    margin: 16px 0;
 }
 
 .or span {
@@ -268,24 +273,24 @@ body {
 
 .or p {
     color: #697386;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
 }
 
 .result-btn {
     width: 100%;
-    height: 52px;
+    height: 46px;
     border: 1px solid #e1e5eb;
-    border-radius: 10px;
+    border-radius: 9px;
     background: #f5f6fd;
     color: #071f43;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     transition: 0.2s ease;
 }
 
@@ -294,7 +299,7 @@ body {
 }
 
 .result-icon {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 @media (max-width: 900px) {
