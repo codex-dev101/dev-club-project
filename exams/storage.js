@@ -1,7 +1,4 @@
-// ==========================================
-// MODULE 2: storage.js
 // Handles saving, loading, and clearing exam data
-// ==========================================
 
 const STORAGE_KEY = "cbt_exam_state";
 
