@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart CBT Examination</title>
+  <link rel="stylesheet" href="exams.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <h1 class="exam-title">Smart CBT Examination</h1>
+
+      <div class="timer-container" id="timerContainer">
+        <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <div class="timer-text-group">
+          <span class="timer-label">Time Left</span>
+          <span class="timer-display" id="timerDisplay">01:00:00</span>
+        </div>
+      </div>
+      <button type="button" class="btn-submit-exam" id="btnSubmitExam">Submit Exam</button>
+    </div>
+  </header>
+
+  <main class="exam-main">
+    <div class="exam-card-wrapper">
+
+      <aside class="sidebar-navigation">
+        <h2 class="nav-title">Question Navigation</h2>
+
+        <div class="legend-group">
+          <div class="legend-item">
+            <span class="legend-box answered"></span>
+            <span class="legend-label">Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box not-answered"></span>
+            <span class="legend-label">Not Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box marked"></span>
+            <span class="legend-label">Marked</span>
+          </div>
+        </div>
+
+        <div class="question-grid" id="questionGrid">
+        </div>
+        <button type="button" class="btn-review-marked" id="btnReviewMarked">
+          <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <line x1="4" y1="22" x2="4" y2="15"></line>
+          </svg>
+          <span id="reviewMarkedText">Review Marked (0)</span>
+        </button>
+      </aside>
+
+      <section class="question-area" id="questionArea">
+        <div class="question-header">
+          <h2 class="question-count" id="questionCount">Question 1 of 50</h2>
+          <span class="question-marks" id="questionMarks">2 Marks</span>
+        </div>
+        <div class="question-prompt" id="questionPrompt">
+          Loading question...
+        </div>
+        <div class="options-list" id="optionsList">
+
+        </div>
+
+        <div class="bottom-actions">
+          <button type="button" class="btn-action btn-prev" id="btnPrev">
+            &larr; Previous
+          </button>
+
+          <button type="button" class="btn-action btn-mark" id="btnMark">
+            <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+            <span id="markBtnText">Mark for Review</span>
+          </button>
+
+          <button type="button" class="btn-action btn-next" id="btnNext">
+            Next &rarr;
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+  <div class="modal-overlay" id="submitModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Confirm Exam Submission</h3>
+      <p class="modal-subtitle">Are you sure you want to finish and submit your exam? Here is your summary:</p>
+
+      <div class="summary-stats">
+        <div class="stat-badge stat-answered">
+          <span class="stat-number" id="statAnswered">0</span>
+          <span class="stat-name">Answered</span>
+        </div>
+        <div class="stat-badge stat-unanswered">
+          <span class="stat-number" id="statUnanswered">50</span>
+          <span class="stat-name">Not Answered</span>
+        </div>
+        <div class="stat-badge stat-marked">
+          <span class="stat-number" id="statMarked">0</span>
+          <span class="stat-name">Marked</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit">Cancel & Continue</button>
+        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit">Yes, Submit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="storage.js"></script>
+  <script src="timer.js"></script>
+  <script src="exams.js"></script>
+</body>
+
+</html>
