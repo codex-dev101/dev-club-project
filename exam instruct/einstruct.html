@@ -122,8 +122,7 @@
             </div>
 
             <!-- Form & Confirmation -->
-            <form action="../exams/index.html" method="get"
-                onsubmit="this.action = '../exams/index.html' + window.location.search;">
+            <form id="startExamForm">
                 <label class="confirm-container">
                     <input type="checkbox" id="checkbox" required>
                     <span class="checkbox-custom"></span>
@@ -134,6 +133,22 @@
             </form>
         </div>
     </main>
+
+    <script>
+        const startExamForm = document.getElementById("startExamForm");
+        startExamForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const checkbox = document.getElementById("checkbox");
+            if (!checkbox.checked) return;
+
+            // Clear old session to ensure a fresh exam for the selected subject
+            localStorage.removeItem("cbt_exam_state");
+
+            // Forward the subject and student query params to exams page
+            const searchParams = window.location.search || "";
+            window.location.href = "../exams/index.html" + searchParams;
+        });
+    </script>
 </body>
 
 </html>
