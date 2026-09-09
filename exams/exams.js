@@ -1,7 +1,4 @@
-// ==========================================
-// MAIN CONTROLLER: exams.js
 // Connects modules with the UI & DOM Events
-// ==========================================
 
 // --- STATE ---
 let activeSubject = "general_knowledge";
@@ -52,6 +49,21 @@ function persist() {
 
 // --- SETUP SUBJECT & QUESTIONS ---
 function setupExam() {
+  // 1. Detect subject from URL parameters, localStorage, or saved state
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlSubject = urlParams.get("subject");
+  const storedSubject = localStorage.getItem("cbt_selected_subject");
+  const saved = window.loadExamState ? window.loadExamState() : null;
+
+  let targetSubject = null;
+  if (urlSubject && window.subjectQuestions && window.subjectQuestions[urlSubject]) {
+    targetSubject = urlSubject;
+  } else if (storedSubject && window.subjectQuestions && window.subjectQuestions[storedSubject]) {
+    targetSubject = storedSubject;
+  } else if (saved?.subject && window.subjectQuestions && window.subjectQuestions[saved.subject]) {
+    targetSubject = saved.subject;
+  } else {
+    targetSubject = "general_knowledge";
   // 1. Detect subject from URL parameters or previous session
   const params = new URLSearchParams(window.location.search);
   const rawSubject = params.get("subject");
@@ -66,6 +78,8 @@ function setupExam() {
     activeSubject = "general_knowledge";
   }
 
+  activeSubject = targetSubject;
+
   // Update header title with subject name
   const names = {
     math: "Mathematics",
@@ -79,14 +93,20 @@ function setupExam() {
     examTitle.textContent = `Smart CBT - ${names[activeSubject] || "General Knowledge"}`;
   }
 
+  // 2. Load saved exam if it matches the current activeSubject, otherwise generate new questions for that subject
+  if (saved && saved.subject === activeSubject && Array.isArray(saved.questions) && saved.questions.length > 0) {
   // 2. Load saved exam (if matching current subject) or generate new random questions
   if (saved && saved.subject === activeSubject && saved.questions?.length > 0) {
     questions = saved.questions;
     currentIndex = saved.currentIndex || 0;
     userAnswers = saved.userAnswers || {};
     markedQuestions = saved.markedQuestions || [];
-    timeLeft = saved.timeLeft || 60 * 60;
+    timeLeft = typeof saved.timeLeft === "number" ? saved.timeLeft : 60 * 60;
   } else {
+    const bank = (window.subjectQuestions && window.subjectQuestions[activeSubject]) ||
+                 (window.subjectQuestions && window.subjectQuestions.general_knowledge) ||
+                 [];
+    questions = typeof window.shuffleQuestions === "function" ? window.shuffleQuestions(bank) : [...bank];
     const bank = window.subjectQuestions?.[activeSubject] || window.subjectQuestions?.general_knowledge || [];
     questions = window.shuffleQuestions(bank);
     currentIndex = 0;
@@ -197,9 +217,14 @@ function startExamTimer() {
 }
 
 // --- SUBMISSION & REDIRECT TO RESULTS PAGE ---
-function submitExam() {
+async function submitExam() {
   window.stopTimer();
   if (submitModal) submitModal.classList.remove("active");
+
+  if (btnConfirmSubmit) {
+    btnConfirmSubmit.disabled = true;
+    btnConfirmSubmit.textContent = "Saving to Database...";
+  }
 
   let correct = 0;
   let wrong = 0;
@@ -212,30 +237,44 @@ function submitExam() {
     else wrong++;
   });
 
-  const percent = Math.round((correct / questions.length) * 100);
+  const totalQuestions = questions.length;
+  const score = correct * 2;
+  const totalMarks = totalQuestions * 2;
+  const percent = totalQuestions > 0 ? Math.round((correct / totalQuestions) * 100) : 0;
   const grades = { 70: "A", 60: "B", 50: "C", 40: "D" };
-  const grade = Object.entries(grades).find(([min]) => percent >= min)?.[1] || "F";
+  const grade = Object.entries(grades).find(([min]) => percent >= Number(min))?.[1] || "F";
 
-  // Package results to local storage so the Result Page can display it
-  const examResults = {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentCandidate = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name") || "Candidate";
+
+  const examResultData = {
+    candidate_name: currentCandidate,
     subject: activeSubject,
-    totalQuestions: questions.length,
+    total_questions: totalQuestions,
     correctAnswers: correct,
     wrongAnswers: wrong,
     unattempted: unattempted,
     percentage: percent,
     grade: grade,
-    score: correct * 2,
-    totalMarks: questions.length * 2,
-    submittedAt: new Date().toISOString()
+    score: score,
+    totalMarks: totalMarks
   };
 
-  localStorage.setItem("cbt_exam_results", JSON.stringify(examResults));
+  // Save to database (Supabase) and local storage
+  if (window.saveResultToDatabase) {
+    try {
+      await window.saveResultToDatabase(examResultData);
+    } catch (err) {
+      console.error("Failed to save result:", err);
+    }
+  }
 
-  // Clear active test state
-  window.clearExamState();
+  // Clear active in-progress exam state
+  if (window.clearExamState) {
+    window.clearExamState();
+  }
 
-  // Redirect to separate result page
+  // Redirect to congratulations & single result summary page
   window.location.href = "../result page/index.html";
 }
 
