@@ -1,4 +1,3 @@
-import results from "results .js";
 import results from "./results.js";
 const resultsTable = document.getElementById("resultsTable");
 

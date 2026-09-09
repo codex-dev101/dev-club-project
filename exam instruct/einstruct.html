@@ -26,7 +26,7 @@
             <nav class="links">
                 <a href="../index.html">Dashboard</a>
                 <a href="einstruct.html" class="active">Take Exam</a>
-                <a href="../result page/index.html">My Result</a>
+                <a href="../henry's-part/result.html">My Result</a>
             </nav>
         </div>
     </header>
@@ -122,8 +122,7 @@
             </div>
 
             <!-- Form & Confirmation -->
-            <form action="../exams/index.html" method="get"
-                onsubmit="this.action = '../exams/index.html' + window.location.search;">
+            <form id="instructForm">
                 <label class="confirm-container">
                     <input type="checkbox" id="checkbox" required>
                     <span class="checkbox-custom"></span>
@@ -134,6 +133,32 @@
             </form>
         </div>
     </main>
+
+    <script>
+        const instructForm = document.getElementById("instructForm");
+        if (instructForm) {
+            instructForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const checkbox = document.getElementById("checkbox");
+                if (!checkbox || !checkbox.checked) {
+                    alert("Please check the confirmation box to proceed.");
+                    return;
+                }
+
+                // Preserve existing URL search params or fallback to localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const subject = urlParams.get("subject") || localStorage.getItem("cbt_selected_subject");
+                const fullname = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name");
+
+                const targetParams = new URLSearchParams();
+                if (fullname) targetParams.set("fullname", fullname);
+                if (subject) targetParams.set("subject", subject);
+
+                const queryString = targetParams.toString();
+                window.location.href = "../exams/index.html" + (queryString ? "?" + queryString : "");
+            });
+        }
+    </script>
 </body>
 
 </html>
