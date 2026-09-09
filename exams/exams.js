@@ -8,6 +8,7 @@ let activeSubject = "general_knowledge";
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
+let markedQuestions = [];
 let timeLeft = 60 * 60; // 60 minutes
 
 // --- DOM ELEMENTS ---
@@ -52,13 +53,17 @@ function persist() {
 // --- SETUP SUBJECT & QUESTIONS ---
 function setupExam() {
   // 1. Detect subject from URL parameters or previous session
-  const urlSubject = new URLSearchParams(window.location.search).get("subject");
+  const params = new URLSearchParams(window.location.search);
+  const rawSubject = params.get("subject");
+  const urlSubject = rawSubject ? rawSubject.trim().toLowerCase() : null;
   const saved = window.loadExamState();
 
-  if (urlSubject && window.subjectQuestions[urlSubject]) {
+  if (urlSubject && window.subjectQuestions && window.subjectQuestions[urlSubject]) {
     activeSubject = urlSubject;
-  } else if (saved?.subject && window.subjectQuestions[saved.subject]) {
+  } else if (saved?.subject && window.subjectQuestions && window.subjectQuestions[saved.subject]) {
     activeSubject = saved.subject;
+  } else {
+    activeSubject = "general_knowledge";
   }
 
   // Update header title with subject name
@@ -74,7 +79,7 @@ function setupExam() {
     examTitle.textContent = `Smart CBT - ${names[activeSubject] || "General Knowledge"}`;
   }
 
-  // 2. Load saved exam or generate new random questions
+  // 2. Load saved exam (if matching current subject) or generate new random questions
   if (saved && saved.subject === activeSubject && saved.questions?.length > 0) {
     questions = saved.questions;
     currentIndex = saved.currentIndex || 0;
@@ -82,7 +87,7 @@ function setupExam() {
     markedQuestions = saved.markedQuestions || [];
     timeLeft = saved.timeLeft || 60 * 60;
   } else {
-    const bank = window.subjectQuestions[activeSubject] || window.subjectQuestions.general_knowledge;
+    const bank = window.subjectQuestions?.[activeSubject] || window.subjectQuestions?.general_knowledge || [];
     questions = window.shuffleQuestions(bank);
     currentIndex = 0;
     userAnswers = {};
