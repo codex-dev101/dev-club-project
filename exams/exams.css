@@ -256,6 +256,7 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
+    -webkit-user-select: none;
     user-select: none;
     background-color: var(--color-unanswered-bg);
     border: 1px solid var(--color-unanswered-border);
@@ -366,6 +367,7 @@ body {
     background-color: #ffffff;
     cursor: pointer;
     transition: all 0.2s ease;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -507,6 +509,7 @@ body {
     position: fixed;
     inset: 0;
     background-color: rgba(15, 23, 42, 0.6);
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
