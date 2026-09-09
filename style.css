@@ -277,6 +277,10 @@ body {
     font-weight: 600;
 }
 
+a {
+    text-decoration: none;
+}
+
 .result-btn {
     width: 100%;
     height: 46px;

@@ -1,8 +1,13 @@
+fetch("./results.json")
+    .then(response => response.json())
+    .then(results => {
 import results from "results .js";
 import results from "./results.js";
 const resultsTable = document.getElementById("resultsTable");
 
+        const table = document.querySelector("#resultTable");
 
+        results.forEach(result => {
 results.forEach((result) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -15,10 +20,17 @@ results.forEach((result) => {
         </td>
     `;
 
-    resultsTable.appendChild(row);
-});
+            const row = document.createElement("tr");
 
+            row.innerHTML = `
+                <td>${result.name}</td>
+                <td>${result.exam}</td>
+                <td>${result.score}</td>
+            `;
 
+            table.appendChild(row);
+        });
+    });
 let grade;
 
 if (result.score >= 70) {
@@ -28,3 +40,4 @@ if (result.score >= 70) {
 } else {
     grade = "C";
 }
+   
