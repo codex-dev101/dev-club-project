@@ -64,6 +64,18 @@ function setupExam() {
     targetSubject = saved.subject;
   } else {
     targetSubject = "general_knowledge";
+  // 1. Detect subject from URL parameters or previous session
+  const params = new URLSearchParams(window.location.search);
+  const rawSubject = params.get("subject");
+  const urlSubject = rawSubject ? rawSubject.trim().toLowerCase() : null;
+  const saved = window.loadExamState();
+
+  if (urlSubject && window.subjectQuestions && window.subjectQuestions[urlSubject]) {
+    activeSubject = urlSubject;
+  } else if (saved?.subject && window.subjectQuestions && window.subjectQuestions[saved.subject]) {
+    activeSubject = saved.subject;
+  } else {
+    activeSubject = "general_knowledge";
   }
 
   activeSubject = targetSubject;
@@ -83,6 +95,8 @@ function setupExam() {
 
   // 2. Load saved exam if it matches the current activeSubject, otherwise generate new questions for that subject
   if (saved && saved.subject === activeSubject && Array.isArray(saved.questions) && saved.questions.length > 0) {
+  // 2. Load saved exam (if matching current subject) or generate new random questions
+  if (saved && saved.subject === activeSubject && saved.questions?.length > 0) {
     questions = saved.questions;
     currentIndex = saved.currentIndex || 0;
     userAnswers = saved.userAnswers || {};
@@ -93,6 +107,8 @@ function setupExam() {
                  (window.subjectQuestions && window.subjectQuestions.general_knowledge) ||
                  [];
     questions = typeof window.shuffleQuestions === "function" ? window.shuffleQuestions(bank) : [...bank];
+    const bank = window.subjectQuestions?.[activeSubject] || window.subjectQuestions?.general_knowledge || [];
+    questions = window.shuffleQuestions(bank);
     currentIndex = 0;
     userAnswers = {};
     markedQuestions = [];

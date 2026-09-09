@@ -123,6 +123,7 @@
 
             <!-- Form & Confirmation -->
             <form id="instructForm">
+            <form id="startExamForm">
                 <label class="confirm-container">
                     <input type="checkbox" id="checkbox" required>
                     <span class="checkbox-custom"></span>
@@ -158,6 +159,19 @@
                 window.location.href = "../exams/index.html" + (queryString ? "?" + queryString : "");
             });
         }
+        const startExamForm = document.getElementById("startExamForm");
+        startExamForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const checkbox = document.getElementById("checkbox");
+            if (!checkbox.checked) return;
+
+            // Clear old session to ensure a fresh exam for the selected subject
+            localStorage.removeItem("cbt_exam_state");
+
+            // Forward the subject and student query params to exams page
+            const searchParams = window.location.search || "";
+            window.location.href = "../exams/index.html" + searchParams;
+        });
     </script>
 </body>
 
