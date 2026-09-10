@@ -5,7 +5,7 @@ const RESULTS_KEY = "cbt_exam_results";
 const ALL_RESULTS_KEY = "cbt_all_results";
 
 const SUPABASE_URL = "https://cjqnrpbctqblxfpspxzq.supabase.co";
-const SUPABASE_KEY = "sb_secret_5hd0ZrVBF7tPKrid3s5IEQ_JxVtOOx1";
+const SUPABASE_KEY = "sb_publishable_WoZjELCqdbbMtSBJAYAe7A_mv3PmKe_";
 
 // Initialize Supabase Client if SDK is loaded
 let supabaseClient = null;
@@ -66,7 +66,7 @@ async function saveResultToDatabase(resultData) {
 
   // Cache locally
   localStorage.setItem(RESULTS_KEY, JSON.stringify(fullResultRecord));
-  
+
   try {
     const history = JSON.parse(localStorage.getItem(ALL_RESULTS_KEY) || "[]");
     history.unshift(fullResultRecord);

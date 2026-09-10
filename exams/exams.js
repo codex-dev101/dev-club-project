@@ -64,18 +64,6 @@ function setupExam() {
     targetSubject = saved.subject;
   } else {
     targetSubject = "general_knowledge";
-  // 1. Detect subject from URL parameters or previous session
-  const params = new URLSearchParams(window.location.search);
-  const rawSubject = params.get("subject");
-  const urlSubject = rawSubject ? rawSubject.trim().toLowerCase() : null;
-  const saved = window.loadExamState();
-
-  if (urlSubject && window.subjectQuestions && window.subjectQuestions[urlSubject]) {
-    activeSubject = urlSubject;
-  } else if (saved?.subject && window.subjectQuestions && window.subjectQuestions[saved.subject]) {
-    activeSubject = saved.subject;
-  } else {
-    activeSubject = "general_knowledge";
   }
 
   activeSubject = targetSubject;
@@ -95,8 +83,6 @@ function setupExam() {
 
   // 2. Load saved exam if it matches the current activeSubject, otherwise generate new questions for that subject
   if (saved && saved.subject === activeSubject && Array.isArray(saved.questions) && saved.questions.length > 0) {
-  // 2. Load saved exam (if matching current subject) or generate new random questions
-  if (saved && saved.subject === activeSubject && saved.questions?.length > 0) {
     questions = saved.questions;
     currentIndex = saved.currentIndex || 0;
     userAnswers = saved.userAnswers || {};
@@ -107,8 +93,6 @@ function setupExam() {
                  (window.subjectQuestions && window.subjectQuestions.general_knowledge) ||
                  [];
     questions = typeof window.shuffleQuestions === "function" ? window.shuffleQuestions(bank) : [...bank];
-    const bank = window.subjectQuestions?.[activeSubject] || window.subjectQuestions?.general_knowledge || [];
-    questions = window.shuffleQuestions(bank);
     currentIndex = 0;
     userAnswers = {};
     markedQuestions = [];
@@ -261,9 +245,10 @@ async function submitExam() {
   };
 
   // Save to database (Supabase) and local storage
+  let saveResponse = null;
   if (window.saveResultToDatabase) {
     try {
-      await window.saveResultToDatabase(examResultData);
+      saveResponse = await window.saveResultToDatabase(examResultData);
     } catch (err) {
       console.error("Failed to save result:", err);
     }
@@ -274,8 +259,20 @@ async function submitExam() {
     window.clearExamState();
   }
 
-  // Redirect to congratulations & single result summary page
-  window.location.href = "../result page/index.html";
+  if (submitModal) submitModal.classList.remove("active");
+  if (btnSubmitExam) btnSubmitExam.disabled = true;
+  if (btnConfirmSubmit) {
+    btnConfirmSubmit.disabled = true;
+    btnConfirmSubmit.textContent = "Submitted";
+  }
+
+  if (saveResponse?.success) {
+    alert("Exam submitted and saved successfully.");
+  } else if (saveResponse?.localSaved) {
+    alert("Exam submitted and saved locally, but the database could not be reached.");
+  } else {
+    alert("Exam submitted, but the save could not be confirmed.");
+  }
 }
 
 // --- ATTACH EVENT LISTENERS ---
