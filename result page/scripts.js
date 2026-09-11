@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. RECEIVE: Read output saved by arinze (Exam Page) from localStorage
-const result = JSON.parse(localStorage.getItem("cbt_exam_results"));
+  const result = JSON.parse(localStorage.getItem("cbt_exam_results"));
 
 
   // Step 1: Early Guard Clause - Exit safe no exam data exists in localStorage
@@ -18,6 +18,8 @@ const result = JSON.parse(localStorage.getItem("cbt_exam_results"));
   if (printBtn) {
     printBtn.addEventListener("click", () => {
       window.print()
+    });
+  }
   // Pure JavaScript navigation to Henery's History Page (Screen 5)
   const detailedResultBtn = document.getElementById("btn-detailed-result");
   if (detailedResultBtn) {
@@ -28,15 +30,15 @@ const result = JSON.parse(localStorage.getItem("cbt_exam_results"));
 });
 
 function renderResults(data) {
-  const { 
-    studentName = "Student", 
+  const {
+    studentName = "Student",
     examTitle = "CBT Examination",
-    totalQuestions = 0, 
-    correctCount = 0, 
-    incorrectCount = 0, 
-    unansweredCount = 0, 
-    timeSpentSeconds = 0, 
-    marksPerQuestion = 2 
+    totalQuestions = 0,
+    correctCount = 0,
+    incorrectCount = 0,
+    unansweredCount = 0,
+    timeSpentSeconds = 0,
+    marksPerQuestion = 2
   } = data;
 
   // Perform Calculations
@@ -82,10 +84,10 @@ function renderResults(data) {
 function saveToHistory(newRecord) {
   // Step 1: Retrieve existing history or default to an empty array
   let historyList = JSON.parse(localStorage.getItem("cbt_exam_history")) || [];
-  
+
   // Step 2: Duplicate check - prevent duplicate entries if user refreshes the page
   const exists = historyList.some(item => item.dateTaken === newRecord.dateTaken && item.score === newRecord.score);
-  
+
   // Step 3: Save the new record to storage if it doesn't already exist
   if (!exists) {
     historyList.unshift(newRecord); // Add newest result to the very top (index 0)

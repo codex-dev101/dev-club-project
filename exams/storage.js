@@ -41,26 +41,37 @@ function clearExamState() {
 
 // --- SAVE EXAM RESULT TO DATABASE ---
 async function saveResultToDatabase(resultData) {
+  const submittedAt = new Date().toISOString();
   const candidateName = resultData.candidate_name || localStorage.getItem("cbt_candidate_name") || "Candidate";
   const subject = resultData.subject || "general_knowledge";
   const score = Number(resultData.score) || 0;
   const totalQuestions = Number(resultData.total_questions) || 50;
   const percentage = Number(resultData.percentage) || 0;
   const grade = resultData.grade || "F";
-  const submittedAt = new Date().toISOString();
+  const correctQuestions = Number(resultData.correct_questions ?? resultData.correctAnswers ?? resultData.correct) || 0;
+  const wrongQuestions = Number(resultData.wrong_questions ?? resultData.wrongAnswers ?? resultData.wrong) || 0;
+  const timeSpentSeconds = Number(resultData.timeSpentSeconds ?? resultData.time_spent_seconds) || 0;
 
   // Package for local storage
   const fullResultRecord = {
     candidate_name: candidateName,
+    name: candidateName,
+    studentName: candidateName,
     subject: subject,
     score: score,
     total_questions: totalQuestions,
     percentage: percentage,
     grade: grade,
-    correct_answers: resultData.correctAnswers ?? resultData.correct,
-    wrong_answers: resultData.wrongAnswers ?? resultData.wrong,
-    unattempted: resultData.unattempted ?? 0,
+    correct_answers: correctQuestions,
+    correctAnswers: correctQuestions,
+    correct_questions: correctQuestions,
+    wrong_answers: wrongQuestions,
+    wrongAnswers: wrongQuestions,
+    wrong_questions: wrongQuestions,
+    unattempted: resultData.unattempted ?? Math.max(0, totalQuestions - correctQuestions - wrongQuestions),
     total_marks: resultData.totalMarks ?? totalQuestions * 2,
+    time_spent_seconds: timeSpentSeconds,
+    timeSpentSeconds: timeSpentSeconds,
     submitted_at: submittedAt
   };
 
@@ -71,12 +82,28 @@ async function saveResultToDatabase(resultData) {
     const history = JSON.parse(localStorage.getItem(ALL_RESULTS_KEY) || "[]");
     history.unshift(fullResultRecord);
     localStorage.setItem(ALL_RESULTS_KEY, JSON.stringify(history));
+
+    // Also update Henry's history key
+    const henryHistory = JSON.parse(localStorage.getItem("cbt_exam_history") || "[]");
+    henryHistory.unshift({
+      name: candidateName,
+      candidate_name: candidateName,
+      exam: subject,
+      subject: subject,
+      score: score,
+      total_questions: totalQuestions,
+      percentage: percentage,
+      grade: grade,
+      correctAnswers: correctQuestions,
+      correct_questions: correctQuestions,
+      wrong_questions: wrongQuestions,
+      dateTaken: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      submitted_at: submittedAt
+    });
+    localStorage.setItem("cbt_exam_history", JSON.stringify(henryHistory));
   } catch (e) {
     console.warn("Could not update local history:", e);
   }
-
-  const correctQuestions = Number(resultData.correct_questions ?? resultData.correctAnswers ?? resultData.correct) || 0;
-  const wrongQuestions = Number(resultData.wrong_questions ?? resultData.wrongAnswers ?? resultData.wrong) || 0;
 
   // Insert to Supabase Database
   const client = getSupabaseClient();
@@ -114,14 +141,20 @@ async function saveResultToDatabase(resultData) {
 
       if (error) {
         console.error("Supabase Error Details:", error.message || error);
-        return { success: false, error, data: null, localSaved: true };
+        return { success: false, error, data: fullResultRecord, localSaved: true };
+      }
+
+      if (data && data[0] && data[0].id) {
+        localStorage.setItem("cbt_current_submission_id", String(data[0].id));
+        fullResultRecord.id = data[0].id;
+        localStorage.setItem(RESULTS_KEY, JSON.stringify(fullResultRecord));
       }
 
       console.log("Result saved to Supabase successfully:", data);
       return { success: true, data: data?.[0] || fullResultRecord, error: null, localSaved: true };
     } catch (err) {
       console.error("Exception connecting to Supabase:", err);
-      return { success: false, error: err, data: null, localSaved: true };
+      return { success: false, error: err, data: fullResultRecord, localSaved: true };
     }
   } else {
     console.warn("Supabase client not initialized. Saved to local storage only.");
