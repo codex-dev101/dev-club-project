@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Smart CBT Examination System</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
@@ -19,7 +19,9 @@
 
             <!-- Logo -->
             <div class="logo">
-                <div class="logo-icon">🎓</div>
+                <div class="logo-icon">
+                    <img src="logo.png" alt="Logo">
+                </div>
 
                 <div>
                     <h2>Smart CBT</h2>
@@ -73,14 +75,15 @@
 
 
                 <!-- Form -->
-                <form>
+                <form action="exam instruct/einstruct.html">
 
                     <!-- Name -->
                     <div class="input-box">
 
-                        <span class="input-icon">♙</span>
+                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
 
-                        <input type="text" placeholder="Enter your full name">
+                        <input type="text" name="fullname" id="candidateName" placeholder="Enter your full name"
+                            required>
 
                     </div>
 
@@ -88,9 +91,9 @@
                     <!-- Exam Code -->
                     <div class="input-box">
 
-                        <span class="input-icon">⚙</span>
+                        <span class="input-icon"><i class="fa-solid fa-book-open"></i></span>
 
-                        <select name="subject" title="Select your subject" placeholder="Select your subject">
+                        <select name="subject" title="Select your subject" placeholder="Select your subject" required>
                             <option value="" disabled selected>Select your subject</option>
                             <option value="math">Mathematics</option>
                             <option value="english">English</option>
@@ -105,12 +108,11 @@
 
                     <!-- Start Exam -->
                     <button class="start-btn" type="submit">
-
                         <span>Start Exam</span>
-
-                        <span class="arrow">→</span>
-
+                        <i class="fa-solid fa-arrow-right arrow"></i>
                     </button>
+
+
 
                 </form>
 
@@ -128,13 +130,12 @@
 
 
                 <!-- Results -->
-                <button class="result-btn">
-
-                    <span class="result-icon">▥</span>
-
-                    <span>View My Results</span>
-
-                </button>
+                <a href="henry's-part/result.html" class="result-btn-link">
+                    <button class="result-btn" type="button">
+                        <span class="result-icon"><i class="fa-solid fa-chart-column"></i></span>
+                        <span>View My Results</span>
+                    </button>
+                </a>
 
             </div>
 
@@ -142,6 +143,7 @@
 
     </main>
 
+    <script src="script.js"></script>
 </body>
 
 </html>

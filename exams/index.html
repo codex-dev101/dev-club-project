@@ -5,14 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart CBT Examination</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="exams.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
   <header class="navbar">
     <div class="navbar-container">
-      <h1 class="exam-title">Smart CBT Examination</h1>
+      <h1 class="exam-title"><i class="fa-solid fa-graduation-cap"></i> Smart CBT Examination</h1>
 
       <div class="timer-container" id="timerContainer">
         <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -22,10 +23,11 @@
         </svg>
         <div class="timer-text-group">
           <span class="timer-label">Time Left</span>
-          <span class="timer-display" id="timerDisplay">00:45:00</span>
+          <span class="timer-display" id="timerDisplay">01:00:00</span>
         </div>
       </div>
-      <button type="button" class="btn-submit-exam" id="btnSubmitExam">Submit Exam</button>
+      <button type="button" class="btn-submit-exam" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Submit
+        Exam</button>
     </div>
   </header>
 
@@ -76,7 +78,7 @@
 
         <div class="bottom-actions">
           <button type="button" class="btn-action btn-prev" id="btnPrev">
-            &larr; Previous
+            <i class="fa-solid fa-arrow-left"></i> Previous
           </button>
 
           <button type="button" class="btn-action btn-mark" id="btnMark">
@@ -89,7 +91,7 @@
           </button>
 
           <button type="button" class="btn-action btn-next" id="btnNext">
-            Next &rarr;
+            Next <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
@@ -119,57 +121,25 @@
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit">Cancel & Continue</button>
-        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit">Yes, Submit Now</button>
+        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit"><i class="fa-solid fa-rotate-left"></i>
+          Cancel & Continue</button>
+        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit"><i class="fa-solid fa-circle-check"></i>
+          Yes, Submit Now</button>
       </div>
     </div>
   </div>
 
-  <!-- Final Results & Score Modal/Screen -->
-  <div class="modal-overlay" id="resultsModal">
-    <div class="modal-card modal-results">
-      <div class="results-header">
-        <div class="result-badge-icon">🏆</div>
-        <h3 class="modal-title">Examination Completed!</h3>
-        <p class="modal-subtitle">Your exam has been automatically marked and scored.</p>
-      </div>
-
-      <div class="score-card">
-        <div class="score-circle">
-          <span class="score-percentage" id="resultPercentage">0%</span>
-          <span class="score-grade" id="resultGrade">Grade</span>
-        </div>
-        <div class="score-details">
-          <div class="score-row">
-            <span>Total Questions:</span>
-            <strong id="resultTotalQuestions">50</strong>
-          </div>
-          <div class="score-row">
-            <span>Correct Answers:</span>
-            <strong class="text-green" id="resultCorrect">0</strong>
-          </div>
-          <div class="score-row">
-            <span>Wrong Answers:</span>
-            <strong class="text-red" id="resultWrong">0</strong>
-          </div>
-          <div class="score-row">
-            <span>Unattempted:</span>
-            <strong class="text-gray" id="resultUnattempted">0</strong>
-          </div>
-          <div class="score-row score-total">
-            <span>Final Score:</span>
-            <strong id="resultTotalScore">0 / 100 Marks</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn-modal-confirm" id="btnRestartExam">Restart Exam</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="exams.js"></script>
+  <!-- Supabase CDN (Load first so storage.js has access to supabase global) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="english.js"></script>
+  <script src="currentaffairs.js"></script>
+  <script src="gknowledge.js"></script>
+  <script src="art.js"></script>
+  <script src="maths.js"></script>
+  <script src="science.js"></script>
+  <script src="storage.js"></script>
+  <script src="timer.js"></script>
+  <script src="exams.js"></script>
 </body>
 
 </html>
