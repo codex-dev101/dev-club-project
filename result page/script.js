@@ -48,9 +48,9 @@ async function loadAndRenderLatestResult() {
   }
 }
 
-/**
- * Calculates statistics and populates UI elements
- */
+
+ //Calculates statistics and populates UI elements
+ 
 async function renderResults(data) {
   const {
     candidate_name = "Student",
@@ -122,9 +122,9 @@ async function renderResults(data) {
   });
 }
 
-/**
- * Inserts completed exam record into the `exam_history` table in Supabase
- */
+
+ //Inserts completed exam record into the `exam_history` table in Supabase
+
 async function saveToSupabaseHistory(newRecord) {
   try {
     const { error } = await supabaseClient
@@ -139,18 +139,17 @@ async function saveToSupabaseHistory(newRecord) {
   }
 }
 
-/**
- * Time Helper - Convert seconds into padded MM:SS format
- */
+
+ //Time Helper - Convert seconds into padded MM:SS format
+ 
 function formatTime(totalSeconds) {
   const mins = Math.floor(totalSeconds / 60);
   const secs = totalSeconds % 60;
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-/**
- * Grading Helper - Determine letter grade and label
- */
+ //Grading Helper - Determine letter grade and label
+ 
 function calculateGrade(percentage) {
   if (percentage >= 80) return { letter: "A", text: "Excellent" };
   if (percentage >= 70) return { letter: "B", text: "Very Good" };
