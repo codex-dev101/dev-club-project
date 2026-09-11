@@ -75,6 +75,9 @@ async function saveResultToDatabase(resultData) {
     console.warn("Could not update local history:", e);
   }
 
+  const correctQuestions = Number(resultData.correct_questions ?? resultData.correctAnswers ?? resultData.correct) || 0;
+  const wrongQuestions = Number(resultData.wrong_questions ?? resultData.wrongAnswers ?? resultData.wrong) || 0;
+
   // Insert to Supabase Database
   const client = getSupabaseClient();
   if (client) {
@@ -87,7 +90,9 @@ async function saveResultToDatabase(resultData) {
             subject: subject,
             score: score,
             total_questions: totalQuestions,
-            percentage: percentage
+            percentage: percentage,
+            correct_questions: correctQuestions,
+            wrong_questions: wrongQuestions
           }
         ])
         .select();
