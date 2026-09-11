@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (historyList.length === 0) {
     const emptyRow = document.createElement("tr");
-    emptyRow.innerHTML = `<td colspan="6" style="text-align: center; color: #888; padding: 20px;">No exam results found yet.</td>`;
+    emptyRow.innerHTML = `<td colspan="7" style="text-align: center; color: #888; padding: 20px;">No exam results found yet.</td>`;
     table.appendChild(emptyRow);
     return;
   }
@@ -29,8 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       else grade = "F";
     }
 
-    const correctCount = result.correctAnswers ?? result.correct_questions ?? result.correct_answers ?? 0;
-    const totalQ = result.total_questions || 50;
+    const correctCount = Number(result.correctAnswers ?? result.correct_questions ?? result.correct_answers) || 0;
+    const totalQ = Number(result.total_questions) || 50;
+    const incorrectCount = Number(result.wrong_questions ?? result.wrongAnswers ?? result.wrong_answers ?? result.incorrectAnswers ?? result.incorrect_questions ?? Math.max(0, totalQ - correctCount)) || 0;
 
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -40,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <td><span class="badge-grade" style="font-weight: bold; color: ${grade === 'F' ? '#ef4444' : '#22c55e'}">${grade}</span></td>
       <td><a href="../result page/index.html" style="color: #007bff; text-decoration: none; font-weight: 500;"><i class="fa-solid fa-eye"></i> View Summary</a></td>
       <td>${correctCount} / ${totalQ} Correct</td>
+      <td>${incorrectCount} / ${totalQ} Incorrect</td>
     `;
 
     table.appendChild(row);
