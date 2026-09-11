@@ -16,6 +16,7 @@ body {
 
 .navbar {
     background-color: #03142e;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: sticky;
@@ -213,12 +214,13 @@ body {
     gap: 10px;
     margin-bottom: 20px;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
 }
 
 .confirm-container input[type="checkbox"] {
-    appearance: none;
     -webkit-appearance: none;
+    appearance: none;
     width: 18px;
     height: 18px;
     border: 1.5px solid #cbd5e1;
