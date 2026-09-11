@@ -4,45 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Results - Smart CBT</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>My Results</title>
     <link rel="stylesheet" href="result.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
-    <header class="header">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: #007bff;"></i>
-            <h1 style="font-size: 20px; margin: 0;">Smart CBT</h1>
-        </div>
-        <nav>
-            <a href="../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-            <a href="../exam instruct/einstruct.html"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
-            <a href="result.html" class="active"><i class="fa-solid fa-chart-column"></i> My Result</a>
-        </nav>
-    </header>
-
-    <main class="results-container" style="margin-top: 30px;">
-        <h1><i class="fa-solid fa-square-poll-vertical" style="color: #007bff; margin-right: 8px;"></i> My Results</h1>
+    <main class="results-container">
+        <h1>My Results</h1>
         <p class="description">
             Here are your all-time exam results.
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th><i class="fa-solid fa-book" style="margin-right: 6px;"></i> Exam Title</th>
-                    <th><i class="fa-regular fa-calendar-days" style="margin-right: 6px;"></i> Date Taken</th>
-                    <th><i class="fa-solid fa-award" style="margin-right: 6px;"></i> Score</th>
-                    <th><i class="fa-solid fa-medal" style="margin-right: 6px;"></i> Grade</th>
-                    <th><i class="fa-solid fa-gear" style="margin-right: 6px;"></i> Action</th>
-                </tr>
-            </thead>
-            <tbody id="resultsTable">
+  </p>
+  <table> 
+        <thead>
+            <tr>
+            <th>Exam Title</th>
+            <th>Date Taken</th>
+            <th>Score</th>
+            <th>Grade</th>
+            <th>Action</th>
+            <th>Correct Answers</th>
+            </tr>
+        </thead>
+     <tbody id="resultsTable">
             </tbody>
         </table>
         <div class="message">
-            <i class="fa-solid fa-circle-info" style="color: #007bff; margin-right: 6px;"></i> Keep practicing and improving your skills. You're doing great! 🚀
+            ⓘ Keep practicing and improving your skills. You're doing great! 🚀
         </div>
     </main>
 
