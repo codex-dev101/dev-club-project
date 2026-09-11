@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Instructions - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="einstruct.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
@@ -24,9 +25,9 @@
             </div>
 
             <nav class="links">
-                <a href="../index.html">Dashboard</a>
-                <a href="einstruct.html" class="active">Take Exam</a>
-                <a href="../result page/index.html">My Result</a>
+                <a href="../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="einstruct.html" class="active"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+                <a href="../henry's-part/result.html"><i class="fa-solid fa-chart-column"></i> My Result</a>
             </nav>
         </div>
     </header>
@@ -122,18 +123,59 @@
             </div>
 
             <!-- Form & Confirmation -->
-            <form action="../exams/index.html" method="get"
-                onsubmit="this.action = '../exams/index.html' + window.location.search;">
+            <form id="instructForm">
                 <label class="confirm-container">
                     <input type="checkbox" id="checkbox" required>
                     <span class="checkbox-custom"></span>
                     <span class="confirm-text">I have read and understood the instructions.</span>
                 </label>
 
-                <button type="submit" class="start-btn">Start Exam</button>
+                <button type="submit" class="start-btn">
+                    <span>Start Exam</span>
+                    <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
             </form>
         </div>
     </main>
+
+    <script>
+        const instructForm = document.getElementById("instructForm");
+        if (instructForm) {
+            instructForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const checkbox = document.getElementById("checkbox");
+                if (!checkbox || !checkbox.checked) {
+                    alert("Please check the confirmation box to proceed.");
+                    return;
+                }
+
+                // Preserve existing URL search params or fallback to localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const subject = urlParams.get("subject") || localStorage.getItem("cbt_selected_subject");
+                const fullname = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name");
+
+                const targetParams = new URLSearchParams();
+                if (fullname) targetParams.set("fullname", fullname);
+                if (subject) targetParams.set("subject", subject);
+
+                const queryString = targetParams.toString();
+                window.location.href = "../exams/index.html" + (queryString ? "?" + queryString : "");
+            });
+        }
+        const startExamForm = document.getElementById("startExamForm");
+        startExamForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const checkbox = document.getElementById("checkbox");
+            if (!checkbox.checked) return;
+
+            // Clear old session to ensure a fresh exam for the selected subject
+            localStorage.removeItem("cbt_exam_state");
+
+            // Forward the subject and student query params to exams page
+            const searchParams = window.location.search || "";
+            window.location.href = "../exams/index.html" + searchParams;
+        });
+    </script>
 </body>
 
 </html>

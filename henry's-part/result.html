@@ -4,14 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Results</title>
+    <title>My Results - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="result.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
-    <main class="results-container">
-        <h1>My Results</h1>
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: #007bff;"></i>
+            <h1 style="font-size: 20px; margin: 0;">Smart CBT</h1>
+        </div>
+        <nav>
+            <a href="../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a href="../exam instruct/einstruct.html"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+            <a href="result.html" class="active"><i class="fa-solid fa-chart-column"></i> My Result</a>
+        </nav>
+    </header>
+
+    <main class="results-container" style="margin-top: 30px;">
+        <h1><i class="fa-solid fa-square-poll-vertical" style="color: #007bff; margin-right: 8px;"></i> My Results</h1>
         <p class="description">
             Here are your all-time exam results.
   </p>
@@ -30,7 +43,7 @@
             </tbody>
         </table>
         <div class="message">
-            ⓘ Keep practicing and improving your skills. You're doing great! 🚀
+            <i class="fa-solid fa-circle-info" style="color: #007bff; margin-right: 6px;"></i> Keep practicing and improving your skills. You're doing great! 🚀
         </div>
     </main>
 
