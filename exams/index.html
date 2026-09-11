@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart CBT Examination</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="exams.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
         </svg>
         <div class="timer-text-group">
           <span class="timer-label">Time Left</span>
-          <span class="timer-display" id="timerDisplay">00:45:00</span>
+          <span class="timer-display" id="timerDisplay">01:00:00</span>
         </div>
       </div>
       <button type="button" class="btn-submit-exam" id="btnSubmitExam">Submit Exam</button>
@@ -125,51 +125,10 @@
     </div>
   </div>
 
-  <!-- Final Results & Score Modal/Screen -->
-  <div class="modal-overlay" id="resultsModal">
-    <div class="modal-card modal-results">
-      <div class="results-header">
-        <div class="result-badge-icon">🏆</div>
-        <h3 class="modal-title">Examination Completed!</h3>
-        <p class="modal-subtitle">Your exam has been automatically marked and scored.</p>
-      </div>
-
-      <div class="score-card">
-        <div class="score-circle">
-          <span class="score-percentage" id="resultPercentage">0%</span>
-          <span class="score-grade" id="resultGrade">Grade</span>
-        </div>
-        <div class="score-details">
-          <div class="score-row">
-            <span>Total Questions:</span>
-            <strong id="resultTotalQuestions">50</strong>
-          </div>
-          <div class="score-row">
-            <span>Correct Answers:</span>
-            <strong class="text-green" id="resultCorrect">0</strong>
-          </div>
-          <div class="score-row">
-            <span>Wrong Answers:</span>
-            <strong class="text-red" id="resultWrong">0</strong>
-          </div>
-          <div class="score-row">
-            <span>Unattempted:</span>
-            <strong class="text-gray" id="resultUnattempted">0</strong>
-          </div>
-          <div class="score-row score-total">
-            <span>Final Score:</span>
-            <strong id="resultTotalScore">0 / 100 Marks</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn-modal-confirm" id="btnRestartExam">Restart Exam</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="exams.js"></script>
+  <script src="questions.js"></script>
+  <script src="storage.js"></script>
+  <script src="timer.js"></script>
+  <script src="exams.js"></script>
 </body>
 
 </html>

@@ -1,121 +1,339 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body{
-    background-color: white;
-}
-.header-content{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    background-color: #0A2342;
-}
-#logo{
-    display: flex;
-    color: whitesmoke;
-}
-.logo-image{
-    width: 52px;
-    height: 59px;
-    display: flex;
-    overflow: hidden;
-}
-.logo-image img{
-    width: 100%;
-    margin: auto;
-    object-fit: contain;
-    display: block;
-    max-height: 100%;
-}
-#logo-text{
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #1e293b;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    margin-top: 8px;
+    -webkit-font-smoothing: antialiased;
 }
-.links{
-    text-align: center;
-    gap: 40px;
-    justify-content: space-between;
+
+.navbar {
+    background-color: #03142e;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
     align-items: center;
-    margin-right: 400px;
+    justify-content: space-between;
 }
-.links a{
+
+#logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
-    color: whitesmoke;
-    font-size: 25px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    padding: 26px;
+    color: #ffffff;
 }
-.links a:hover{
-    color: lightblue;
-}
-#Scbt{
-    font-size: 19px;
-    margin-top: 5px;
-    margin-right: 1px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    margin: 0px;
-}
-#esystem{
-    margin-top: 25px;
-    font-style: italic;
-    font-size: 16px;
-    margin: 0px;
-}
-.img-int{
+
+.logo-image {
+    width: 34px;
+    height: 34px;
     display: flex;
-    color:#0A2342 ;
-    justify-content: center;
-}
-.img-int h2{
-    text-align: center;
-    margin-top: 20px;
-}
-.b-start{
-    font-size: 13px;
-    letter-spacing: 1px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-align: center;
-    margin-bottom: 8px;
-}
-.rules{
-    background-color: whitesmoke;
-    padding: 35px;
-    height: 350px;
-    width: 500px;
-    margin-left: 380px;
-    line-height: 48px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-bottom: 20px;
-    border-radius: 10px;
-}
-#checkbox{
-    margin-left: 385px;
-    margin-top: 3px;
-}
-button{
-    border: none;
-    height: 45px;
-    width: 180px;
-    color: whitesmoke;
-    background-color: #0A2342 ;
-    border-radius: 3px;
-    margin-top: 3px;
-    margin-left:520px ;
-    margin-bottom: 10px;
-}
-button:hover{
-    color: lightblue;
-}
-.confirm{
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
-    margin-left: 70px;
-    margin-top: 5px;
+}
+
+.logo-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#Scbt {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+#esystem {
+    font-size: 11px;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+.links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.links a {
+    text-decoration: none;
+    color: #cbd5e1;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.links a:hover,
+.links a.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.page-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background-color: #ffffff;
+    min-height: calc(100vh - 65px);
+}
+
+.instruction-card {
+    background-color: #f4f6f9;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 20px;
+    padding: 34px 26px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06),
+        0 4px 6px -2px rgba(15, 23, 42, 0.03);
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.icon-badge {
+    width: 38px;
+    height: 38px;
+    background-color: #e0edff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.card-header h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0b1a30;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.45;
+    margin-bottom: 18px;
+}
+
+.rules-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+
+.rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.rules-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.45;
+}
+
+.rule-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: #475569;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.rule-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.rules-list strong {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.confirm-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.confirm-container input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    display: inline-grid;
+    place-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.confirm-container input[type="checkbox"]::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #ffffff;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.confirm-container input[type="checkbox"]:checked {
+    background-color: #081d3d;
+    border-color: #081d3d;
+}
+
+.confirm-container input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.confirm-container input[type="checkbox"]:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.confirm-text {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.4;
+}
+
+.start-btn {
+    width: 100%;
+    height: 46px;
+    background-color: #071a36;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 600;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.2px;
+}
+
+.start-btn:hover {
+    background-color: #0c274e;
+    box-shadow: 0 4px 12px rgba(7, 26, 54, 0.25);
+    transform: translateY(-1px);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(7, 26, 54, 0.15);
+}
+
+
+@media (max-width: 640px) {
+    .header-content {
+        padding: 10px 16px;
+    }
+
+    .links {
+        gap: 10px;
+    }
+
+    .links a {
+        font-size: 12.5px;
+        padding: 5px 8px;
+    }
+
+    .page-container {
+        padding: 12px;
+    }
+
+    .instruction-card {
+        padding: 16px 16px;
+        border-radius: 14px;
+    }
+
+    .card-header h2 {
+        font-size: 17px;
+    }
+
+    .rules-box {
+        padding: 10px 12px;
+        margin-bottom: 12px;
+    }
+
+    .rules-list {
+        gap: 7px;
+    }
+
+    .rules-list li {
+        font-size: 12px;
+    }
+
+    .start-btn {
+        height: 40px;
+        font-size: 13.5px;
+    }
 }
