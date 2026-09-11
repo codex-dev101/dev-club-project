@@ -82,23 +82,38 @@ async function saveResultToDatabase(resultData) {
   const client = getSupabaseClient();
   if (client) {
     try {
-      const { data, error } = await client
+      const payloadWithNewCols = {
+        candidate_name: candidateName,
+        subject: subject,
+        score: score,
+        total_questions: totalQuestions,
+        percentage: percentage,
+        correct_questions: correctQuestions,
+        wrong_questions: wrongQuestions
+      };
+
+      let { data, error } = await client
         .from("exam_results")
-        .insert([
-          {
-            candidate_name: candidateName,
-            subject: subject,
-            score: score,
-            total_questions: totalQuestions,
-            percentage: percentage,
-            correct_questions: correctQuestions,
-            wrong_questions: wrongQuestions
-          }
-        ])
+        .insert([payloadWithNewCols])
         .select();
 
+      // If error is caused by missing columns in Supabase schema, retry with basic payload
+      if (error && (error.message?.includes("column") || error.code === "PGRST204" || error.code === "42703")) {
+        console.warn("Retrying Supabase insert without new columns (table schema may not have them yet)...");
+        const basePayload = {
+          candidate_name: candidateName,
+          subject: subject,
+          score: score,
+          total_questions: totalQuestions,
+          percentage: percentage
+        };
+        const retryResult = await client.from("exam_results").insert([basePayload]).select();
+        data = retryResult.data;
+        error = retryResult.error;
+      }
+
       if (error) {
-        console.error("Supabase error saving result:", error);
+        console.error("Supabase Error Details:", error.message || error);
         return { success: false, error, data: null, localSaved: true };
       }
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Instructions - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="einstruct.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
@@ -24,9 +25,9 @@
             </div>
 
             <nav class="links">
-                <a href="../index.html">Dashboard</a>
-                <a href="einstruct.html" class="active">Take Exam</a>
-                <a href="../henry's-part/result.html">My Result</a>
+                <a href="../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="einstruct.html" class="active"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+                <a href="../henry's-part/result.html"><i class="fa-solid fa-chart-column"></i> My Result</a>
             </nav>
         </div>
     </header>
@@ -123,14 +124,16 @@
 
             <!-- Form & Confirmation -->
             <form id="instructForm">
-            <form id="startExamForm">
                 <label class="confirm-container">
                     <input type="checkbox" id="checkbox" required>
                     <span class="checkbox-custom"></span>
                     <span class="confirm-text">I have read and understood the instructions.</span>
                 </label>
 
-                <button type="submit" class="start-btn">Start Exam</button>
+                <button type="submit" class="start-btn">
+                    <span>Start Exam</span>
+                    <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
             </form>
         </div>
     </main>

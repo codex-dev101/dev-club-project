@@ -36,7 +36,7 @@ function renderResults(results) {
             <td>${score}</td>
             <td>${grade}</td>
             <td>
-                <button type="button">View</button>
+                <button type="button"><i class="fa-solid fa-eye"></i> View</button>
             </td>
         `;
 

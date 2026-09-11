@@ -1,127 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart CBT - Result Summary</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- FontAwesome CDN for Icons -->
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /> -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart CBT - Result Summary</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- FontAwesome CDN for Icons -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /> -->
 </head>
+
 <body>
-  <div class="result-container">
-    
-    <!-- Top Navy Header -->
-    <header class="result-header">
-      <div class="header-title">
-        <i class="fa-solid fa-trophy"></i>
-        <h2>Result Summary</h2>
-      </div>
-    </header>
+    <div class="result-container">
 
-    <!-- Main Content Layout -->
-    <div class="result-grid">
-      
-      <!-- Hero Card (Left) -->
-      <div class="hero-card">
-        <div class="check-circle">
-          <i class="fa-solid fa-check"></i>
-        </div>
-        <h1 class="congrats-title">Congratulations, <br><span id="student-name">Student!</span> 🎉</h1>
-        <p class="sub-text">You have completed the exam.</p>
-        <span class="caption-text">Below is your performance summary.</span>
-      </div>
+        <!-- Top Navy Header -->
+        <header class="result-header">
+            <div class="header-title">
+                <i class="fa-solid fa-trophy"></i>
+                <h2>Result Summary</h2>
+            </div>
+        </header>
 
-      <!-- Performance Stats (Right) -->
-      <div class="stats-section">
-        
-        <!-- Top Metric Cards -->
-        <div class="metrics-grid">
-          
-          <div class="metric-card blue">
-            <span class="metric-label">Your Score</span>
-            <h3 class="metric-value" id="score-percentage">0%</h3>
-            <span class="metric-sub" id="score-count">(0 out of 0)</span>
-            <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-          </div>
+        <!-- Main Content Layout -->
+        <div class="result-grid">
 
-          <div class="metric-card green">
-            <span class="metric-label">Total Marks</span>
-            <h3 class="metric-value" id="total-marks">0</h3>
-            <span class="metric-sub">2 marks per question</span>
-            <div class="card-icon"><i class="fa-solid fa-square-poll-vertical"></i></div>
-          </div>
-
-          <div class="metric-card orange">
-            <span class="metric-label">Time Taken</span>
-            <h3 class="metric-value" id="time-taken">00:00</h3>
-            <span class="metric-sub">out of 60:00</span>
-            <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
-          </div>
-
-          <div class="metric-card purple">
-            <span class="metric-label">Grade</span>
-            <h3 class="metric-value" id="grade-letter">-</h3>
-            <span class="metric-sub" id="grade-text">Pending</span>
-            <div class="card-icon"><i class="fa-solid fa-award"></i></div>
-          </div>
-
-        </div>
-
-        <!-- Performance Overview Stacked Bar -->
-        <div class="overview-card">
-          <h4>Performance Overview</h4>
-          
-          <div class="progress-bar-container">
-            <div class="progress-segment correct" id="bar-correct" style="width: 0%;"></div>
-            <div class="progress-segment incorrect" id="bar-incorrect" style="width: 0%;"></div>
-            <div class="progress-segment unanswered" id="bar-unanswered" style="width: 0%;"></div>
-          </div>
-
-          <div class="legend-container">
-            <div class="legend-item">
-              <span class="dot correct"></span>
-              <div>
-                <strong>Correct</strong>
-                <p id="correct-stats">0 (0%)</p>
-              </div>
+            <!-- Hero Card (Left) -->
+            <div class="hero-card">
+                <div class="check-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h1 class="congrats-title">Congratulations, <br><span id="student-name">Student!</span> 🎉</h1>
+                <p class="sub-text">You have completed the exam.</p>
+                <span class="caption-text">Below is your performance summary.</span>
             </div>
 
-            <div class="legend-item">
-              <span class="dot incorrect"></span>
-              <div>
-                <strong>Incorrect</strong>
-                <p id="incorrect-stats">0 (0%)</p>
-              </div>
+            <!-- Performance Stats (Right) -->
+            <div class="stats-section">
+
+                <!-- Top Metric Cards -->
+                <div class="metrics-grid">
+
+                    <div class="metric-card blue">
+                        <span class="metric-label">Your Score</span>
+                        <h3 class="metric-value" id="score-percentage">0%</h3>
+                        <span class="metric-sub" id="score-count">(0 out of 0)</span>
+                        <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    </div>
+
+                    <div class="metric-card green">
+                        <span class="metric-label">Total Marks</span>
+                        <h3 class="metric-value" id="total-marks">0</h3>
+                        <span class="metric-sub">2 marks per question</span>
+                        <div class="card-icon"><i class="fa-solid fa-square-poll-vertical"></i></div>
+                    </div>
+
+                    <div class="metric-card orange">
+                        <span class="metric-label">Time Taken</span>
+                        <h3 class="metric-value" id="time-taken">00:00</h3>
+                        <span class="metric-sub">out of 60:00</span>
+                        <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+                    </div>
+
+                    <div class="metric-card purple">
+                        <span class="metric-label">Grade</span>
+                        <h3 class="metric-value" id="grade-letter">-</h3>
+                        <span class="metric-sub" id="grade-text">Pending</span>
+                        <div class="card-icon"><i class="fa-solid fa-award"></i></div>
+                    </div>
+
+                </div>
+
+                <!-- Performance Overview Stacked Bar -->
+                <div class="overview-card">
+                    <h4>Performance Overview</h4>
+
+                    <div class="progress-bar-container">
+                        <div class="progress-segment correct" id="bar-correct" style="width: 0%;"></div>
+                        <div class="progress-segment incorrect" id="bar-incorrect" style="width: 0%;"></div>
+                        <div class="progress-segment unanswered" id="bar-unanswered" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="legend-container">
+                        <div class="legend-item">
+                            <span class="dot correct"></span>
+                            <div>
+                                <strong>Correct</strong>
+                                <p id="correct-stats">0 (0%)</p>
+                            </div>
+                        </div>
+
+                        <div class="legend-item">
+                            <span class="dot incorrect"></span>
+                            <div>
+                                <strong>Incorrect</strong>
+                                <p id="incorrect-stats">0 (0%)</p>
+                            </div>
+                        </div>
+
+                        <div class="legend-item">
+                            <span class="dot unanswered"></span>
+                            <div>
+                                <strong>Unanswered</strong>
+                                <p id="unanswered-stats">0 (0%)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="legend-item">
-              <span class="dot unanswered"></span>
-              <div>
-                <strong>Unanswered</strong>
-                <p id="unanswered-stats">0 (0%)</p>
-              </div>
-            </div>
-          </div>
         </div>
 
-      </div>
+        <!-- Action Buttons -->
+        <footer class="action-footer">
+            <!-- Outgoing href pointing to Screen 5 (history.html) -->
+            <button class="btn btn-primary" id="btn-detailed-result">
+                <i class="fa-solid fa-list-check"></i> View Detailed Result
+            </button>
+            <button class="btn btn-outline" id="btn-print">
+                <i class="fa-solid fa-print"></i> Print Result
+            </button>
+        </footer>
 
     </div>
 
-    <!-- Action Buttons -->
-    <footer class="action-footer">
-      <!-- Outgoing href pointing to Screen 5 (history.html) -->
-      <button class="btn btn-primary" id="btn-detailed-result">
-  <i class="fa-solid fa-list-check"></i> View Detailed Result
-</button>
-      <button class="btn btn-outline" id="btn-print">
-        <i class="fa-solid fa-print"></i> Print Result
-      </button>
-    </footer>
-
-  </div>
-
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
+
 </html>
