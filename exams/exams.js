@@ -227,21 +227,24 @@ async function submitExam() {
   const percent = totalQuestions > 0 ? Math.round((correct / totalQuestions) * 100) : 0;
   const grades = { 70: "A", 60: "B", 50: "C", 40: "D" };
   const grade = Object.entries(grades).find(([min]) => percent >= Number(min))?.[1] || "F";
-
   const urlParams = new URLSearchParams(window.location.search);
   const currentCandidate = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name") || "Candidate";
+  const timeSpentSeconds = Math.max(0, (60 * 60) - timeLeft);
 
   const examResultData = {
     candidate_name: currentCandidate,
     subject: activeSubject,
     total_questions: totalQuestions,
     correctAnswers: correct,
+    correct_questions: correct,
     wrongAnswers: wrong,
+    wrong_questions: wrong,
     unattempted: unattempted,
     percentage: percent,
     grade: grade,
     score: score,
-    totalMarks: totalMarks
+    totalMarks: totalMarks,
+    timeSpentSeconds: timeSpentSeconds
   };
 
   // Save to database (Supabase) and local storage
@@ -266,13 +269,8 @@ async function submitExam() {
     btnConfirmSubmit.textContent = "Submitted";
   }
 
-  if (saveResponse?.success) {
-    alert("Exam submitted and saved successfully.");
-  } else if (saveResponse?.localSaved) {
-    alert("Exam submitted and saved locally, but the database could not be reached.");
-  } else {
-    alert("Exam submitted, but the save could not be confirmed.");
-  }
+  // Redirect to result page
+  window.location.href = "../result page/index.html";
 }
 
 // --- ATTACH EVENT LISTENERS ---
@@ -338,7 +336,10 @@ if (btnCancelSubmit) {
 }
 
 if (btnConfirmSubmit) {
-  btnConfirmSubmit.addEventListener("click", submitExam);
+  btnConfirmSubmit.addEventListener("click", (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    submitExam();
+  });
 }
 
 // --- INITIALIZE ---

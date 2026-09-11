@@ -1,10 +1,14 @@
-// 1. Supabase Initialization
+// Supabase Initialization
 const SUPABASE_URL = "https://cjqnrpbctqblxfpspxzq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WoZjELCqdbbMtSBJAYAe7A_mv3PmKe_";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let supabaseClient = null;
+if (typeof supabase !== "undefined" && supabase.createClient) {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 2. Setup Page Navigation & Actions
+  // Setup Actions
   const printBtn = document.getElementById("btn-print");
   if (printBtn) {
     printBtn.addEventListener("click", () => window.print());
@@ -13,134 +17,187 @@ document.addEventListener("DOMContentLoaded", async () => {
   const detailedResultBtn = document.getElementById("btn-detailed-result");
   if (detailedResultBtn) {
     detailedResultBtn.addEventListener("click", () => {
-      window.location.href = "result.html";
+      window.location.href = "../henry's-part/result.html";
     });
   }
 
-  // 3. Load Latest Result from Supabase
+  // Load and display result
   await loadAndRenderLatestResult();
 });
 
 /**
- * Fetches the latest exam submission from Supabase
+ * Fetches the user's exam submission from Supabase database or local storage cache
  */
 async function loadAndRenderLatestResult() {
+  // 1. Read Local Storage for the current user's session
+  let localResult = null;
   try {
-    const { data, error } = await supabaseClient
-      .from("exam_results")
-      .select("*")
-      .order("id", { ascending: false })
-      .limit(1);
-
-    if (error) {
-      console.error("Error fetching from Supabase:", error);
-      return;
-    }
-
-    if (data && data.length > 0) {
-      const latestResult = data[0];
-      renderResults(latestResult);
-    } else {
-      console.log("No exam results found in Supabase database.");
-    }
-  } catch (err) {
-    console.error("Unexpected error fetching result:", err);
+    const localRaw = localStorage.getItem("cbt_exam_results");
+    if (localRaw) localResult = JSON.parse(localRaw);
+  } catch (e) {
+    console.error("Error reading local exam results:", e);
   }
+
+  const currentSubmissionId = localStorage.getItem("cbt_current_submission_id");
+  const candidateName = localStorage.getItem("cbt_candidate_name") || localResult?.candidate_name;
+
+  let dbResult = null;
+
+  // 2. Query Supabase for the specific record
+  if (supabaseClient) {
+    try {
+      let query = supabaseClient.from("exam_results").select("*");
+
+      if (currentSubmissionId) {
+        query = query.eq("id", currentSubmissionId);
+      } else if (candidateName && candidateName !== "Candidate") {
+        query = query.eq("candidate_name", candidateName).order("id", { ascending: false });
+      } else {
+        query = query.order("id", { ascending: false });
+      }
+
+      const { data, error } = await query.limit(1);
+
+      if (error) {
+        console.warn("Could not fetch from Supabase:", error.message || error);
+      } else if (data && data.length > 0) {
+        dbResult = data[0];
+      }
+    } catch (err) {
+      console.warn("Error communicating with Supabase:", err);
+    }
+  }
+
+  // 3. Combine verified DB data with the local active session data
+  const combinedData = {
+    ...(dbResult || {}),
+    ...(localResult || {})
+  };
+
+  // If DB returned data, ensure scores are aligned with DB
+  if (dbResult) {
+    if (dbResult.score !== undefined) combinedData.score = dbResult.score;
+    if (dbResult.percentage !== undefined) combinedData.percentage = dbResult.percentage;
+    if (dbResult.correct_questions !== undefined) combinedData.correct_questions = dbResult.correct_questions;
+    if (dbResult.wrong_questions !== undefined) combinedData.wrong_questions = dbResult.wrong_questions;
+    if (dbResult.total_questions !== undefined) combinedData.total_questions = dbResult.total_questions;
+  }
+
+  // Ensure time taken is preserved
+  if (localResult && (localResult.timeSpentSeconds || localResult.time_spent_seconds)) {
+    combinedData.timeSpentSeconds = localResult.timeSpentSeconds ?? localResult.time_spent_seconds;
+  }
+
+  renderResults(combinedData);
 }
 
 /**
- * Calculates statistics and populates UI elements
+ * Populates all UI elements with accurate data
  */
-async function renderResults(data) {
-  const {
-    candidate_name = "Student",
-    studentName, // Fallback property name
-    subject = "CBT Examination",
-    examTitle,   // Fallback property name
-    total_questions = 0,
-    totalQuestions,
-    correctCount = 0,
-    incorrectCount = 0,
-    unansweredCount = 0,
-    timeSpentSeconds = 0,
-    marksPerQuestion = 2,
-    score = 0
-  } = data;
+function renderResults(data) {
+  if (!data) return;
 
-  // Normalize property names (handles both snake_case from DB and camelCase)
-  const name = candidate_name || studentName || "Student";
-  const title = subject || examTitle || "CBT Examination";
-  const total = total_questions || totalQuestions || 0;
+  const candidateName = data.candidate_name || data.name || data.studentName || localStorage.getItem("cbt_candidate_name") || "Student";
+  const totalQuestions = Number(data.total_questions || data.totalQuestions) || 50;
+  
+  const correctCount = Number(data.correct_questions ?? data.correct_answers ?? data.correctAnswers ?? data.correctCount ?? data.correct) || 0;
+  const incorrectCount = Number(data.wrong_questions ?? data.wrong_answers ?? data.wrongAnswers ?? data.incorrectCount ?? data.wrong) || 0;
+  const unansweredCount = Number(data.unattempted ?? data.unansweredCount ?? data.unanswered) || Math.max(0, totalQuestions - (correctCount + incorrectCount));
+  
+  const score = Number(data.score ?? (correctCount * 2));
+  const totalMarks = Number(data.total_marks ?? data.totalMarks ?? (totalQuestions * 2)) || (totalQuestions * 2);
+  const percentage = Number(data.percentage ?? (totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0));
+  const timeSpentSeconds = Number(data.timeSpentSeconds ?? data.time_spent_seconds) || 0;
 
-  // Perform Calculations
-  const maxPossibleMarks = total * marksPerQuestion;
-  const scorePercent = total > 0 ? Math.round((correctCount / total) * 100) : 0;
-  const incorrectPercent = total > 0 ? Math.round((incorrectCount / total) * 100) : 0;
-  const unansweredPercent = total > 0 ? Math.round((unansweredCount / total) * 100) : 0;
+  // Calculate percentages for progress bars
+  const correctPercent = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+  const incorrectPercent = totalQuestions > 0 ? Math.round((incorrectCount / totalQuestions) * 100) : 0;
+  const unansweredPercent = totalQuestions > 0 ? Math.max(0, 100 - correctPercent - incorrectPercent) : 0;
 
-  // Helper for safe element updating
+  // Determine Grade
+  const gradeInfo = getGradeDetails(percentage);
+
+  // Helper functions
   const setText = (id, text) => {
     const el = document.getElementById(id);
-    if (el) el.innerText = text;
+    if (el) el.textContent = text;
   };
 
-  // Update Text Elements (Handles both original UI IDs)
-  setText("student-name", `${name}!`);
-  setText("candidateName", name);
-  setText("userScore", score);
-  setText("score-percentage", `${scorePercent}%`);
-  setText("userPercentage", `${scorePercent}%`);
-  setText("score-count", `(${correctCount} out of ${total})`);
-  setText("total-marks", maxPossibleMarks);
+  const setWidth = (id, percent) => {
+    const el = document.getElementById(id);
+    if (el) el.style.width = `${percent}%`;
+  };
+
+  // 1. Student Name
+  setText("student-name", candidateName);
+
+  // 2. Metrics Cards
+  // Card 1: Your Score (Percentage & correct question count)
+  setText("score-percentage", `${percentage}%`);
+  setText("score-count", `(${correctCount} out of ${totalQuestions})`);
+
+  // Card 2: Total Marks (Total marks available for this exam)
+  setText("total-marks", totalMarks);
+
+  // Card 3: Time Taken (Formatted MM:SS)
   setText("time-taken", formatTime(timeSpentSeconds));
 
-  // Calculate & Set Grade
-  const gradeInfo = calculateGrade(scorePercent);
+  // Card 4: Grade Letter & Text
   setText("grade-letter", gradeInfo.letter);
   setText("grade-text", gradeInfo.text);
 
-  // Dynamic CSS Progress Bar Widths
-  const setWidth = (id, width) => {
-    const el = document.getElementById(id);
-    if (el) el.style.width = `${width}%`;
-  };
-  setWidth("bar-correct", scorePercent);
+  // 3. Stacked Progress Bar Widths
+  setWidth("bar-correct", correctPercent);
   setWidth("bar-incorrect", incorrectPercent);
   setWidth("bar-unanswered", unansweredPercent);
 
-  // Dynamic Legend Text
-  setText("correct-stats", `${correctCount} (${scorePercent}%)`);
+  // 4. Legend Breakdown
+  setText("correct-stats", `${correctCount} (${correctPercent}%)`);
   setText("incorrect-stats", `${incorrectCount} (${incorrectPercent}%)`);
   setText("unanswered-stats", `${unansweredCount} (${unansweredPercent}%)`);
 
-  // Record into Supabase History table
-  await saveToSupabaseHistory({
-    exam_title: title,
-    date_taken: new Date().toISOString(),
-    score: `${scorePercent}% (${correctCount}/${total})`,
-    grade: gradeInfo.letter
+  // Record into History
+  saveToHenryHistory({
+    name: candidateName,
+    candidate_name: candidateName,
+    exam: data.subject || "CBT Examination",
+    subject: data.subject || "CBT Examination",
+    score: score,
+    total_questions: totalQuestions,
+    totalMarks: totalMarks,
+    percentage: percentage,
+    grade: gradeInfo.letter,
+    correctAnswers: correctCount,
+    correct_questions: correctCount,
+    wrong_questions: incorrectCount,
+    timeSpentSeconds: timeSpentSeconds,
+    dateTaken: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    submitted_at: data.submitted_at || new Date().toISOString()
   });
 }
 
 /**
- * Inserts completed exam record into the `exam_history` table in Supabase
+ * Saves result entry to history array for Henry's table
  */
-async function saveToSupabaseHistory(newRecord) {
+function saveToHenryHistory(record) {
   try {
-    const { error } = await supabaseClient
-      .from("exam_history")
-      .insert([newRecord]);
+    let history = JSON.parse(localStorage.getItem("cbt_exam_history") || "[]");
+    const isDuplicate = history.some(item => 
+      item.submitted_at === record.submitted_at || 
+      (item.dateTaken === record.dateTaken && item.score === record.score && item.name === record.name)
+    );
 
-    if (error) {
-      console.warn("Could not save to history table:", error.message);
+    if (!isDuplicate) {
+      history.unshift(record);
+      localStorage.setItem("cbt_exam_history", JSON.stringify(history));
     }
-  } catch (err) {
-    console.error("Error saving exam history to Supabase:", err);
+  } catch (e) {
+    console.warn("Could not save to history:", e);
   }
 }
 
 /**
- * Time Helper - Convert seconds into padded MM:SS format
+ * Converts total seconds into MM:SS format
  */
 function formatTime(totalSeconds) {
   const mins = Math.floor(totalSeconds / 60);
@@ -149,12 +206,12 @@ function formatTime(totalSeconds) {
 }
 
 /**
- * Grading Helper - Determine letter grade and label
+ * Returns letter grade and descriptive performance text
  */
-function calculateGrade(percentage) {
-  if (percentage >= 80) return { letter: "A", text: "Excellent" };
-  if (percentage >= 70) return { letter: "B", text: "Very Good" };
-  if (percentage >= 60) return { letter: "C", text: "Good" };
-  if (percentage >= 50) return { letter: "D", text: "Pass" };
-  return { letter: "F", text: "Fail" };
+function getGradeDetails(percentage) {
+  if (percentage >= 70) return { letter: "A", text: "Excellent" };
+  if (percentage >= 60) return { letter: "B", text: "Very Good" };
+  if (percentage >= 50) return { letter: "C", text: "Good" };
+  if (percentage >= 40) return { letter: "D", text: "Pass" };
+  return { letter: "F", text: "Needs Improvement" };
 }
