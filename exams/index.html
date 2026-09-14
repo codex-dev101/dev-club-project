@@ -26,8 +26,9 @@
           <span class="timer-display" id="timerDisplay">01:00:00</span>
         </div>
       </div>
-      <button type="button" class="btn-submit-exam" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Submit
-        Exam</button>
+      <button type="button" class="btn-submit-exam" id="btnSubmitExam" title="Press S or click to submit">
+        <i class="fa-solid fa-paper-plane"></i> Submit Exam <kbd class="kbd-shortcut">S</kbd>
+      </button>
     </div>
   </header>
 
@@ -77,22 +78,32 @@
         </div>
 
         <div class="bottom-actions">
-          <button type="button" class="btn-action btn-prev" id="btnPrev">
-            <i class="fa-solid fa-arrow-left"></i> Previous
+          <button type="button" class="btn-action btn-prev" id="btnPrev" title="Press P or Left Arrow">
+            <i class="fa-solid fa-arrow-left"></i> Previous <kbd class="kbd-shortcut">P</kbd>
           </button>
 
-          <button type="button" class="btn-action btn-mark" id="btnMark">
+          <button type="button" class="btn-action btn-mark" id="btnMark" title="Press M or R to mark">
             <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
               <line x1="4" y1="22" x2="4" y2="15"></line>
             </svg>
-            <span id="markBtnText">Mark for Review</span>
+            <span id="markBtnText">Mark for Review</span> <kbd class="kbd-shortcut">M</kbd>
           </button>
 
-          <button type="button" class="btn-action btn-next" id="btnNext">
-            Next <i class="fa-solid fa-arrow-right"></i>
+          <button type="button" class="btn-action btn-next" id="btnNext" title="Press N or Right Arrow">
+            Next <kbd class="kbd-shortcut">N</kbd> <i class="fa-solid fa-arrow-right"></i>
           </button>
+        </div>
+
+        <!-- Keyboard Shortcut Helper Bar -->
+        <div class="keyboard-hints-bar">
+          <span class="keyboard-hint-item"><i class="fa-solid fa-keyboard" style="color: #2563eb;"></i> <strong>Keys:</strong></span>
+          <span class="keyboard-hint-item"><kbd class="kbd-shortcut">A</kbd><kbd class="kbd-shortcut">B</kbd><kbd class="kbd-shortcut">C</kbd><kbd class="kbd-shortcut">D</kbd> Pick Option</span>
+          <span class="keyboard-hint-item"><kbd class="kbd-shortcut">N</kbd> Next</span>
+          <span class="keyboard-hint-item"><kbd class="kbd-shortcut">P</kbd> Previous</span>
+          <span class="keyboard-hint-item"><kbd class="kbd-shortcut">M</kbd> Mark</span>
+          <span class="keyboard-hint-item"><kbd class="kbd-shortcut">S</kbd> Submit</span>
         </div>
       </section>
 

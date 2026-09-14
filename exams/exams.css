@@ -141,6 +141,9 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .btn-submit-exam:hover {
@@ -150,6 +153,68 @@ body {
     transform: translateY(-1px);
 }
 
+.kbd-shortcut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    font-size: 0.72rem;
+    font-family: inherit;
+    font-weight: 800;
+    line-height: 1;
+    color: #475569;
+    background-color: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.btn-next .kbd-shortcut {
+    color: #002554;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.btn-all-answered .kbd-shortcut {
+    color: #065f46;
+    background-color: #ffffff;
+}
+
+.btn-submit-exam .kbd-shortcut {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-prev .kbd-shortcut, .btn-mark .kbd-shortcut {
+    color: #334155;
+    background-color: #f1f5f9;
+}
+
+.keyboard-hints-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: #475569;
+}
+
+.keyboard-hint-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
 
 .exam-main {
     flex: 1;
@@ -722,46 +787,193 @@ body {
 .text-red {
     color: #dc2626 !important;
 }
-
-.text-gray {
-    color: #64748b !important;
+.btn-next.btn-all-answered {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    animation: submitPulse 1.8s infinite ease-in-out;
 }
 
+.btn-next.btn-all-answered:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes submitPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+}
+
+/* ==========================================================================
+   Responsive & Mobile Optimization: Questions Above, Options Below
+   ========================================================================== */
 @media (max-width: 900px) {
     .exam-card-wrapper {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--radius-lg);
     }
 
-    .sidebar-navigation {
-        border-right: none;
+    /* Primary focus on mobile: Question Area on Top */
+    .question-area {
+        order: 1;
+        padding: 1.5rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .question-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
         border-bottom: 1px solid var(--border-light);
     }
 
-    .question-grid {
-        grid-template-columns: repeat(10, 1fr);
-        max-height: 160px;
+    .question-count {
+        font-size: 1.1rem;
     }
 
-    .question-area {
-        padding: 1.5rem;
+    /* Question Prompt Above */
+    .question-prompt {
+        font-size: 1.05rem;
+        line-height: 1.55;
+        margin-bottom: 1.25rem;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    /* Options Stacked Cleanly Below */
+    .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+        width: 100%;
+    }
+
+    .option-card {
+        padding: 0.9rem 1rem;
+        border-radius: var(--radius-md);
+        width: 100%;
+    }
+
+    .option-text {
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    /* Bottom Actions */
+    .bottom-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-top: 1rem;
+    }
+
+    .btn-action {
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Sidebar Palette placed below Question Area on mobile */
+    .sidebar-navigation {
+        order: 2;
+        border-right: none;
+        border-top: 2px solid var(--border-light);
+        padding: 1.25rem 1.25rem 1.75rem;
+        background-color: #f8fafc;
+    }
+
+    .legend-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .question-grid {
+        grid-template-columns: repeat(8, 1fr);
+        max-height: 180px;
     }
 }
 
 @media (max-width: 600px) {
-    .navbar-container {
-        flex-wrap: wrap;
+    .navbar {
+        padding: 0.75rem 1rem;
     }
 
-    .question-grid {
-        grid-template-columns: repeat(5, 1fr);
+    .navbar-container {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .exam-title {
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .timer-container {
+        padding: 0.35rem 0.75rem;
+    }
+
+    .timer-display {
+        font-size: 0.95rem;
+    }
+
+    .btn-submit-exam {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .exam-main {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .question-area {
+        padding: 1.25rem 1rem;
+    }
+
+    .question-prompt {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .options-list {
+        gap: 0.65rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .option-card {
+        padding: 0.85rem 0.9rem;
     }
 
     .bottom-actions {
         flex-wrap: wrap;
     }
 
-    .btn-action {
+    .btn-prev {
+        order: 1;
         flex: 1;
+    }
+
+    .btn-next {
+        order: 2;
+        flex: 1;
+    }
+
+    .btn-mark {
+        order: 3;
+        width: 100%;
+        margin-top: 0.25rem;
+    }
+
+    .question-grid {
+        grid-template-columns: repeat(5, 1fr);
+        max-height: 160px;
     }
 
     .score-card {
