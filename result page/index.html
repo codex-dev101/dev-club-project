@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart CBT - Result Summary</title>
+    <title>Smart CBT - Result Summary & Detailed Review</title>
     <link rel="stylesheet" href="styles.css" />
     <!-- FontAwesome CDN for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 
 <body>
@@ -15,11 +16,39 @@
 
         <!-- Top Navy Header -->
         <header class="result-header">
-            <div class="header-title">
-                <i class="fa-solid fa-trophy"></i>
-                <h2>Result Summary</h2>
+            <div class="header-title" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-trophy"></i>
+                    <h2>Smart CBT - Result Summary</h2>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <a href="../index.html" style="color: #cbd5e1; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                    <a href="../creator-dashboard.html" style="color: #cbd5e1; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-left: 8px;">
+                        <i class="fa-solid fa-graduation-cap"></i> Creator Studio
+                    </a>
+                </div>
             </div>
         </header>
+
+        <!-- Candidate Metadata Sub-bar -->
+        <div class="candidate-meta-bar">
+            <div class="meta-group">
+                <span style="color: #64748b; font-weight: 600;">Candidate:</span>
+                <strong id="meta-candidate-name">Student</strong>
+                <span class="meta-badge" id="meta-candidate-id">CBT-2026</span>
+            </div>
+            <div class="meta-group">
+                <span style="color: #64748b; font-weight: 600;">Subject:</span>
+                <strong id="meta-subject-name">General Knowledge</strong>
+                <span class="meta-badge creator" id="meta-creator-tag" style="display: none;">by @creator</span>
+            </div>
+            <div class="meta-group">
+                <span style="color: #64748b; font-weight: 600;">Session:</span>
+                <span class="meta-badge attempt" id="meta-attempt-badge">Attempt #1</span>
+            </div>
+        </div>
 
         <!-- Main Content Layout -->
         <div class="result-grid">
@@ -31,7 +60,7 @@
                 </div>
                 <h1 class="congrats-title">Congratulations, <br><span id="student-name">Student!</span> 🎉</h1>
                 <p class="sub-text">You have completed the exam.</p>
-                <span class="caption-text">Below is your performance summary.</span>
+                <span class="caption-text">Below is your performance summary & answer breakdown.</span>
             </div>
 
             <!-- Performance Stats (Right) -->
@@ -57,7 +86,7 @@
                     <div class="metric-card orange">
                         <span class="metric-label">Time Taken</span>
                         <h3 class="metric-value" id="time-taken">00:00</h3>
-                        <span class="metric-sub">out of 60:00</span>
+                        <span class="metric-sub">Minutes : Seconds</span>
                         <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
                     </div>
 
@@ -111,15 +140,55 @@
 
         </div>
 
+        <!-- DETAILED ANSWERS REVIEW SECTION -->
+        <section class="detailed-review-section">
+            <div class="review-section-header">
+                <h3>
+                    <i class="fa-solid fa-list-check" style="color: #2563eb;"></i>
+                    Detailed Answers Review Breakdown
+                </h3>
+
+                <!-- Filter Tabs -->
+                <div class="review-filter-tabs">
+                    <button type="button" class="review-filter-btn active" data-filter="all" id="filterAllBtn">
+                        <i class="fa-solid fa-layer-group"></i> All Questions (<span id="count-filter-all">0</span>)
+                    </button>
+                    <button type="button" class="review-filter-btn" data-filter="correct" id="filterCorrectBtn">
+                        <i class="fa-solid fa-circle-check" style="color: #16a34a;"></i> Correct (<span id="count-filter-correct">0</span>)
+                    </button>
+                    <button type="button" class="review-filter-btn" data-filter="wrong" id="filterWrongBtn">
+                        <i class="fa-solid fa-circle-xmark" style="color: #dc2626;"></i> Wrong (<span id="count-filter-wrong">0</span>)
+                    </button>
+                    <button type="button" class="review-filter-btn" data-filter="unanswered" id="filterUnansweredBtn">
+                        <i class="fa-solid fa-circle-question" style="color: #d97706;"></i> Unanswered (<span id="count-filter-unanswered">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- List of Questions with Detailed Correct vs Wrong Breakdown -->
+            <div class="review-questions-list" id="reviewQuestionsList">
+                <div style="text-align: center; padding: 2rem; color: #94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                    <p style="margin-top: 0.5rem;">Loading detailed question breakdown...</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Action Buttons -->
-        <footer class="action-footer">
-            <!-- Outgoing href pointing to Screen 5 (history.html) -->
-            <button class="btn btn-primary" id="btn-detailed-result">
-                <i class="fa-solid fa-list-check"></i> View Detailed Result
-            </button>
-            <button class="btn btn-outline" id="btn-print">
-                <i class="fa-solid fa-print"></i> Print Result
-            </button>
+        <footer class="action-footer" style="border-top: 1px solid #e2e8f0; justify-content: space-between; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="btn-detailed-result">
+                    <i class="fa-solid fa-table-list"></i> View All Results History
+                </button>
+                <a href="../exam instruct/einstruct.html" class="btn btn-outline" style="color: #2563eb; border-color: #93c5fd; background: #eff6ff;">
+                    <i class="fa-solid fa-rotate-right"></i> Retake / New Exam
+                </a>
+            </div>
+            <div>
+                <button class="btn btn-outline" id="btn-print">
+                    <i class="fa-solid fa-print"></i> Print Result
+                </button>
+            </div>
         </footer>
 
     </div>

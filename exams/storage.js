@@ -43,7 +43,12 @@ function clearExamState() {
 async function saveResultToDatabase(resultData) {
   const submittedAt = new Date().toISOString();
   const candidateName = resultData.candidate_name || localStorage.getItem("cbt_candidate_name") || "Candidate";
+  const candidateId = resultData.candidate_id || localStorage.getItem("cbt_candidate_id") || "CBT-2026";
+  const attemptNumber = resultData.attempt_number || parseInt(localStorage.getItem("cbt_current_attempt_number")) || 1;
   const subject = resultData.subject || "general_knowledge";
+  const subjectTitle = resultData.subject_title || resultData.subject || "General Knowledge";
+  const creatorTag = resultData.creator_tag || localStorage.getItem("cbt_creator_tag") || "";
+  
   const score = Number(resultData.score) || 0;
   const totalQuestions = Number(resultData.total_questions) || 50;
   const percentage = Number(resultData.percentage) || 0;
@@ -51,13 +56,20 @@ async function saveResultToDatabase(resultData) {
   const correctQuestions = Number(resultData.correct_questions ?? resultData.correctAnswers ?? resultData.correct) || 0;
   const wrongQuestions = Number(resultData.wrong_questions ?? resultData.wrongAnswers ?? resultData.wrong) || 0;
   const timeSpentSeconds = Number(resultData.timeSpentSeconds ?? resultData.time_spent_seconds) || 0;
+  const reviewBreakdown = Array.isArray(resultData.review_breakdown) ? resultData.review_breakdown : [];
 
   // Package for local storage
   const fullResultRecord = {
+    candidate_id: candidateId,
+    candidateId: candidateId,
     candidate_name: candidateName,
     name: candidateName,
     studentName: candidateName,
     subject: subject,
+    subject_title: subjectTitle,
+    creator_tag: creatorTag,
+    attempt_number: attemptNumber,
+    attemptNumber: attemptNumber,
     score: score,
     total_questions: totalQuestions,
     percentage: percentage,
@@ -72,7 +84,8 @@ async function saveResultToDatabase(resultData) {
     total_marks: resultData.totalMarks ?? totalQuestions * 2,
     time_spent_seconds: timeSpentSeconds,
     timeSpentSeconds: timeSpentSeconds,
-    submitted_at: submittedAt
+    submitted_at: submittedAt,
+    review_breakdown: reviewBreakdown
   };
 
   // Cache locally
@@ -86,10 +99,16 @@ async function saveResultToDatabase(resultData) {
     // Also update Henry's history key
     const henryHistory = JSON.parse(localStorage.getItem("cbt_exam_history") || "[]");
     henryHistory.unshift({
+      candidate_id: candidateId,
+      candidateId: candidateId,
       name: candidateName,
       candidate_name: candidateName,
-      exam: subject,
+      exam: subjectTitle,
       subject: subject,
+      subject_title: subjectTitle,
+      creator_tag: creatorTag,
+      attempt_number: attemptNumber,
+      attemptNumber: attemptNumber,
       score: score,
       total_questions: totalQuestions,
       percentage: percentage,
@@ -98,7 +117,8 @@ async function saveResultToDatabase(resultData) {
       correct_questions: correctQuestions,
       wrong_questions: wrongQuestions,
       dateTaken: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-      submitted_at: submittedAt
+      submitted_at: submittedAt,
+      review_breakdown: reviewBreakdown
     });
     localStorage.setItem("cbt_exam_history", JSON.stringify(henryHistory));
   } catch (e) {
