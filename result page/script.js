@@ -25,9 +25,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Setup Review Filter Tabs
-  setupFilterTabs();
-
   // Load and display result
   await loadAndRenderLatestResult();
 });
@@ -193,9 +190,8 @@ function renderResults(data) {
   setText("incorrect-stats", `${incorrectCount} (${incorrectPercent}%)`);
   setText("unanswered-stats", `${unansweredCount} (${unansweredPercent}%)`);
 
-  // 6. Render Detailed Question Review Breakdown
+  // Save active questions for history storage
   activeReviewQuestions = Array.isArray(data.review_breakdown) ? data.review_breakdown : [];
-  renderDetailedAnswersReview(activeReviewQuestions);
 
   // Record into History
   saveToHenryHistory({
@@ -221,131 +217,6 @@ function renderResults(data) {
     dateTaken: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
     submitted_at: data.submitted_at || new Date().toISOString(),
     review_breakdown: activeReviewQuestions
-  });
-}
-
-/**
- * Renders the question-by-question review with all options highlighted
- */
-function renderDetailedAnswersReview(questions) {
-  const container = document.getElementById("reviewQuestionsList");
-  if (!container) return;
-
-  // Update filter counters
-  const total = questions.length;
-  const correct = questions.filter(q => q.isCorrect).length;
-  const wrong = questions.filter(q => !q.isCorrect && !q.isUnanswered).length;
-  const unanswered = questions.filter(q => q.isUnanswered).length;
-
-  const setElText = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val;
-  };
-  setElText("count-filter-all", total);
-  setElText("count-filter-correct", correct);
-  setElText("count-filter-wrong", wrong);
-  setElText("count-filter-unanswered", unanswered);
-
-  // Filter based on active tab
-  let filtered = questions;
-  if (currentFilter === "correct") {
-    filtered = questions.filter(q => q.isCorrect);
-  } else if (currentFilter === "wrong") {
-    filtered = questions.filter(q => !q.isCorrect && !q.isUnanswered);
-  } else if (currentFilter === "unanswered") {
-    filtered = questions.filter(q => q.isUnanswered);
-  }
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 2.5rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
-        <i class="fa-solid fa-clipboard-check" style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;"></i>
-        <p style="color: #64748b; font-weight: 600;">No questions found in this category.</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = "";
-  filtered.forEach(q => {
-    const card = document.createElement("div");
-    let statusClass = "status-unanswered";
-    let statusPill = `<span class="review-status-pill pill-unanswered"><i class="fa-solid fa-circle-question"></i> Not Answered</span>`;
-
-    if (q.isCorrect) {
-      statusClass = "status-correct";
-      statusPill = `<span class="review-status-pill pill-correct"><i class="fa-solid fa-circle-check"></i> Correct (+2 Marks)</span>`;
-    } else if (!q.isUnanswered) {
-      statusClass = "status-wrong";
-      statusPill = `<span class="review-status-pill pill-wrong"><i class="fa-solid fa-circle-xmark"></i> Incorrect (0 Marks)</span>`;
-    }
-
-    card.className = `review-card ${statusClass}`;
-
-    // Options HTML
-    const optionsHtml = q.options.map((optText, optIdx) => {
-      const isCorrectOpt = optIdx === q.correctAnswerIndex;
-      const isUserChoice = optIdx === q.userAnswerIndex;
-
-      let optClass = "";
-      let optBadge = "";
-
-      if (isCorrectOpt && isUserChoice) {
-        optClass = "is-user-correct";
-        optBadge = `<span class="review-opt-badge"><i class="fa-solid fa-check"></i> Your Choice (Correct)</span>`;
-      } else if (isCorrectOpt) {
-        optClass = "is-correct-answer";
-        optBadge = `<span class="review-opt-badge"><i class="fa-solid fa-check"></i> Correct Answer</span>`;
-      } else if (isUserChoice) {
-        optClass = "is-user-wrong";
-        optBadge = `<span class="review-opt-badge"><i class="fa-solid fa-xmark"></i> Your Choice</span>`;
-      }
-
-      const letter = String.fromCharCode(65 + optIdx);
-      return `
-        <div class="review-opt ${optClass}">
-          <div class="review-opt-left">
-            <span class="review-opt-letter">${letter}.</span>
-            <span>${escapeHtml(optText)}</span>
-          </div>
-          ${optBadge}
-        </div>
-      `;
-    }).join("");
-
-    card.innerHTML = `
-      <div class="review-card-header">
-        <span class="review-q-num">Question ${q.index || 1}</span>
-        ${statusPill}
-      </div>
-      <div class="review-prompt">${escapeHtml(q.question)}</div>
-      <div class="review-options-grid">
-        ${optionsHtml}
-      </div>
-      ${q.explanation ? `
-        <div class="review-explanation">
-          <i class="fa-solid fa-circle-info" style="margin-top: 2px;"></i>
-          <div><strong>Explanation:</strong> ${escapeHtml(q.explanation)}</div>
-        </div>
-      ` : ''}
-    `;
-
-    container.appendChild(card);
-  });
-}
-
-/**
- * Filter Tabs Setup
- */
-function setupFilterTabs() {
-  const tabs = document.querySelectorAll(".review-filter-btn");
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      tabs.forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-      currentFilter = tab.getAttribute("data-filter") || "all";
-      renderDetailedAnswersReview(activeReviewQuestions);
-    });
   });
 }
 

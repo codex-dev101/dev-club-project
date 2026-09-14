@@ -98,12 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
         <td>
           <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-            <a href="../result page/index.html" class="btn-summary-link" style="color: #2563eb; font-size: 12px; font-weight: 600; text-decoration: none; padding: 5px 10px; border-radius: 4px; background: #eff6ff; border: 1px solid #bfdbfe;">
-              <i class="fa-solid fa-eye"></i> Summary
+            <a href="../result page/index.html" class="btn-summary-link" style="color: #2563eb; font-size: 12px; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #eff6ff; border: 1px solid #bfdbfe; display: inline-flex; align-items: center; gap: 4px;">
+              <i class="fa-solid fa-trophy"></i> Congrats
             </a>
             ${hasBreakdown ? `
-              <button type="button" class="btn-review-modal-trigger" data-idx="${idx}" style="color: #0b1e36; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 4px; background: #f8fafc; border: 1px solid #cbd5e1; cursor: pointer;">
-                <i class="fa-solid fa-list-check"></i> Answers
+              <button type="button" class="btn-review-modal-trigger" data-idx="${idx}" style="color: #ffffff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; background: #0b1e36; border: 1px solid #0b1e36; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fa-solid fa-list-check"></i> View Answers
               </button>
             ` : ''}
           </div>
