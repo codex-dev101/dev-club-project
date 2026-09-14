@@ -60,7 +60,7 @@
                 </div>
                 <h1 class="congrats-title">Congratulations, <br><span id="student-name">Student!</span> 🎉</h1>
                 <p class="sub-text">You have completed the exam.</p>
-                <span class="caption-text">Below is your performance summary & answer breakdown.</span>
+                <span class="caption-text">Below is your performance summary.</span>
             </div>
 
             <!-- Performance Stats (Right) -->
@@ -140,45 +140,11 @@
 
         </div>
 
-        <!-- DETAILED ANSWERS REVIEW SECTION -->
-        <section class="detailed-review-section">
-            <div class="review-section-header">
-                <h3>
-                    <i class="fa-solid fa-list-check" style="color: #2563eb;"></i>
-                    Detailed Answers Review Breakdown
-                </h3>
-
-                <!-- Filter Tabs -->
-                <div class="review-filter-tabs">
-                    <button type="button" class="review-filter-btn active" data-filter="all" id="filterAllBtn">
-                        <i class="fa-solid fa-layer-group"></i> All Questions (<span id="count-filter-all">0</span>)
-                    </button>
-                    <button type="button" class="review-filter-btn" data-filter="correct" id="filterCorrectBtn">
-                        <i class="fa-solid fa-circle-check" style="color: #16a34a;"></i> Correct (<span id="count-filter-correct">0</span>)
-                    </button>
-                    <button type="button" class="review-filter-btn" data-filter="wrong" id="filterWrongBtn">
-                        <i class="fa-solid fa-circle-xmark" style="color: #dc2626;"></i> Wrong (<span id="count-filter-wrong">0</span>)
-                    </button>
-                    <button type="button" class="review-filter-btn" data-filter="unanswered" id="filterUnansweredBtn">
-                        <i class="fa-solid fa-circle-question" style="color: #d97706;"></i> Unanswered (<span id="count-filter-unanswered">0</span>)
-                    </button>
-                </div>
-            </div>
-
-            <!-- List of Questions with Detailed Correct vs Wrong Breakdown -->
-            <div class="review-questions-list" id="reviewQuestionsList">
-                <div style="text-align: center; padding: 2rem; color: #94a3b8;">
-                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
-                    <p style="margin-top: 0.5rem;">Loading detailed question breakdown...</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Action Buttons -->
         <footer class="action-footer" style="border-top: 1px solid #e2e8f0; justify-content: space-between; flex-wrap: wrap;">
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <button class="btn btn-primary" id="btn-detailed-result">
-                    <i class="fa-solid fa-table-list"></i> View All Results History
+                    <i class="fa-solid fa-table-list"></i> View Result Details & Answers
                 </button>
                 <a href="../exam instruct/einstruct.html" class="btn btn-outline" style="color: #2563eb; border-color: #93c5fd; background: #eff6ff;">
                     <i class="fa-solid fa-rotate-right"></i> Retake / New Exam
