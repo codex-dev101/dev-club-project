@@ -4,34 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Results</title>
+    <title>All Exam Results - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="result.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 
 <body>
-    <main class="results-container">
-        <h1>My Results</h1>
-        <p class="description">
-            Here are your all-time exam results.
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Exam Title</th>
-                    <th>Date Taken</th>
-                    <th>Score</th>
-                    <th>Grade</th>
-                    <th>Action</th>
-                    <th>Correct Answers</th>
-                    <th>Incorrect Answers</th>
+    <!-- Top Header Navigation -->
+    <div class="header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: #002554;"></i>
+            <h1 style="font-size: 22px; color: #002554; margin: 0;">Smart CBT</h1>
+        </div>
+        <nav>
+            <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="../creator-dashboard.html"><i class="fa-solid fa-sliders"></i> Creator Studio</a>
+            <a href="../exam instruct/einstruct.html"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+            <a href="result.html" class="active"><i class="fa-solid fa-chart-column"></i> My Results</a>
+        </nav>
+    </div>
 
-                </tr>
-            </thead>
-            <tbody id="resultsTable">
-            </tbody>
-        </table>
+    <main class="results-container" style="max-width: 1150px; margin-top: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+            <div>
+                <h1 style="color: #0b1e36;">My All-Time Results</h1>
+                <p class="description" style="margin-bottom: 0;">
+                    Complete history of tests written, candidate IDs, attempt retakes, and detailed score breakdowns.
+                </p>
+            </div>
+            <div>
+                <button type="button" id="btnClearHistory" style="color: #ef4444; border-color: #fecaca; background: #fff5f5; font-size: 13px; font-weight: 600;">
+                    <i class="fa-solid fa-trash-can"></i> Clear History
+                </button>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidate & ID</th>
+                        <th>Exam Subject</th>
+                        <th>Attempt</th>
+                        <th>Date Taken</th>
+                        <th>Score & Grade</th>
+                        <th>Performance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTable">
+                    <!-- Populated dynamically -->
+                </tbody>
+            </table>
+        </div>
     </main>
+
+    <!-- Review Answers Modal for past results -->
+    <div id="reviewModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
+        <div style="background: white; border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="padding: 18px 24px; background: #0b1e36; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; font-size: 1.15rem;" id="modalExamTitle">
+                    <i class="fa-solid fa-list-check"></i> Detailed Answers Review
+                </h3>
+                <button type="button" id="btnCloseModal" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+
+            <div style="padding: 20px 24px; overflow-y: auto; flex: 1;" id="modalQuestionsList">
+                <!-- Question cards injected here -->
+            </div>
+
+            <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('reviewModal').style.display='none'" style="padding: 8px 18px; background: #0b1e36; color: white; border: none; border-radius: 6px; font-weight: 600;">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script src="result.js"></script>
 </body>

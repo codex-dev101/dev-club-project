@@ -77,34 +77,48 @@
                 <!-- Form -->
                 <form action="exam instruct/einstruct.html">
 
+                    <!-- Candidate Unique Identifier -->
+                    <div class="input-box" style="position: relative;">
+                        <span class="input-icon"><i class="fa-solid fa-id-card"></i></span>
+                        <input type="text" name="candidateId" id="candidateId" placeholder="Candidate ID / Matric No." required>
+                        <button type="button" id="btnGenId" title="Generate random Candidate ID" style="background: none; border: none; color: #2563eb; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0 4px; white-space: nowrap;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto
+                        </button>
+                    </div>
+
                     <!-- Name -->
                     <div class="input-box">
-
                         <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-
-                        <input type="text" name="fullname" id="candidateName" placeholder="Enter your full name"
-                            required>
-
+                        <input type="text" name="fullname" id="candidateName" placeholder="Enter your full name" required>
                     </div>
 
-
-                    <!-- Exam Code -->
+                    <!-- Exam Subject / Custom Pack -->
                     <div class="input-box">
-
                         <span class="input-icon"><i class="fa-solid fa-book-open"></i></span>
-
-                        <select name="subject" title="Select your subject" placeholder="Select your subject" required>
+                        <select name="subject" id="subjectSelect" title="Select your subject" required>
                             <option value="" disabled selected>Select your subject</option>
-                            <option value="math">Mathematics</option>
-                            <option value="english">English</option>
-                            <option value="science">Science</option>
-                            <option value="art">Art</option>
-                            <option value="current_affairs">Current Affairs</option>
-                            <option value="general_knowledge">General Knowledge</option>
+                            <optgroup label="Standard Subjects">
+                                <option value="math">Mathematics</option>
+                                <option value="english">English</option>
+                                <option value="science">Science</option>
+                                <option value="art">Art</option>
+                                <option value="current_affairs">Current Affairs</option>
+                                <option value="general_knowledge">General Knowledge</option>
+                            </optgroup>
+                            <optgroup label="User Created & Custom Packs" id="customSubjectsOptgroup">
+                                <!-- Populated dynamically from creator packs -->
+                            </optgroup>
                         </select>
-
                     </div>
 
+                    <!-- Duplicate Attempt Notice Banner (Hidden by default) -->
+                    <div id="attemptNoticeBanner" style="display: none; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; text-align: left; font-size: 12.5px; color: #9a3412;">
+                        <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; margin-bottom: 2px;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span id="attemptNoticeTitle">Retake Notice</span>
+                        </div>
+                        <p id="attemptNoticeDesc" style="margin: 0; line-height: 1.35; color: #c2410c;">You have written this exam before.</p>
+                    </div>
 
                     <!-- Start Exam -->
                     <button class="start-btn" type="submit">
@@ -112,30 +126,32 @@
                         <i class="fa-solid fa-arrow-right arrow"></i>
                     </button>
 
-
-
                 </form>
-
 
                 <!-- OR -->
                 <div class="or">
-
                     <span></span>
-
                     <p>OR</p>
-
                     <span></span>
-
                 </div>
 
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Question Creator Dashboard Link -->
+                    <a href="creator-dashboard.html" class="creator-btn-link">
+                        <button class="result-btn" type="button" style="background: #eef2ff; border-color: #c7d2fe; color: #3730a3;">
+                            <span class="result-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                            <span>Question Creator Studio</span>
+                        </button>
+                    </a>
 
-                <!-- Results -->
-                <a href="henry's-part/result.html" class="result-btn-link">
-                    <button class="result-btn" type="button">
-                        <span class="result-icon"><i class="fa-solid fa-chart-column"></i></span>
-                        <span>View My Results</span>
-                    </button>
-                </a>
+                    <!-- Results -->
+                    <a href="henry's-part/result.html" class="result-btn-link">
+                        <button class="result-btn" type="button">
+                            <span class="result-icon"><i class="fa-solid fa-chart-column"></i></span>
+                            <span>View My Results</span>
+                        </button>
+                    </a>
+                </div>
 
             </div>
 
