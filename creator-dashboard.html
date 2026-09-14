@@ -27,7 +27,8 @@
 
             <nav class="header-nav">
                 <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
-                <a href="exam instruct/einstruct.html" class="nav-link"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+                <a href="exam instruct/einstruct.html" class="nav-link"><i class="fa-solid fa-pen-to-square"></i> Take
+                    Exam</a>
                 <a href="henry's-part/result.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Results</a>
             </nav>
         </div>
@@ -40,7 +41,8 @@
         <section class="dashboard-hero">
             <div class="hero-text">
                 <h2>Question Creator Studio 🎓</h2>
-                <p>Upload and manage your own custom exam questions. Questions are tagged to your profile so students can practice your custom tests!</p>
+                <p>Upload and manage your own custom exam questions. Questions are tagged to your profile so students
+                    can practice your custom tests!</p>
             </div>
 
             <!-- Creator Identity Badge -->
@@ -80,13 +82,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group">
                                 <label>Category</label>
-                                <select id="packCategory">
-                                    <option value="Science">Science</option>
-                                    <option value="Computer Science">Computer Science</option>
-                                    <option value="Arts & Humanities">Arts & Humanities</option>
-                                    <option value="Commercial & Business">Commercial & Business</option>
-                                    <option value="General Knowledge">General Knowledge</option>
-                                </select>
+                                <input type="text" id="packCategory" placeholder="Enter Category">
                             </div>
 
                             <div class="form-group">
@@ -98,8 +94,10 @@
 
                     <!-- Step 2: Question Builder Form -->
                     <div class="card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <h3 class="card-title" style="margin-bottom: 0;"><i class="fa-solid fa-circle-question"></i> 2. Add Questions</h3>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 class="card-title" style="margin-bottom: 0;"><i class="fa-solid fa-circle-question"></i>
+                                2. Add Questions</h3>
                             <button type="button" class="btn btn-sm btn-outline" id="btnBulkPaste">
                                 <i class="fa-solid fa-file-import"></i> Bulk JSON Paste
                             </button>
@@ -114,22 +112,26 @@
                             <label>Options & Select Correct Answer (Click radio to mark correct answer) *</label>
                             <div class="options-builder">
                                 <div class="option-input-row">
-                                    <input type="radio" name="correctOpt" value="0" id="optRadio0" checked title="Mark Option A as correct">
+                                    <input type="radio" name="correctOpt" value="0" id="optRadio0" checked
+                                        title="Mark Option A as correct">
                                     <span class="option-letter">A:</span>
                                     <input type="text" id="qOptA" placeholder="Option A text">
                                 </div>
                                 <div class="option-input-row">
-                                    <input type="radio" name="correctOpt" value="1" id="optRadio1" title="Mark Option B as correct">
+                                    <input type="radio" name="correctOpt" value="1" id="optRadio1"
+                                        title="Mark Option B as correct">
                                     <span class="option-letter">B:</span>
                                     <input type="text" id="qOptB" placeholder="Option B text">
                                 </div>
                                 <div class="option-input-row">
-                                    <input type="radio" name="correctOpt" value="2" id="optRadio2" title="Mark Option C as correct">
+                                    <input type="radio" name="correctOpt" value="2" id="optRadio2"
+                                        title="Mark Option C as correct">
                                     <span class="option-letter">C:</span>
                                     <input type="text" id="qOptC" placeholder="Option C text">
                                 </div>
                                 <div class="option-input-row">
-                                    <input type="radio" name="correctOpt" value="3" id="optRadio3" title="Mark Option D as correct">
+                                    <input type="radio" name="correctOpt" value="3" id="optRadio3"
+                                        title="Mark Option D as correct">
                                     <span class="option-letter">D:</span>
                                     <input type="text" id="qOptD" placeholder="Option D text">
                                 </div>
@@ -149,7 +151,8 @@
 
                 <!-- Right Column: Staged Questions & Publish -->
                 <div class="card" style="display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                         <h3 class="card-title" style="margin-bottom: 0;">
                             <i class="fa-solid fa-list-check"></i> Pack Questions (<span id="stagedCount">0</span>)
                         </h3>
@@ -161,7 +164,8 @@
                     </div>
 
                     <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light);">
-                        <button type="button" class="btn btn-emerald" id="btnSavePack" style="width: 100%; font-size: 1rem; padding: 0.85rem;">
+                        <button type="button" class="btn btn-emerald" id="btnSavePack"
+                            style="width: 100%; font-size: 1rem; padding: 0.85rem;">
                             <i class="fa-solid fa-cloud-arrow-up"></i> Save & Publish Question Pack
                         </button>
                     </div>
@@ -180,15 +184,23 @@
     </main>
 
     <!-- Bulk JSON Modal -->
-    <div id="bulkModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(4px);">
-        <div style="background: white; border-radius: 16px; max-width: 600px; width: 100%; padding: 2rem; box-shadow: var(--shadow-lg);">
+    <div id="bulkModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(4px);">
+        <div
+            style="background: white; border-radius: 16px; max-width: 600px; width: 100%; padding: 2rem; box-shadow: var(--shadow-lg);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="font-size: 1.25rem; color: var(--navy-dark);"><i class="fa-solid fa-file-code"></i> Bulk Import Questions (JSON)</h3>
-                <button type="button" id="btnCloseBulk" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+                <h3 style="font-size: 1.25rem; color: var(--navy-dark);"><i class="fa-solid fa-file-code"></i> Bulk
+                    Import Questions (JSON)</h3>
+                <button type="button" id="btnCloseBulk"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
             </div>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Paste an array of question objects formatted with <code>question</code>, <code>options</code> (array of 4 strings), and <code>answer</code> (index 0 to 3).</p>
-            
-            <textarea id="bulkJsonInput" rows="10" style="width: 100%; font-family: monospace; font-size: 0.85rem; padding: 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none;" placeholder='[
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Paste an array of question objects
+                formatted with <code>question</code>, <code>options</code> (array of 4 strings), and <code>answer</code>
+                (index 0 to 3).</p>
+
+            <textarea id="bulkJsonInput" rows="10"
+                style="width: 100%; font-family: monospace; font-size: 0.85rem; padding: 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none;"
+                placeholder='[
   {
     "question": "What is 2 + 2?",
     "options": ["3", "4", "5", "6"],
@@ -196,9 +208,10 @@
     "explanation": "2 + 2 equals 4"
   }
 ]'></textarea>
-            
+
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
-                <button type="button" class="btn btn-outline" onclick="document.getElementById('bulkModal').style.display='none'">Cancel</button>
+                <button type="button" class="btn btn-outline"
+                    onclick="document.getElementById('bulkModal').style.display='none'">Cancel</button>
                 <button type="button" class="btn btn-primary" id="btnApplyBulk">Import Questions</button>
             </div>
         </div>
