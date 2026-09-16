@@ -106,64 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const rawPacks = localStorage.getItem("cbt_custom_packs");
             let packs = [];
+
             if (rawPacks) {
                 packs = JSON.parse(rawPacks);
+                packs = Array.isArray(packs) ? packs.filter(pack => pack && pack.id !== "custom_web_dev_101") : [];
+                if (packs.length !== JSON.parse(rawPacks).length) {
+                    localStorage.setItem("cbt_custom_packs", JSON.stringify(packs));
+                }
             } else {
-                // Preload default sample pack if none exists
-                packs = [
-                    {
-                        id: "custom_web_dev_101",
-                        title: "Web Development Fundamentals",
-                        subjectKey: "custom_web_dev_101",
-                        creatorName: "Alex Dev",
-                        creatorTag: "@alexdev",
-                        category: "Computer Science",
-                        durationMinutes: 15,
-                        questions: [
-                            {
-                                question: "What does HTML stand for?",
-                                options: [
-                                    "Hyper Text Markup Language",
-                                    "High Tech Modern Language",
-                                    "Hyperlink and Text Management Language",
-                                    "Home Tool Markup Language"
-                                ],
-                                answer: 0,
-                                explanation: "HTML stands for Hyper Text Markup Language."
-                            },
-                            {
-                                question: "Which CSS property changes the background color?",
-                                options: ["color", "background-color", "bgcolor", "canvas-color"],
-                                answer: 1,
-                                explanation: "background-color defines background color in CSS."
-                            },
-                            {
-                                question: "Which JavaScript keyword declares a block-scoped variable?",
-                                options: ["var", "let", "def", "dim"],
-                                answer: 1,
-                                explanation: "'let' and 'const' are block-scoped in modern JS."
-                            },
-                            {
-                                question: "What is the primary function of JavaScript?",
-                                options: [
-                                    "Database hosting",
-                                    "Adding interactivity to web pages",
-                                    "Physical circuit design",
-                                    "Printing hardcopy documents"
-                                ],
-                                answer: 1,
-                                explanation: "JavaScript adds dynamic behavior and interactivity."
-                            },
-                            {
-                                question: "Which tag is used to include external JavaScript?",
-                                options: ["<link>", "<script>", "<js>", "<src>"],
-                                answer: 1,
-                                explanation: "<script src='...'> is the standard HTML tag for JS."
-                            }
-                        ]
-                    }
-                ];
-                localStorage.setItem("cbt_custom_packs", JSON.stringify(packs));
+                localStorage.setItem("cbt_custom_packs", JSON.stringify([]));
             }
 
             customOptgroup.innerHTML = "";
