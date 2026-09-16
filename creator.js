@@ -147,7 +147,7 @@ function renderPacksList() {
         const card = document.createElement("div");
         card.className = "pack-card";
         const dateStr = pack.createdAt ? new Date(pack.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent";
-        
+
         card.innerHTML = `
             <div class="pack-header">
                 <h3 class="pack-title">${escapeHtml(pack.title)}</h3>
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const optC = document.getElementById("qOptC")?.value.trim();
             const optD = document.getElementById("qOptD")?.value.trim();
             const explanation = document.getElementById("qExplanation")?.value.trim();
-            
+
             const prompt = promptEl?.value.trim();
             const selectedAnswerRadio = document.querySelector("input[name='correctOpt']:checked");
 
@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("qOptC").value = "";
             document.getElementById("qOptD").value = "";
             if (document.getElementById("qExplanation")) document.getElementById("qExplanation").value = "";
-            
+
             renderStagedQuestions();
             showToast("Question added to stage!");
             promptEl.focus();
