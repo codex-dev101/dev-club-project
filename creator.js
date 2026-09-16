@@ -38,69 +38,15 @@ function saveCreatorProfile() {
 function getCustomPacks() {
     try {
         const packs = JSON.parse(localStorage.getItem(CUSTOM_PACKS_KEY) || "[]");
-        if (packs.length === 0) {
-            // Seed with a sample creator pack for demonstration
-            const samplePack = {
-                id: "custom_web_dev_101",
-                title: "Web Development Fundamentals",
-                subjectKey: "custom_web_dev_101",
-                creatorName: "Alex Dev",
-                creatorTag: "@alexdev",
-                category: "Computer Science",
-                durationMinutes: 15,
-                createdAt: new Date().toISOString(),
-                questions: [
-                    {
-                        question: "What does HTML stand for?",
-                        options: [
-                            "Hyper Text Markup Language",
-                            "High Tech Modern Language",
-                            "Hyperlink and Text Management Language",
-                            "Home Tool Markup Language"
-                        ],
-                        answer: 0,
-                        explanation: "HTML stands for Hyper Text Markup Language."
-                    },
-                    {
-                        question: "Which CSS property is used to change the background color of an element?",
-                        options: [
-                            "color",
-                            "background-color",
-                            "bgcolor",
-                            "surface-color"
-                        ],
-                        answer: 1,
-                        explanation: "background-color defines the background color in CSS."
-                    },
-                    {
-                        question: "Which keyword declares a block-scoped variable in modern JavaScript?",
-                        options: ["var", "let", "dim", "define"],
-                        answer: 1,
-                        explanation: "'let' and 'const' provide block-scoped variables in JS."
-                    },
-                    {
-                        question: "What is the primary function of JavaScript in web development?",
-                        options: [
-                            "Database hosting",
-                            "Adding interactivity and dynamic behavior to web pages",
-                            "Styling font colors only",
-                            "Network cable routing"
-                        ],
-                        answer: 1,
-                        explanation: "JavaScript brings interactivity, DOM manipulation, and dynamic features to web pages."
-                    },
-                    {
-                        question: "Which HTML tag is used to link an external JavaScript file?",
-                        options: ["<link>", "<script>", "<js>", "<src>"],
-                        answer: 1,
-                        explanation: "The <script src='...'> tag is used to import external JavaScript."
-                    }
-                ]
-            };
-            packs.push(samplePack);
-            localStorage.setItem(CUSTOM_PACKS_KEY, JSON.stringify(packs));
+        const cleanPacks = Array.isArray(packs)
+            ? packs.filter(pack => pack && pack.id !== "custom_web_dev_101")
+            : [];
+
+        if (JSON.stringify(cleanPacks) !== JSON.stringify(packs)) {
+            localStorage.setItem(CUSTOM_PACKS_KEY, JSON.stringify(cleanPacks));
         }
-        return packs;
+
+        return cleanPacks;
     } catch (e) {
         console.error("Error loading custom packs:", e);
         return [];
