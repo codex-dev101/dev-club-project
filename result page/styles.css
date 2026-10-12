@@ -567,6 +567,94 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+  .result-container {
+    width: 100%;
+  }
+
+  .header-title-bar {
+    align-items: flex-start;
+  }
+
+  .brand-title-group {
+    min-width: 0;
+    align-items: flex-start;
+  }
+
+  .brand-title-group h2 {
+    min-width: 0;
+    line-height: 1.3;
+  }
+
+  .candidate-meta-bar {
+    padding: 12px 14px;
+  }
+
+  .meta-group {
+    min-width: 0;
+    align-items: flex-start;
+  }
+
+  .meta-group strong,
+  .meta-exam-date {
+    overflow-wrap: anywhere;
+  }
+
+  .result-grid {
+    padding: 12px;
+  }
+
+  .metrics-grid {
+    gap: 8px;
+  }
+
+  .metric-card {
+    min-width: 0;
+    padding: 12px 10px;
+  }
+
+  .metric-label,
+  .metric-sub {
+    overflow-wrap: anywhere;
+  }
+
+  .overview-card {
+    padding: 16px 12px;
+  }
+
+  .legend-container {
+    gap: 12px;
+  }
+
+  .review-modal-backdrop {
+    padding: 8px;
+  }
+
+  .review-modal-card {
+    max-height: calc(100dvh - 16px);
+  }
+
+  .review-modal-header,
+  .review-modal-body {
+    padding: 14px;
+  }
+
+  .review-modal-header h3 {
+    min-width: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .review-modal-footer {
+    padding: 10px 14px;
+  }
+
+  .btn-modal-close {
+    min-height: 44px;
+    width: 100%;
+  }
+}
+
 @media print {
   body {
     background: white;

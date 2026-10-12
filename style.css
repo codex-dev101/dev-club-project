@@ -655,3 +655,39 @@ body {
         border-radius: 10px;
     }
 }
+
+@media (max-width: 380px) {
+    .container {
+        padding: 6px;
+        gap: 8px;
+    }
+
+    .left-side,
+    .right-side {
+        padding-inline: 14px;
+    }
+
+    .right-side {
+        align-items: flex-start;
+    }
+
+    .login-card {
+        min-width: 0;
+    }
+
+    .auth-tab {
+        min-height: 42px;
+        padding-inline: 6px;
+        font-size: 12px;
+    }
+
+    .resources-nav {
+        gap: 8px;
+    }
+
+    .result-btn,
+    .btn-signout-home {
+        min-width: 0;
+        padding-inline: 10px;
+    }
+}
