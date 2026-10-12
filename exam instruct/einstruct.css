@@ -296,46 +296,115 @@ body {
 
 @media (max-width: 640px) {
     .header-content {
-        padding: 10px 16px;
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    #logo {
+        justify-content: flex-start;
     }
 
     .links {
-        gap: 10px;
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        gap: 8px;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+    }
+
+    .links::-webkit-scrollbar {
+        display: none;
     }
 
     .links a {
         font-size: 12.5px;
-        padding: 5px 8px;
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        flex-shrink: 0;
     }
 
     .page-container {
-        padding: 12px;
+        padding: 14px 10px;
+        min-height: auto;
     }
 
     .instruction-card {
-        padding: 16px 16px;
-        border-radius: 14px;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px 16px;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
     }
 
     .card-header h2 {
-        font-size: 17px;
+        font-size: 18px;
+    }
+
+    #candidateExamInfo {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 12px 14px !important;
+    }
+
+    #candidateExamInfo > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #bfdbfe;
+        padding-bottom: 6px;
+    }
+
+    #candidateExamInfo > div:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    #candidateExamInfo > div > span:first-child {
+        display: inline !important;
+        margin-right: 6px;
+    }
+
+    .subtitle {
+        font-size: 12.5px;
+        margin-bottom: 14px;
     }
 
     .rules-box {
-        padding: 10px 12px;
-        margin-bottom: 12px;
+        padding: 14px 14px;
+        margin-bottom: 16px;
+        border-radius: 12px;
     }
 
     .rules-list {
-        gap: 7px;
+        gap: 10px;
     }
 
     .rules-list li {
-        font-size: 12px;
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+
+    .confirm-container {
+        padding: 6px 0;
+        margin-bottom: 16px;
+        gap: 10px;
+    }
+
+    .confirm-text {
+        font-size: 12.5px;
+        line-height: 1.35;
     }
 
     .start-btn {
-        height: 40px;
-        font-size: 13.5px;
+        height: 48px;
+        font-size: 14.5px;
+        font-weight: 700;
+        border-radius: 10px;
     }
 }
