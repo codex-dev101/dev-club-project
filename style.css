@@ -514,12 +514,14 @@ body {
     }
 
     .left-side {
+        flex: 0 0 auto;
         width: 100%;
         padding: 24px 20px;
         border-radius: var(--radius-lg);
     }
 
     .right-side {
+        flex: 0 0 auto;
         width: 100%;
         border-radius: var(--radius-lg);
         padding: 28px 20px;
