@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2: Customize Examination - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="exam instruct/einstruct.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        .workflow-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #94a3b8;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            background: #f1f5f9;
+        }
+
+        .step-item.active {
+            color: white;
+            background: #2563eb;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .step-divider {
+            color: #cbd5e1;
+        }
+
+        .user-meta-bar {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .subject-summary-banner {
+            background: linear-gradient(135deg, #f8fafc, #edf2f7);
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .custom-section {
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .section-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .section-desc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .chip-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .option-chip {
+            padding: 10px 18px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .option-chip:hover:not(:disabled) {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .option-chip.selected {
+            border-color: #2563eb;
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .option-chip:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .custom-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .custom-input-box {
+            display: inline-flex;
+            align-items: center;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 14px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .custom-input-box input {
+            border: none;
+            outline: none;
+            width: 70px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+        }
+
+        .validation-msg {
+            font-size: 12.5px;
+            color: #dc2626;
+            margin-top: 8px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn-continue {
+            padding: 12px 28px;
+            border-radius: 9px;
+            background: #002554;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s ease;
+        }
+
+        .btn-continue:hover:not(:disabled) {
+            background: #003b7d;
+        }
+
+        .btn-continue:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Header -->
+    <header class="navbar">
+        <div class="header-content">
+            <div id="logo">
+                <div class="logo-image">
+                    <img src="logo.png" alt="Smart CBT Logo">
+                </div>
+                <div id="logo-text">
+                    <h3 id="Scbt">Smart CBT</h3>
+                    <p id="esystem">Examination System</p>
+                </div>
+            </div>
+
+            <nav class="links">
+                <a href="index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="select-subject.html"><i class="fa-solid fa-book-open"></i> Choose Subject</a>
+                <a href="creator-dashboard.html"><i class="fa-solid fa-graduation-cap"></i> Creator Studio</a>
+                <a href="henry's-part/result.html"><i class="fa-solid fa-chart-column"></i> My Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container" style="max-width: 860px;">
+        <!-- User Status Bar -->
+        <div class="user-meta-bar">
+            <div>
+                <span style="font-size: 12px; color: #64748b; font-weight: 600;">CANDIDATE</span>
+                <div style="font-size: 14px; font-weight: 700; color: #1e3a8a;">
+                    <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i>
+                    <span id="userNameDisplay">Student</span>
+                    <span id="userMatricDisplay" style="font-family: monospace; font-size: 12px; background: #dbeafe; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">CBT/2026/0001</span>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="btnPageSignOut" style="background: white; border: 1px solid #cbd5e1; color: #b91c1c; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
+            </div>
+        </div>
+
+        <div class="instruction-card" style="max-width: 100%;">
+            <!-- Workflow Steps -->
+            <div class="workflow-steps">
+                <div class="step-item">
+                    <i class="fa-solid fa-check"></i> 1. Choose Subject
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item active">
+                    <i class="fa-solid fa-2"></i> 2. Customize
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-3"></i> 3. Instructions
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-4"></i> 4. Examination
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-5"></i> 5. Results
+                </div>
+            </div>
+
+            <div class="card-header">
+                <div class="icon-badge">
+                    <i class="fa-solid fa-sliders" style="color: #2563eb;"></i>
+                </div>
+                <h2>Step 2: Customize Examination</h2>
+            </div>
+            <p class="subtitle">
+                Configure your question count and exam time limit before proceeding to instructions.
+            </p>
+
+            <!-- Selected Subject Summary Banner -->
+            <div class="subject-summary-banner">
+                <div>
+                    <span style="font-size: 12px; color: #64748b; font-weight: 600; display: block;">SELECTED SUBJECT</span>
+                    <strong id="summarySubjectTitle" style="font-size: 18px; color: #0b1e36;">Mathematics</strong>
+                    <div id="summarySubjectCategory" style="font-size: 12.5px; color: #475569; margin-top: 2px;">Category: Sciences</div>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 12px; color: #64748b; font-weight: 600; display: block;">ELIGIBLE QUESTIONS IN BANK</span>
+                    <span id="summaryAvailableCount" style="display: inline-block; background: #dcfce7; color: #166534; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 13.5px; margin-top: 2px;">
+                        50 Available
+                    </span>
+                </div>
+            </div>
+
+            <!-- SECTION A: NUMBER OF QUESTIONS -->
+            <div class="custom-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-list-ol" style="color: #2563eb;"></i>
+                    <h3>A. Number of Questions</h3>
+                </div>
+                <p class="section-desc" id="questionExplanationText">
+                    Select how many questions you want to answer. Maximum available for this subject: <strong>50 questions</strong>.
+                </p>
+
+                <div class="chip-grid" id="questionChips">
+                    <button type="button" class="option-chip" data-qcount="10">10 Questions</button>
+                    <button type="button" class="option-chip selected" data-qcount="20">20 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="30">30 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="40">40 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="50" id="chip50">50 Questions</button>
+                </div>
+
+                <div class="custom-input-group">
+                    <span style="font-size: 13px; font-weight: 600; color: #475569;">Or enter custom question count:</span>
+                    <div class="custom-input-box">
+                        <input type="number" id="customQInput" min="1" max="50" value="20">
+                        <span style="color: #64748b; font-size: 13px; margin-left: 6px;" id="customMaxLabel">/ 50 max</span>
+                    </div>
+                </div>
+
+                <div class="validation-msg" id="qValidationMsg">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="qValidationText">Invalid question count.</span>
+                </div>
+            </div>
+
+            <!-- SECTION B: EXAMINATION DURATION -->
+            <div class="custom-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-clock" style="color: #2563eb;"></i>
+                    <h3>B. Examination Duration</h3>
+                </div>
+                <p class="section-desc">
+                    Choose the duration for this test. The maximum allowed duration is strictly <strong>60 minutes</strong>.
+                </p>
+
+                <div class="chip-grid" id="durationChips">
+                    <button type="button" class="option-chip" data-duration="10">10 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="15">15 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="20">20 Minutes</button>
+                    <button type="button" class="option-chip selected" data-duration="30">30 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="45">45 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="60">60 Minutes</button>
+                </div>
+
+                <div class="custom-input-group">
+                    <span style="font-size: 13px; font-weight: 600; color: #475569;">Or enter custom duration (minutes):</span>
+                    <div class="custom-input-box">
+                        <input type="number" id="customDurationInput" min="1" max="60" value="30">
+                        <span style="color: #64748b; font-size: 13px; margin-left: 6px;">/ 60 mins max</span>
+                    </div>
+                </div>
+
+                <div class="validation-msg" id="durationValidationMsg">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="durationValidationText">Invalid duration.</span>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-container">
+                <a href="select-subject.html" style="color: #64748b; font-size: 14px; font-weight: 600;">
+                    <i class="fa-solid fa-arrow-left"></i> Change Subject
+                </a>
+
+                <button type="button" class="btn-continue" id="btnProceedToInstruct">
+                    <span>Proceed to Exam Instructions</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script src="questions-data.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Require authentication
+            const user = window.requireAuth ? window.requireAuth() : null;
+            if (!user) return;
+
+            // Display user info
+            const nameEl = document.getElementById("userNameDisplay");
+            const matricEl = document.getElementById("userMatricDisplay");
+            if (nameEl) nameEl.textContent = user.fullName;
+            if (matricEl) matricEl.textContent = user.matricNo;
+
+            // Sign out button
+            const signOutBtn = document.getElementById("btnPageSignOut");
+            if (signOutBtn) {
+                signOutBtn.addEventListener("click", async () => {
+                    await window.signOutStudent();
+                    window.location.href = "index.html?signed_out=true";
+                });
+            }
+
+            // Check selected subject
+            const selectedSubject = localStorage.getItem("cbt_selected_subject");
+            if (!selectedSubject) {
+                window.location.href = "select-subject.html";
+                return;
+            }
+
+            const subjectInfo = window.getCbtSubjectById ? window.getCbtSubjectById(selectedSubject) : null;
+            const availableQuestions = subjectInfo ? subjectInfo.questionCount : 50;
+
+            // Update Subject Summary Banner
+            const summaryTitle = document.getElementById("summarySubjectTitle");
+            const summaryCategory = document.getElementById("summarySubjectCategory");
+            const summaryCount = document.getElementById("summaryAvailableCount");
+            const explanationText = document.getElementById("questionExplanationText");
+            const customMaxLabel = document.getElementById("customMaxLabel");
+
+            if (summaryTitle && subjectInfo) summaryTitle.textContent = subjectInfo.title;
+            if (summaryCategory && subjectInfo) summaryCategory.textContent = `Category: ${subjectInfo.category}`;
+            if (summaryCount) summaryCount.textContent = `${availableQuestions} Eligible Available`;
+            if (explanationText) {
+                explanationText.innerHTML = `Select how many questions you want to answer. Maximum available for this subject: <strong>${availableQuestions} questions</strong>.`;
+            }
+            if (customMaxLabel) customMaxLabel.textContent = `/ ${availableQuestions} max`;
+
+            // State
+            let selectedQCount = Math.min(20, availableQuestions);
+            let selectedDuration = 30; // minutes
+
+            const customQInput = document.getElementById("customQInput");
+            const customDurationInput = document.getElementById("customDurationInput");
+            const qValidationMsg = document.getElementById("qValidationMsg");
+            const qValidationText = document.getElementById("qValidationText");
+            const durationValidationMsg = document.getElementById("durationValidationMsg");
+            const durationValidationText = document.getElementById("durationValidationText");
+            const btnProceed = document.getElementById("btnProceedToInstruct");
+
+            // Disable 50 chip if available questions < 50
+            const chip50 = document.getElementById("chip50");
+            if (chip50 && availableQuestions < 50) {
+                chip50.disabled = true;
+                chip50.title = `Only ${availableQuestions} questions available for this subject`;
+            }
+
+            // Setup Question Count chips
+            const qChips = document.querySelectorAll("#questionChips .option-chip");
+            qChips.forEach(chip => {
+                const count = parseInt(chip.dataset.qcount);
+                if (count > availableQuestions) {
+                    chip.disabled = true;
+                    chip.title = `Only ${availableQuestions} questions available`;
+                }
+
+                chip.addEventListener("click", () => {
+                    if (chip.disabled) return;
+                    qChips.forEach(c => c.classList.remove("selected"));
+                    chip.classList.add("selected");
+                    selectedQCount = count;
+                    customQInput.value = count;
+                    validate();
+                });
+            });
+
+            // Set initial selected chip
+            qChips.forEach(chip => {
+                const count = parseInt(chip.dataset.qcount);
+                chip.classList.toggle("selected", count === selectedQCount);
+            });
+            customQInput.max = availableQuestions;
+            customQInput.value = selectedQCount;
+
+            // Custom Question Input Handler
+            customQInput.addEventListener("input", () => {
+                const val = parseInt(customQInput.value);
+                selectedQCount = isNaN(val) ? 0 : val;
+
+                // Sync chips
+                qChips.forEach(chip => {
+                    chip.classList.toggle("selected", parseInt(chip.dataset.qcount) === selectedQCount);
+                });
+                validate();
+            });
+
+            // Setup Duration chips
+            const dChips = document.querySelectorAll("#durationChips .option-chip");
+            dChips.forEach(chip => {
+                const dur = parseInt(chip.dataset.duration);
+                chip.addEventListener("click", () => {
+                    dChips.forEach(c => c.classList.remove("selected"));
+                    chip.classList.add("selected");
+                    selectedDuration = dur;
+                    customDurationInput.value = dur;
+                    validate();
+                });
+            });
+
+            customDurationInput.value = selectedDuration;
+
+            // Custom Duration Input Handler
+            customDurationInput.addEventListener("input", () => {
+                const val = parseInt(customDurationInput.value);
+                selectedDuration = isNaN(val) ? 0 : val;
+
+                // Sync chips
+                dChips.forEach(chip => {
+                    chip.classList.toggle("selected", parseInt(chip.dataset.duration) === selectedDuration);
+                });
+                validate();
+            });
+
+            // Validation function
+            function validate() {
+                let isValid = true;
+
+                // 1. Validate Question Count
+                if (!selectedQCount || selectedQCount < 1) {
+                    qValidationMsg.style.display = "flex";
+                    qValidationText.textContent = "Please select at least 1 question.";
+                    isValid = false;
+                } else if (selectedQCount > availableQuestions) {
+                    qValidationMsg.style.display = "flex";
+                    qValidationText.textContent = `Cannot select more than ${availableQuestions} questions (the maximum available for this subject).`;
+                    isValid = false;
+                } else if (selectedQCount > 50) {
+                    qValidationMsg.style.display = "flex";
+                    qValidationText.textContent = "Maximum allowed question count is 50.";
+                    isValid = false;
+                } else {
+                    qValidationMsg.style.display = "none";
+                }
+
+                // 2. Validate Duration
+                if (!selectedDuration || selectedDuration < 1) {
+                    durationValidationMsg.style.display = "flex";
+                    durationValidationText.textContent = "Please specify a duration of at least 1 minute.";
+                    isValid = false;
+                } else if (selectedDuration > 60) {
+                    durationValidationMsg.style.display = "flex";
+                    durationValidationText.textContent = "Maximum allowed examination duration is strictly 60 minutes.";
+                    isValid = false;
+                } else {
+                    durationValidationMsg.style.display = "none";
+                }
+
+                btnProceed.disabled = !isValid;
+                return isValid;
+            }
+
+            validate();
+
+            // Proceed Handler -> Navigate to Step 3: Exam Instructions
+            btnProceed.addEventListener("click", () => {
+                if (!validate()) return;
+
+                // Save configuration
+                const examConfig = {
+                    subjectId: selectedSubject,
+                    subjectTitle: subjectInfo ? subjectInfo.title : selectedSubject,
+                    questionCount: selectedQCount,
+                    durationMinutes: selectedDuration,
+                    maxAvailable: availableQuestions
+                };
+
+                localStorage.setItem("cbt_exam_config", JSON.stringify(examConfig));
+                localStorage.setItem("cbt_selected_question_count", String(selectedQCount));
+                localStorage.setItem("cbt_selected_duration_minutes", String(selectedDuration));
+
+                // Clear any stale prior in-progress state to ensure clean start
+                localStorage.removeItem("cbt_exam_state");
+
+                window.location.href = "exam instruct/einstruct.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

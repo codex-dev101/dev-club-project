@@ -1,250 +1,214 @@
-// Store candidate info, handle custom packs & duplicate attempt detection
+// ============================================================
+// Smart CBT - Home & Authentication Controller
+// ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    const candidateIdInput = document.getElementById("candidateId");
-    const candidateNameInput = document.getElementById("candidateName");
-    const subjectSelect = document.getElementById("subjectSelect") || document.querySelector("select[name='subject']");
-    const customOptgroup = document.getElementById("customSubjectsOptgroup");
-    const btnGenId = document.getElementById("btnGenId");
-    const attemptNotice = document.getElementById("attemptNoticeBanner");
-    const attemptNoticeTitle = document.getElementById("attemptNoticeTitle");
-    const attemptNoticeDesc = document.getElementById("attemptNoticeDesc");
+    // DOM Elements
+    const authAlert = document.getElementById("authAlert");
+    const authenticatedView = document.getElementById("authenticatedView");
+    const guestAuthView = document.getElementById("guestAuthView");
 
-    // 1. Initialize & populate Custom Question Packs
-    populateCustomSubjects();
+    // Authenticated Card
+    const welcomeUserName = document.getElementById("welcomeUserName");
+    const welcomeUserEmail = document.getElementById("welcomeUserEmail");
+    const welcomeUserMatric = document.getElementById("welcomeUserMatric");
+    const userAvatar = document.getElementById("userAvatar");
+    const btnSignOutHome = document.getElementById("btnSignOutHome");
 
-    // 2. Load stored candidate ID and Name if available
-    const savedId = localStorage.getItem("cbt_candidate_id");
-    const savedName = localStorage.getItem("cbt_candidate_name");
-    const savedSubject = localStorage.getItem("cbt_selected_subject");
+    // Tabs
+    const tabSignIn = document.getElementById("tabSignIn");
+    const tabRegister = document.getElementById("tabRegister");
+    const panelSignIn = document.getElementById("panelSignIn");
+    const panelRegister = document.getElementById("panelRegister");
 
-    if (candidateIdInput) {
-        if (savedId) {
-            candidateIdInput.value = savedId;
+    // Forms
+    const signInForm = document.getElementById("signInForm");
+    const registerForm = document.getElementById("registerForm");
+
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const toggleLoginPassword = document.getElementById("toggleLoginPassword");
+
+    const regFullName = document.getElementById("regFullName");
+    const regEmail = document.getElementById("regEmail");
+    const regPassword = document.getElementById("regPassword");
+    const regConfirmPassword = document.getElementById("regConfirmPassword");
+    const toggleRegPassword = document.getElementById("toggleRegPassword");
+    const toggleRegConfirmPassword = document.getElementById("toggleRegConfirmPassword");
+
+    // Check URL parameters for notices
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("auth") === "required") {
+        showAlert("Please sign in or create an account to start your examination.", "info");
+    } else if (urlParams.get("signed_out") === "true") {
+        showAlert("You have signed out successfully.", "info");
+    }
+
+    // Initialize UI based on session
+    renderAuthState();
+
+    // Tab Switching
+    if (tabSignIn && tabRegister) {
+        tabSignIn.addEventListener("click", () => switchTab("signin"));
+        tabRegister.addEventListener("click", () => switchTab("register"));
+    }
+
+    function switchTab(tab) {
+        clearAlert();
+        if (tab === "signin") {
+            tabSignIn.classList.add("active");
+            tabRegister.classList.remove("active");
+            panelSignIn.classList.add("active");
+            panelRegister.classList.remove("active");
         } else {
-            // Generate a default ID if none exists
-            candidateIdInput.value = generateCandidateId();
+            tabRegister.classList.add("active");
+            tabSignIn.classList.remove("active");
+            panelRegister.classList.add("active");
+            panelSignIn.classList.remove("active");
         }
     }
 
-    if (candidateNameInput && savedName) {
-        candidateNameInput.value = savedName;
-    }
+    // Password Visibility Toggles
+    setupPasswordToggle(toggleLoginPassword, loginPassword);
+    setupPasswordToggle(toggleRegPassword, regPassword);
+    setupPasswordToggle(toggleRegConfirmPassword, regConfirmPassword);
 
-    // Check URL parameters for pre-selected subject or custom pack
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlSubject = urlParams.get("subject");
-    if (urlSubject && subjectSelect) {
-        subjectSelect.value = urlSubject;
-    } else if (savedSubject && subjectSelect) {
-        subjectSelect.value = savedSubject;
-    }
-
-    // 3. Auto ID Generator button
-    if (btnGenId && candidateIdInput) {
-        btnGenId.addEventListener("click", () => {
-            candidateIdInput.value = generateCandidateId();
-            checkForDuplicateAttempts();
+    function setupPasswordToggle(btn, input) {
+        if (!btn || !input) return;
+        btn.addEventListener("click", () => {
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            btn.innerHTML = isPassword ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
         });
     }
 
-    // 4. Listeners for duplicate attempt check
-    if (candidateIdInput) candidateIdInput.addEventListener("input", checkForDuplicateAttempts);
-    if (candidateNameInput) candidateNameInput.addEventListener("input", checkForDuplicateAttempts);
-    if (subjectSelect) subjectSelect.addEventListener("change", checkForDuplicateAttempts);
+    // --- FORM 1: SIGN IN SUBMISSION ---
+    if (signInForm) {
+        signInForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            clearAlert();
 
-    // Initial check on load
-    checkForDuplicateAttempts();
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value;
 
-    // 5. Form submission handler
-    const loginForm = document.querySelector("form");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function (e) {
-            const candidateId = candidateIdInput ? candidateIdInput.value.trim() : generateCandidateId();
-            const candidateName = candidateNameInput ? candidateNameInput.value.trim() : "Candidate";
-            const selectedSubject = subjectSelect ? subjectSelect.value : "general_knowledge";
-
-            localStorage.setItem("cbt_candidate_id", candidateId);
-            localStorage.setItem("cbt_candidate_name", candidateName);
-            localStorage.setItem("cbt_selected_subject", selectedSubject);
-
-            // Determine attempt count
-            const attemptInfo = getAttemptCount(candidateId, candidateName, selectedSubject);
-            const currentAttempt = attemptInfo.count + 1;
-            localStorage.setItem("cbt_current_attempt_number", String(currentAttempt));
-
-            // Save subject title & creator tag if custom
-            const customPack = getCustomPackById(selectedSubject);
-            if (customPack) {
-                localStorage.setItem("cbt_creator_tag", customPack.creatorTag || "@creator");
-                localStorage.setItem("cbt_creator_name", customPack.creatorName || "Instructor");
-                localStorage.setItem("cbt_selected_subject_title", customPack.title);
-            } else {
-                localStorage.removeItem("cbt_creator_tag");
-                localStorage.removeItem("cbt_creator_name");
-                localStorage.removeItem("cbt_selected_subject_title");
+            const submitBtn = document.getElementById("btnSubmitSignIn");
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>Signing In...</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
             }
 
-            // Clear previous exam state if starting a different subject or new attempt
             try {
-                const saved = localStorage.getItem("cbt_exam_state");
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (parsed.subject !== selectedSubject) {
-                        localStorage.removeItem("cbt_exam_state");
-                    }
+                const res = await window.signInStudent({ email, password });
+                if (res.success) {
+                    showAlert(res.message || "Signed in successfully!", "success");
+                    setTimeout(() => {
+                        renderAuthState();
+                        // Redirect to choose subject or return url
+                        const redirectUrl = urlParams.get("redirect") || "select-subject.html";
+                        window.location.href = redirectUrl;
+                    }, 500);
+                } else {
+                    showAlert(res.message || "Failed to sign in. Please verify your credentials.", "error");
                 }
             } catch (err) {
-                localStorage.removeItem("cbt_exam_state");
+                showAlert("An unexpected error occurred. Please try again.", "error");
+                console.error(err);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<span>Sign In</span> <i class="fa-solid fa-arrow-right arrow"></i>`;
+                }
             }
         });
     }
 
-    // Helper: Populate custom subjects from localStorage
-    function populateCustomSubjects() {
-        if (!customOptgroup) return;
-        try {
-            const rawPacks = localStorage.getItem("cbt_custom_packs");
-            let packs = [];
+    // --- FORM 2: REGISTRATION SUBMISSION ---
+    if (registerForm) {
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            clearAlert();
 
-            if (rawPacks) {
-                packs = JSON.parse(rawPacks);
-                packs = Array.isArray(packs) ? packs.filter(pack => pack && pack.id !== "custom_web_dev_101") : [];
-                if (packs.length !== JSON.parse(rawPacks).length) {
-                    localStorage.setItem("cbt_custom_packs", JSON.stringify(packs));
+            const fullName = regFullName.value.trim();
+            const email = regEmail.value.trim();
+            const password = regPassword.value;
+            const confirmPassword = regConfirmPassword.value;
+
+            const submitBtn = document.getElementById("btnSubmitRegister");
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>Creating Account...</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
+            }
+
+            try {
+                const res = await window.registerStudent({ fullName, email, password, confirmPassword });
+                if (res.success) {
+                    showAlert(res.message || "Account created successfully!", "success");
+                    setTimeout(() => {
+                        renderAuthState();
+                        // Direct to Step 1: Choose Subject!
+                        window.location.href = "select-subject.html";
+                    }, 900);
+                } else {
+                    showAlert(res.message || "Registration failed. Please review your details.", "error");
                 }
-            } else {
-                localStorage.setItem("cbt_custom_packs", JSON.stringify([]));
+            } catch (err) {
+                showAlert("An error occurred during registration. Please try again.", "error");
+                console.error(err);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<span>Create Account</span> <i class="fa-solid fa-user-plus arrow"></i>`;
+                }
             }
-
-            customOptgroup.innerHTML = "";
-            if (packs.length === 0) {
-                const opt = document.createElement("option");
-                opt.value = "";
-                opt.disabled = true;
-                opt.textContent = "No custom packs yet (Create in Studio)";
-                customOptgroup.appendChild(opt);
-                return;
-            }
-
-            packs.forEach(pack => {
-                const opt = document.createElement("option");
-                opt.value = pack.id;
-                opt.textContent = `⭐ ${pack.title} (by ${pack.creatorTag || '@author'})`;
-                customOptgroup.appendChild(opt);
-            });
-        } catch (e) {
-            console.error("Error populating custom subjects:", e);
-        }
+        });
     }
 
-    // Helper: Duplicate Attempt Detection
-    function checkForDuplicateAttempts() {
-        if (!attemptNotice) return;
+    // Sign Out Button on Authenticated Home Card
+    if (btnSignOutHome) {
+        btnSignOutHome.addEventListener("click", async () => {
+            await window.signOutStudent();
+            renderAuthState();
+            showAlert("You have signed out securely.", "info");
+        });
+    }
 
-        const candidateId = candidateIdInput ? candidateIdInput.value.trim() : "";
-        const candidateName = candidateNameInput ? candidateNameInput.value.trim() : "";
-        const selectedSubject = subjectSelect ? subjectSelect.value : "";
+    // Render Auth View State
+    function renderAuthState() {
+        const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
 
-        if (!selectedSubject || (!candidateId && !candidateName)) {
-            attemptNotice.style.display = "none";
-            return;
-        }
+        if (currentUser) {
+            if (authenticatedView) authenticatedView.style.display = "block";
+            if (guestAuthView) guestAuthView.style.display = "none";
 
-        const attemptInfo = getAttemptCount(candidateId, candidateName, selectedSubject);
-        if (attemptInfo.count > 0) {
-            attemptNotice.style.display = "block";
-            const subjectLabel = getSubjectName(selectedSubject);
-            if (attemptNoticeTitle) {
-                attemptNoticeTitle.textContent = `Retake Notice: Attempt #${attemptInfo.count + 1}`;
-            }
-            if (attemptNoticeDesc) {
-                attemptNoticeDesc.innerHTML = `Candidate <strong>${escapeHtml(candidateName || candidateId)}</strong> has taken <strong>${escapeHtml(subjectLabel)}</strong> ${attemptInfo.count} time(s) before.<br>Previous Best Score: <strong>${attemptInfo.bestScore}%</strong> (${attemptInfo.lastDate}).`;
+            if (welcomeUserName) welcomeUserName.textContent = `Welcome, ${currentUser.fullName}!`;
+            if (welcomeUserEmail) welcomeUserEmail.textContent = currentUser.email;
+            if (welcomeUserMatric) welcomeUserMatric.textContent = currentUser.matricNo;
+            if (userAvatar) {
+                const initial = (currentUser.fullName || "S").charAt(0).toUpperCase();
+                userAvatar.textContent = initial;
             }
         } else {
-            attemptNotice.style.display = "none";
+            if (authenticatedView) authenticatedView.style.display = "none";
+            if (guestAuthView) guestAuthView.style.display = "block";
         }
     }
 
-    function getAttemptCount(candidateId, candidateName, subject) {
-        let history = [];
-        try {
-            history = JSON.parse(localStorage.getItem("cbt_exam_history") || "[]");
-            const allResults = JSON.parse(localStorage.getItem("cbt_all_results") || "[]");
-            history = [...history, ...allResults];
-        } catch (e) {
-            history = [];
-        }
-
-        const normalizedSubject = (subject || "").toLowerCase();
-        const matches = history.filter(item => {
-            const itemSubject = (item.subject || item.exam || "").toLowerCase();
-            const itemId = item.candidate_id || item.candidateId || "";
-            const itemName = (item.name || item.candidate_name || "").toLowerCase();
-
-            const subjectMatches = itemSubject === normalizedSubject || (subject.startsWith("custom_") && itemSubject.includes(subject));
-            const idMatches = candidateId && itemId && itemId.toLowerCase() === candidateId.toLowerCase();
-            const nameMatches = candidateName && itemName && itemName === candidateName.toLowerCase();
-
-            return subjectMatches && (idMatches || nameMatches);
-        });
-
-        if (matches.length === 0) return { count: 0, bestScore: 0, lastDate: "" };
-
-        let maxScore = 0;
-        let lastDate = "";
-        matches.forEach(m => {
-            const score = Number(m.percentage ?? m.score) || 0;
-            if (score > maxScore) maxScore = score;
-            if (m.dateTaken || m.submitted_at) {
-                lastDate = m.dateTaken || new Date(m.submitted_at).toLocaleDateString();
-            }
-        });
-
-        return {
-            count: matches.length,
-            bestScore: maxScore,
-            lastDate: lastDate || "Recently"
-        };
+    // Helper: Show Alert Banner
+    function showAlert(message, type = "error") {
+        if (!authAlert) return;
+        authAlert.className = `auth-alert ${type}`;
+        const icon = type === "success" 
+            ? '<i class="fa-solid fa-circle-check"></i>' 
+            : type === "info" 
+            ? '<i class="fa-solid fa-circle-info"></i>' 
+            : '<i class="fa-solid fa-triangle-exclamation"></i>';
+        authAlert.innerHTML = `${icon} <span>${message}</span>`;
+        authAlert.style.display = "flex";
     }
 
-    function getCustomPackById(id) {
-        try {
-            const packs = JSON.parse(localStorage.getItem("cbt_custom_packs") || "[]");
-            return packs.find(p => p.id === id);
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function getSubjectName(subjectKey) {
-        const standard = {
-            math: "Mathematics",
-            english: "English",
-            science: "Science",
-            art: "Art",
-            current_affairs: "Current Affairs",
-            general_knowledge: "General Knowledge"
-        };
-        if (standard[subjectKey]) return standard[subjectKey];
-        const custom = getCustomPackById(subjectKey);
-        if (custom) return custom.title;
-        return subjectKey;
-    }
-
-    function generateCandidateId() {
-        const year = new Date().getFullYear();
-        const rand = Math.floor(1000 + Math.random() * 9000);
-        return `CBT-${year}-${rand}`;
-    }
-
-    function escapeHtml(text) {
-        if (!text) return "";
-        return String(text)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    function clearAlert() {
+        if (!authAlert) return;
+        authAlert.style.display = "none";
+        authAlert.innerHTML = "";
     }
 });
