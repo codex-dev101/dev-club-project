@@ -3,11 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnClearHistory = document.getElementById("btnClearHistory");
   const reviewModal = document.getElementById("reviewModal");
   const btnCloseModal = document.getElementById("btnCloseModal");
+  const btnCloseModalBottom = document.getElementById("btnCloseModalBottom");
   const modalExamTitle = document.getElementById("modalExamTitle");
   const modalQuestionsList = document.getElementById("modalQuestionsList");
 
   if (btnCloseModal && reviewModal) {
     btnCloseModal.addEventListener("click", () => {
+      reviewModal.style.display = "none";
+    });
+  }
+
+  if (btnCloseModalBottom && reviewModal) {
+    btnCloseModalBottom.addEventListener("click", () => {
       reviewModal.style.display = "none";
     });
   }
