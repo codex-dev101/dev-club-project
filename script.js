@@ -177,8 +177,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
 
         if (currentUser) {
-            if (authenticatedView) authenticatedView.style.display = "block";
-            if (guestAuthView) guestAuthView.style.display = "none";
+            if (authenticatedView) {
+                authenticatedView.classList.remove("hidden");
+                authenticatedView.style.display = "block";
+            }
+            if (guestAuthView) {
+                guestAuthView.classList.add("hidden");
+                guestAuthView.style.display = "none";
+            }
 
             if (welcomeUserName) welcomeUserName.textContent = `Welcome, ${currentUser.fullName}!`;
             if (welcomeUserEmail) welcomeUserEmail.textContent = currentUser.email;
@@ -188,8 +194,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 userAvatar.textContent = initial;
             }
         } else {
-            if (authenticatedView) authenticatedView.style.display = "none";
-            if (guestAuthView) guestAuthView.style.display = "block";
+            if (authenticatedView) {
+                authenticatedView.classList.add("hidden");
+                authenticatedView.style.display = "none";
+            }
+            if (guestAuthView) {
+                guestAuthView.classList.remove("hidden");
+                guestAuthView.style.display = "block";
+            }
         }
     }
 
@@ -197,6 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function showAlert(message, type = "error") {
         if (!authAlert) return;
         authAlert.className = `auth-alert ${type}`;
+        authAlert.classList.remove("hidden");
         const icon = type === "success" 
             ? '<i class="fa-solid fa-circle-check"></i>' 
             : type === "info" 
@@ -208,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function clearAlert() {
         if (!authAlert) return;
+        authAlert.classList.add("hidden");
         authAlert.style.display = "none";
         authAlert.innerHTML = "";
     }

@@ -13,7 +13,7 @@
 <body>
   <header class="navbar">
     <div class="navbar-container">
-      <h1 class="exam-title"><i class="fa-solid fa-graduation-cap"></i> Smart CBT Examination</h1>
+      <h1 class="exam-title"><i class="fa-solid fa-graduation-cap"></i> Smart CBT</h1>
 
       <div class="timer-container" id="timerContainer">
         <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -27,7 +27,7 @@
         </div>
       </div>
       <button type="button" class="btn-submit-exam" id="btnSubmitExam" title="Press S or click to submit">
-        <i class="fa-solid fa-paper-plane"></i> Submit Exam <kbd class="kbd-shortcut">S</kbd>
+        <i class="fa-solid fa-paper-plane"></i> Submit <kbd class="kbd-shortcut">S</kbd>
       </button>
     </div>
   </header>
@@ -36,7 +36,10 @@
     <div class="exam-card-wrapper">
 
       <aside class="sidebar-navigation">
-        <h2 class="nav-title">Question Navigation</h2>
+        <div class="sidebar-header-row">
+          <h2 class="nav-title">Question Navigation</h2>
+          <button type="button" class="btn-close-palette" id="btnClosePalette" title="Close Question Palette">&times;</button>
+        </div>
 
         <div class="legend-group">
           <div class="legend-item">
@@ -53,8 +56,8 @@
           </div>
         </div>
 
-        <div class="question-grid" id="questionGrid">
-        </div>
+        <div class="question-grid" id="questionGrid"></div>
+
         <button type="button" class="btn-review-marked" id="btnReviewMarked">
           <svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -70,12 +73,20 @@
           <h2 class="question-count" id="questionCount">Question 1 of 50</h2>
           <span class="question-marks" id="questionMarks">2 Marks</span>
         </div>
+
+        <!-- Mobile Question Palette Toggle Bar -->
+        <div class="mobile-palette-bar">
+          <button type="button" class="btn-toggle-palette" id="btnTogglePalette">
+            <span><i class="fa-solid fa-table-cells-large"></i> Question Palette (<span id="paletteAnsweredCount">0</span>/<span id="paletteTotalCount">50</span> answered)</span>
+            <i class="fa-solid fa-chevron-down palette-arrow"></i>
+          </button>
+        </div>
+
         <div class="question-prompt" id="questionPrompt">
           Loading question...
         </div>
-        <div class="options-list" id="optionsList">
 
-        </div>
+        <div class="options-list" id="optionsList"></div>
 
         <div class="bottom-actions">
           <button type="button" class="btn-action btn-prev" id="btnPrev" title="Press P or Left Arrow">
@@ -100,7 +111,6 @@
     </div>
   </main>
 
-
   <div class="modal-overlay" id="submitModal">
     <div class="modal-card">
       <h3 class="modal-title">Confirm Exam Submission</h3>
@@ -122,25 +132,14 @@
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit"><i class="fa-solid fa-rotate-left"></i>
-          Cancel & Continue</button>
-        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit"><i class="fa-solid fa-circle-check"></i>
-          Yes, Submit Now</button>
+        <button type="button" class="btn-modal-cancel" id="btnCancelSubmit">Return to Exam</button>
+        <button type="button" class="btn-modal-confirm" id="btnConfirmSubmit">Confirm & Submit</button>
       </div>
     </div>
   </div>
 
-  <!-- Supabase CDN (Load first so storage.js has access to supabase global) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../auth.js"></script>
   <script src="../questions-data.js"></script>
-  <script src="english.js"></script>
-  <script src="currentaffairs.js"></script>
-  <script src="gknowledge.js"></script>
-  <script src="art.js"></script>
-  <script src="maths.js"></script>
-  <script src="science.js"></script>
-  <script src="storage.js"></script>
   <script src="timer.js"></script>
   <script src="exams.js"></script>
 </body>

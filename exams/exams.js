@@ -233,6 +233,12 @@ function renderGrid() {
       currentIndex = idx;
       renderQuestion();
       persist();
+      const sidebarNav = document.querySelector(".sidebar-navigation");
+      if (sidebarNav && sidebarNav.classList.contains("mobile-open")) {
+        sidebarNav.classList.remove("mobile-open");
+        const toggleBtn = document.getElementById("btnTogglePalette");
+        if (toggleBtn) toggleBtn.classList.remove("active");
+      }
     });
 
     questionGrid.appendChild(btn);
@@ -241,6 +247,11 @@ function renderGrid() {
   if (reviewMarkedText) {
     reviewMarkedText.textContent = `Review Marked (${markedQuestions.length})`;
   }
+
+  const answeredCountEl = document.getElementById("paletteAnsweredCount");
+  const totalCountEl = document.getElementById("paletteTotalCount");
+  if (answeredCountEl) answeredCountEl.textContent = Object.keys(userAnswers).length;
+  if (totalCountEl) totalCountEl.textContent = questions.length;
 }
 
 function renderQuestion() {
@@ -248,7 +259,7 @@ function renderQuestion() {
   if (!q) return;
 
   if (questionCount) {
-    questionCount.innerHTML = `Question ${currentIndex + 1} of ${questions.length} <span style="font-size: 0.75rem; color: #64748b; font-weight: normal; margin-left: 8px;">(Attempt #${attemptNumber})</span>`;
+    questionCount.innerHTML = `Question ${currentIndex + 1} of ${questions.length} <span class="attempt-indicator">(Attempt #${attemptNumber})</span>`;
   }
   if (questionMarks) {
     questionMarks.textContent = "2 Marks";
@@ -268,7 +279,7 @@ function renderQuestion() {
       const optionLetter = String.fromCharCode(65 + optIdx);
       card.innerHTML = `
         <div class="custom-radio"><div class="radio-dot"></div></div>
-        <kbd class="kbd-shortcut" style="margin-right: 8px; margin-left: 0; background: #eef2ff; color: #3730a3; border-color: #c7d2fe;">${optionLetter}</kbd>
+        <span class="option-badge">${optionLetter}</span>
         <span class="option-text">${escapeText(optText)}</span>
       `;
 
@@ -576,3 +587,22 @@ document.addEventListener("keydown", (e) => {
 setupExam();
 renderQuestion();
 startExamTimer();
+
+// Mobile Question Palette Toggle
+const btnTogglePalette = document.getElementById("btnTogglePalette");
+const btnClosePalette = document.getElementById("btnClosePalette");
+const sidebarNav = document.querySelector(".sidebar-navigation");
+
+if (btnTogglePalette && sidebarNav) {
+  btnTogglePalette.addEventListener("click", () => {
+    sidebarNav.classList.toggle("mobile-open");
+    btnTogglePalette.classList.toggle("active");
+  });
+}
+
+if (btnClosePalette && sidebarNav) {
+  btnClosePalette.addEventListener("click", () => {
+    sidebarNav.classList.remove("mobile-open");
+    if (btnTogglePalette) btnTogglePalette.classList.remove("active");
+  });
+}
