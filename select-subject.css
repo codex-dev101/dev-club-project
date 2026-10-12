@@ -540,3 +540,73 @@ body {
         height: 48px;
     }
 }
+
+@media (max-width: 640px) {
+    .user-meta-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .user-meta-bar > div:first-child {
+        min-width: 0;
+    }
+
+    .candidate-info {
+        flex-wrap: wrap;
+        row-gap: 4px;
+        overflow-wrap: anywhere;
+    }
+
+    .candidate-matric {
+        margin-left: 0;
+    }
+
+    .btn-signout-page {
+        width: auto;
+        min-height: 42px;
+        padding-inline: 10px;
+        white-space: nowrap;
+    }
+
+    .instruction-card {
+        padding-inline: 14px;
+    }
+
+    .subject-card {
+        min-width: 0;
+    }
+
+    .subject-title,
+    .subject-desc {
+        overflow-wrap: anywhere;
+    }
+
+    .subject-footer {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .header-content {
+        padding-inline: 12px;
+    }
+
+    .page-container {
+        padding-inline: 8px;
+    }
+
+    .user-meta-bar {
+        padding: 10px;
+    }
+
+    .candidate-info {
+        font-size: 12px;
+    }
+
+    .btn-signout-page {
+        font-size: 11px;
+        padding-inline: 8px;
+    }
+}

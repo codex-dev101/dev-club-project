@@ -321,3 +321,61 @@ td button:hover {
         justify-content: center;
     }
 }
+
+@media (max-width: 768px) {
+    .header nav {
+        min-width: 0;
+        padding-inline: 2px;
+    }
+
+    .results-container {
+        width: calc(100% - 16px);
+    }
+
+    .results-title-group h1 {
+        font-size: clamp(1.2rem, 5vw, 1.4rem);
+        line-height: 1.25;
+    }
+
+    .description {
+        overflow-wrap: anywhere;
+    }
+
+    .table-responsive-wrapper {
+        max-width: 100%;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
+    }
+
+    table {
+        min-width: 680px;
+    }
+
+    .modal-backdrop {
+        padding: 10px;
+    }
+
+    .modal-dialog {
+        max-height: calc(100dvh - 20px);
+    }
+
+    .modal-header-navy,
+    .modal-scrollable-body {
+        padding-inline: 14px;
+    }
+
+    .modal-header-navy h3 {
+        min-width: 0;
+        font-size: 1rem;
+        line-height: 1.35;
+    }
+
+    .modal-footer-gray {
+        padding: 10px 14px;
+    }
+
+    .btn-close-modal {
+        min-height: 44px;
+        width: 100%;
+    }
+}

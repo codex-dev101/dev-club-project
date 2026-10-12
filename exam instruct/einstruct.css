@@ -464,3 +464,48 @@ body {
         border-radius: 10px;
     }
 }
+
+@media (max-width: 640px) {
+    .header-content {
+        min-width: 0;
+    }
+
+    .links {
+        min-width: 0;
+        padding-inline: 2px;
+    }
+
+    .instruction-card {
+        min-width: 0;
+    }
+
+    .candidate-exam-info > .info-block {
+        min-width: 0;
+        gap: 8px;
+    }
+
+    .candidate-exam-info > .info-block > div {
+        min-width: 0;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    .info-value,
+    .info-candidate-id,
+    .info-creator-tag {
+        overflow-wrap: anywhere;
+    }
+
+    .confirm-container {
+        align-items: flex-start;
+    }
+
+    .confirm-text {
+        min-width: 0;
+    }
+
+    .start-btn {
+        min-height: 48px;
+        width: 100%;
+    }
+}
