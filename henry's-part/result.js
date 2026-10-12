@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTable() {
     if (!table) return;
 
+    const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
+
     let historyList = [];
     try {
       historyList = JSON.parse(localStorage.getItem("cbt_exam_history")) || 
@@ -36,13 +38,23 @@ document.addEventListener("DOMContentLoaded", () => {
       historyList = [];
     }
 
+    // Filter to current student's own examination records
+    if (currentUser) {
+      historyList = historyList.filter(item => {
+        const idMatch = item.candidate_id === currentUser.matricNo || item.candidateId === currentUser.matricNo;
+        const nameMatch = item.candidate_name?.toLowerCase() === currentUser.fullName?.toLowerCase() || 
+                          item.name?.toLowerCase() === currentUser.fullName?.toLowerCase();
+        return idMatch || nameMatch;
+      });
+    }
+
     table.innerHTML = "";
 
     if (historyList.length === 0) {
       const emptyRow = document.createElement("tr");
       emptyRow.innerHTML = `<td colspan="7" style="text-align: center; color: #888; padding: 30px;">
         <i class="fa-solid fa-file-circle-xmark" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 8px; display: block;"></i>
-        No exam results found yet. Take an exam to see your records here!
+        No exam results found for ${currentUser ? escapeHtml(currentUser.fullName) : 'you'} yet. Take an exam to see your records here!
       </td>`;
       table.appendChild(emptyRow);
       return;

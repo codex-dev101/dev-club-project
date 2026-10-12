@@ -33,7 +33,7 @@
         </header>
 
         <!-- Candidate Metadata Sub-bar -->
-        <div class="candidate-meta-bar">
+        <div class="candidate-meta-bar" style="display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: center;">
             <div class="meta-group">
                 <span style="color: #64748b; font-weight: 600;">Candidate:</span>
                 <strong id="meta-candidate-name">Student</strong>
@@ -43,6 +43,14 @@
                 <span style="color: #64748b; font-weight: 600;">Subject:</span>
                 <strong id="meta-subject-name">General Knowledge</strong>
                 <span class="meta-badge creator" id="meta-creator-tag" style="display: none;">by @creator</span>
+            </div>
+            <div class="meta-group">
+                <span style="color: #64748b; font-weight: 600;">Exam Duration:</span>
+                <strong id="meta-exam-duration">30 Mins</strong>
+            </div>
+            <div class="meta-group">
+                <span style="color: #64748b; font-weight: 600;">Date & Time:</span>
+                <span id="meta-exam-date" style="font-size: 13px; color: #475569;">-</span>
             </div>
             <div class="meta-group">
                 <span style="color: #64748b; font-weight: 600;">Session:</span>
@@ -146,11 +154,14 @@
                 <button class="btn btn-primary" id="btn-detailed-result">
                     <i class="fa-solid fa-table-list"></i> View Result Details & Answers
                 </button>
-                <a href="../exam instruct/einstruct.html" class="btn btn-outline" style="color: #2563eb; border-color: #93c5fd; background: #eff6ff;">
-                    <i class="fa-solid fa-rotate-right"></i> Retake / New Exam
+                <a href="../select-subject.html" class="btn btn-outline" style="color: #2563eb; border-color: #93c5fd; background: #eff6ff;">
+                    <i class="fa-solid fa-rotate-right"></i> Take Another Exam
                 </a>
             </div>
-            <div>
+            <div style="display: flex; gap: 10px;">
+                <a href="../henry's-part/result.html" class="btn btn-outline" style="color: #475569;">
+                    <i class="fa-solid fa-clock-rotate-left"></i> All Results History
+                </a>
                 <button class="btn btn-outline" id="btn-print">
                     <i class="fa-solid fa-print"></i> Print Result
                 </button>
@@ -159,7 +170,28 @@
 
     </div>
 
+    <!-- Review Answers Modal on Result Page -->
+    <div id="resultReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
+        <div style="background: white; border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="padding: 18px 24px; background: #0b1e36; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; font-size: 1.15rem;" id="modalResultTitle">
+                    <i class="fa-solid fa-list-check"></i> Examination Questions & Answers Review
+                </h3>
+                <button type="button" id="btnCloseResultModal" style="background: none; border: none; color: white; font-size: 26px; cursor: pointer; line-height: 1;">&times;</button>
+            </div>
+
+            <div style="padding: 20px 24px; overflow-y: auto; flex: 1;" id="modalResultQuestionsList">
+                <!-- Question cards injected here -->
+            </div>
+
+            <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+                <button type="button" id="btnCloseResultModalBtn" style="padding: 8px 18px; background: #0b1e36; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Close Review</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../auth.js"></script>
     <script src="script.js"></script>
 </body>
 

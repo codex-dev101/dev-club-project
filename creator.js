@@ -1,5 +1,3 @@
-// Creator Dashboard JS Logic
-
 const CUSTOM_PACKS_KEY = "cbt_custom_packs";
 const CREATOR_PROFILE_KEY = "cbt_creator_profile";
 

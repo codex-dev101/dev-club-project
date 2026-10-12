@@ -81,7 +81,7 @@
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </span>
-                        <span>The exam consists of <strong>50</strong> multiple choice questions.</span>
+                        <span>The exam consists of <strong id="ruleQuestionCount">50</strong> multiple choice questions.</span>
                     </li>
                     <li>
                         <span class="rule-icon-wrap">
@@ -105,7 +105,7 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                         </span>
-                        <span>The total duration of the exam is <strong>60 minutes</strong>.</span>
+                        <span>The total duration of the exam is <strong id="ruleDuration">60 minutes</strong>.</span>
                     </li>
                     <li>
                         <span class="rule-icon-wrap">
@@ -156,34 +156,51 @@
         </div>
     </main>
 
+    <script src="../auth.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Route protection
+            const user = window.requireAuth ? window.requireAuth("../index.html") : null;
+
             const urlParams = new URLSearchParams(window.location.search);
-            const candidateName = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name") || "Student";
-            const candidateId = urlParams.get("candidateId") || localStorage.getItem("cbt_candidate_id") || "CBT-2026";
-            const subject = urlParams.get("subject") || localStorage.getItem("cbt_selected_subject") || "general_knowledge";
+            const candidateName = user?.fullName || urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name") || "Student";
+            const candidateId = user?.matricNo || urlParams.get("candidateId") || localStorage.getItem("cbt_candidate_id") || "CBT-2026";
+            const storedSubject = localStorage.getItem("cbt_selected_subject");
+            
+            let examConfig = null;
+            try {
+                examConfig = JSON.parse(localStorage.getItem("cbt_exam_config") || "null");
+            } catch (e) {}
+
+            const subject = urlParams.get("subject") || examConfig?.subjectId || storedSubject || "general_knowledge";
             const attempt = urlParams.get("attempt") || localStorage.getItem("cbt_current_attempt_number") || "1";
+            const qCount = parseInt(urlParams.get("qcount")) || examConfig?.questionCount || parseInt(localStorage.getItem("cbt_selected_question_count")) || 50;
+            const durationMins = parseInt(urlParams.get("duration")) || examConfig?.durationMinutes || parseInt(localStorage.getItem("cbt_selected_duration_minutes")) || 60;
 
             const nameEl = document.getElementById("infoCandidateName");
             const idEl = document.getElementById("infoCandidateId");
             const subjectEl = document.getElementById("infoSubjectName");
             const creatorTagEl = document.getElementById("infoCreatorTag");
             const attemptBadgeEl = document.getElementById("infoAttemptBadge");
+            const ruleQEl = document.getElementById("ruleQuestionCount");
+            const ruleDurEl = document.getElementById("ruleDuration");
 
             if (nameEl) nameEl.textContent = candidateName;
             if (idEl) idEl.textContent = candidateId;
+            if (ruleQEl) ruleQEl.textContent = qCount;
+            if (ruleDurEl) ruleDurEl.textContent = `${durationMins} minutes`;
 
             // Subject label & custom pack details
             const standardNames = {
                 math: "Mathematics",
-                english: "English",
-                science: "Science",
-                art: "Art",
+                english: "English Language",
+                science: "Basic Science",
+                art: "Art & Culture",
                 current_affairs: "Current Affairs",
                 general_knowledge: "General Knowledge"
             };
 
-            let subjectTitle = standardNames[subject] || subject;
+            let subjectTitle = examConfig?.subjectTitle || standardNames[subject] || subject;
             let creatorTag = localStorage.getItem("cbt_creator_tag") || "";
 
             try {
@@ -231,6 +248,9 @@
                     targetParams.set("candidateId", candidateId);
                     targetParams.set("subject", subject);
                     targetParams.set("attempt", attempt);
+                    targetParams.set("qcount", qCount);
+                    targetParams.set("duration", durationMins);
+                    targetParams.set("start", "true");
 
                     window.location.href = "../exams/index.html?" + targetParams.toString();
                 });

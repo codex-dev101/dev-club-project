@@ -1,18 +1,28 @@
-// Connects modules with the UI & DOM Events
+// ============================================================
+// Smart CBT - Examination Controller (exams.js)
+// Handles Question Navigation, Custom Timer, Answer Selection & Submissions
+// ============================================================
 
 // --- STATE ---
 let activeSubject = "general_knowledge";
 let activeSubjectTitle = "General Knowledge";
 let creatorTag = "";
 let candidateId = "CBT-2026";
+let candidateName = "Student";
 let attemptNumber = 1;
+let attemptId = "";
 
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
 let markedQuestions = [];
-let timeLeft = 60 * 60; // Default 60 minutes
-let totalDurationSeconds = 60 * 60;
+
+let startTime = Date.now();
+let totalDurationSeconds = 60 * 60; // Up to 60 minutes
+let deadlineTimestamp = Date.now() + totalDurationSeconds * 1000;
+let timeLeft = totalDurationSeconds;
+
+let isSubmitting = false;
 
 // --- DOM ELEMENTS ---
 const examTitle = document.querySelector(".exam-title");
@@ -44,19 +54,26 @@ const statMarked = document.getElementById("statMarked");
 
 // --- HELPER: Save current exam state to storage ---
 function persist() {
-  window.saveExamState({
-    subject: activeSubject,
-    subjectTitle: activeSubjectTitle,
-    creatorTag: creatorTag,
-    candidateId: candidateId,
-    attemptNumber: attemptNumber,
-    questions,
-    currentIndex,
-    userAnswers,
-    markedQuestions,
-    timeLeft,
-    totalDurationSeconds
-  });
+  if (typeof window.saveExamState === "function") {
+    window.saveExamState({
+      attemptId,
+      subject: activeSubject,
+      subjectTitle: activeSubjectTitle,
+      creatorTag: creatorTag,
+      candidateId: candidateId,
+      candidateName: candidateName,
+      attemptNumber: attemptNumber,
+      questions,
+      currentIndex,
+      userAnswers,
+      markedQuestions,
+      startTime,
+      durationSeconds: totalDurationSeconds,
+      deadlineTimestamp,
+      timeLeft,
+      totalDurationSeconds
+    });
+  }
 }
 
 // Check if all questions have been answered
@@ -107,85 +124,92 @@ function updateNavigationButtons() {
 
 // --- SETUP SUBJECT & QUESTIONS ---
 function setupExam() {
+  // 1. Authenticate Route
+  const user = window.requireAuth ? window.requireAuth("../index.html") : null;
+  if (user) {
+    candidateName = user.fullName || "Student";
+    candidateId = user.matricNo || "CBT-2026";
+  } else {
+    candidateName = localStorage.getItem("cbt_candidate_name") || "Student";
+    candidateId = localStorage.getItem("cbt_candidate_id") || "CBT-2026";
+  }
+
+  // 2. Read Configuration
+  let examConfig = null;
+  try {
+    examConfig = JSON.parse(localStorage.getItem("cbt_exam_config") || "null");
+  } catch (e) {}
+
   const urlParams = new URLSearchParams(window.location.search);
   const urlSubject = urlParams.get("subject");
   const storedSubject = localStorage.getItem("cbt_selected_subject");
-  const saved = window.loadExamState ? window.loadExamState() : null;
+  const isFreshStart = urlParams.get("start") === "true";
 
-  candidateId = urlParams.get("candidateId") || localStorage.getItem("cbt_candidate_id") || "CBT-2026";
+  activeSubject = urlSubject || examConfig?.subjectId || storedSubject || "general_knowledge";
   attemptNumber = parseInt(urlParams.get("attempt") || localStorage.getItem("cbt_current_attempt_number")) || 1;
 
-  let targetSubject = "general_knowledge";
-  if (urlSubject) {
-    targetSubject = urlSubject;
-  } else if (storedSubject) {
-    targetSubject = storedSubject;
-  } else if (saved?.subject) {
-    targetSubject = saved.subject;
-  }
+  // Customization parameters
+  const requestedQCount = Math.min(50, Math.max(1, parseInt(urlParams.get("qcount")) || examConfig?.questionCount || parseInt(localStorage.getItem("cbt_selected_question_count")) || 20));
+  const requestedDurationMins = Math.min(60, Math.max(1, parseInt(urlParams.get("duration")) || examConfig?.durationMinutes || parseInt(localStorage.getItem("cbt_selected_duration_minutes")) || 30));
 
-  activeSubject = targetSubject;
+  // Retrieve subject metadata
+  const subMeta = window.getCbtSubjectById ? window.getCbtSubjectById(activeSubject) : null;
+  activeSubjectTitle = examConfig?.subjectTitle || (subMeta ? subMeta.title : activeSubject);
+  creatorTag = localStorage.getItem("cbt_creator_tag") || subMeta?.creatorTag || "";
 
-  // Standard Subject Titles
-  const standardNames = {
-    math: "Mathematics",
-    english: "English",
-    science: "Science",
-    art: "Art",
-    current_affairs: "Current Affairs",
-    general_knowledge: "General Knowledge"
-  };
-
-  activeSubjectTitle = standardNames[activeSubject] || activeSubject;
-  creatorTag = "";
-
-  // Check if target is a Custom Question Pack
-  let customPack = null;
-  try {
-    const packs = JSON.parse(localStorage.getItem("cbt_custom_packs") || "[]");
-    customPack = packs.find(p => p.id === activeSubject || p.subjectKey === activeSubject);
-    if (customPack) {
-      activeSubjectTitle = customPack.title;
-      creatorTag = customPack.creatorTag || "@creator";
-      if (customPack.durationMinutes) {
-        totalDurationSeconds = customPack.durationMinutes * 60;
-      }
-    }
-  } catch (e) {
-    console.error("Error checking custom packs:", e);
-  }
-
-  // Update header title with subject name and creator tag
+  // Update navbar header title
   if (examTitle) {
     if (creatorTag) {
-      examTitle.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Smart CBT - ${activeSubjectTitle} <span style="font-size: 0.8rem; background: rgba(255,255,255,0.18); padding: 2px 8px; border-radius: 9999px; margin-left: 6px; font-weight: normal;">by ${creatorTag}</span>`;
+      examTitle.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Smart CBT - ${escapeText(activeSubjectTitle)} <span style="font-size: 0.8rem; background: rgba(255,255,255,0.18); padding: 2px 8px; border-radius: 9999px; margin-left: 6px; font-weight: normal;">by ${escapeText(creatorTag)}</span>`;
     } else {
-      examTitle.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Smart CBT - ${activeSubjectTitle}`;
+      examTitle.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Smart CBT - ${escapeText(activeSubjectTitle)}`;
     }
   }
 
-  // Load saved exam if it matches the current activeSubject, otherwise generate questions
-  if (saved && saved.subject === activeSubject && Array.isArray(saved.questions) && saved.questions.length > 0) {
+  // Check saved exam state in local storage (for page refreshes)
+  const saved = window.loadExamState ? window.loadExamState() : null;
+
+  if (saved && !isFreshStart && saved.subject === activeSubject && Array.isArray(saved.questions) && saved.questions.length > 0) {
+    // RESUME EXISTING IN-PROGRESS EXAM
     questions = saved.questions;
     currentIndex = saved.currentIndex || 0;
     userAnswers = saved.userAnswers || {};
     markedQuestions = saved.markedQuestions || [];
-    timeLeft = typeof saved.timeLeft === "number" ? saved.timeLeft : totalDurationSeconds;
+    startTime = saved.startTime || Date.now();
+    totalDurationSeconds = saved.totalDurationSeconds || (requestedDurationMins * 60);
+    deadlineTimestamp = saved.deadlineTimestamp || (startTime + totalDurationSeconds * 1000);
+    attemptId = saved.attemptId || ("att_" + Date.now());
+
+    // Calculate remaining time against persistent deadline
+    const now = Date.now();
+    timeLeft = Math.max(0, Math.floor((deadlineTimestamp - now) / 1000));
+
+    // If deadline has already passed while away, auto-submit immediately!
+    if (timeLeft <= 0) {
+      submitExam(true);
+      return;
+    }
   } else {
-    let bank = [];
-    if (customPack && Array.isArray(customPack.questions) && customPack.questions.length > 0) {
-      bank = customPack.questions;
-    } else if (window.subjectQuestions && window.subjectQuestions[activeSubject]) {
-      bank = window.subjectQuestions[activeSubject];
-    } else if (window.subjectQuestions && window.subjectQuestions.general_knowledge) {
-      bank = window.subjectQuestions.general_knowledge;
+    // INITIALIZE NEW EXAM ATTEMPT
+    if (typeof window.sampleCbtQuestions === "function") {
+      questions = window.sampleCbtQuestions(activeSubject, requestedQCount);
+    } else {
+      // Fallback
+      const bank = (window.subjectQuestions && window.subjectQuestions[activeSubject]) || [];
+      const shuffled = [...bank].sort(() => 0.5 - Math.random());
+      questions = shuffled.slice(0, Math.min(requestedQCount, bank.length));
     }
 
-    questions = typeof window.shuffleQuestions === "function" ? window.shuffleQuestions(bank) : [...bank];
     currentIndex = 0;
     userAnswers = {};
     markedQuestions = [];
+    attemptId = "att_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+
+    totalDurationSeconds = Math.min(3600, requestedDurationMins * 60); // Strictly max 60 minutes
+    startTime = Date.now();
+    deadlineTimestamp = startTime + (totalDurationSeconds * 1000);
     timeLeft = totalDurationSeconds;
+
     persist();
   }
 }
@@ -245,7 +269,7 @@ function renderQuestion() {
       card.innerHTML = `
         <div class="custom-radio"><div class="radio-dot"></div></div>
         <kbd class="kbd-shortcut" style="margin-right: 8px; margin-left: 0; background: #eef2ff; color: #3730a3; border-color: #c7d2fe;">${optionLetter}</kbd>
-        <span class="option-text">${optText}</span>
+        <span class="option-text">${escapeText(optText)}</span>
       `;
 
       card.addEventListener("click", () => {
@@ -274,7 +298,7 @@ function startExamTimer() {
 
   if (window.initTimer) {
     window.initTimer({
-      getTime: () => timeLeft,
+      getDeadline: () => deadlineTimestamp,
       setTime: (t) => {
         timeLeft = t;
         if (timeLeft % 5 === 0) persist();
@@ -284,8 +308,8 @@ function startExamTimer() {
         if (timerContainer) timerContainer.classList.toggle("warning", t < 300);
       },
       onTimeUp: () => {
-        alert("Time is up! Submitting your exam.");
-        submitExam();
+        // Automatic submission when timer expires
+        submitExam(true);
       }
     });
   }
@@ -305,23 +329,26 @@ function openSubmitModal() {
 }
 
 // --- SUBMISSION & REDIRECT TO RESULTS PAGE ---
-async function submitExam() {
+async function submitExam(isAuto = false) {
+  if (isSubmitting) return;
+  isSubmitting = true;
+
   if (window.stopTimer) window.stopTimer();
   if (submitModal) submitModal.classList.remove("active");
 
   if (btnConfirmSubmit) {
     btnConfirmSubmit.disabled = true;
-    btnConfirmSubmit.textContent = "Saving to Database...";
+    btnConfirmSubmit.textContent = "Calculating and saving results...";
   }
 
+  // Calculate scores strictly against question bank correct answers
   let correct = 0;
   let wrong = 0;
   let unattempted = 0;
 
-  // Build Comprehensive Question-by-Question Review Breakdown
   const reviewBreakdown = questions.map((q, idx) => {
     const userAns = userAnswers[idx];
-    const isAnswered = userAns !== undefined;
+    const isAnswered = userAns !== undefined && userAns !== null;
     const isCorrect = isAnswered && userAns === q.answer;
 
     if (!isAnswered) unattempted++;
@@ -348,14 +375,14 @@ async function submitExam() {
   const percent = totalQuestions > 0 ? Math.round((correct / totalQuestions) * 100) : 0;
   const grades = { 70: "A", 60: "B", 50: "C", 40: "D" };
   const grade = Object.entries(grades).find(([min]) => percent >= Number(min))?.[1] || "F";
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentCandidate = urlParams.get("fullname") || localStorage.getItem("cbt_candidate_name") || "Candidate";
-  const timeSpentSeconds = Math.max(0, totalDurationSeconds - timeLeft);
+
+  const now = Date.now();
+  const timeSpentSeconds = Math.min(totalDurationSeconds, Math.max(1, Math.round((now - startTime) / 1000)));
 
   const examResultData = {
+    attempt_id: attemptId,
     candidate_id: candidateId,
-    candidate_name: currentCandidate,
+    candidate_name: candidateName,
     subject: activeSubject,
     subject_title: activeSubjectTitle,
     creator_tag: creatorTag,
@@ -370,11 +397,14 @@ async function submitExam() {
     grade: grade,
     score: score,
     totalMarks: totalMarks,
+    duration_minutes: Math.round(totalDurationSeconds / 60),
     timeSpentSeconds: timeSpentSeconds,
+    auto_submitted: isAuto,
+    submitted_at: new Date().toISOString(),
     review_breakdown: reviewBreakdown
   };
 
-  // Save to database (Supabase) and local storage
+  // Save to database (Supabase exam_results) and local caches
   if (window.saveResultToDatabase) {
     try {
       await window.saveResultToDatabase(examResultData);
@@ -383,19 +413,15 @@ async function submitExam() {
     }
   }
 
-  // Clear active in-progress exam state
+  // Clear in-progress exam state
   if (window.clearExamState) {
     window.clearExamState();
   }
 
   if (submitModal) submitModal.classList.remove("active");
   if (btnSubmitExam) btnSubmitExam.disabled = true;
-  if (btnConfirmSubmit) {
-    btnConfirmSubmit.disabled = true;
-    btnConfirmSubmit.textContent = "Submitted";
-  }
 
-  // Redirect to result page
+  // Redirect to results page
   window.location.href = "../result page/index.html";
 }
 
@@ -432,6 +458,16 @@ function closeSubmitModal() {
   if (submitModal) submitModal.classList.remove("active");
 }
 
+function escapeText(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // --- ATTACH CLICK EVENT LISTENERS ---
 if (btnPrev) btnPrev.addEventListener("click", goToPrevQuestion);
 if (btnNext) btnNext.addEventListener("click", goToNextQuestion);
@@ -461,13 +497,12 @@ if (btnCancelSubmit) {
 if (btnConfirmSubmit) {
   btnConfirmSubmit.addEventListener("click", (e) => {
     if (e && e.preventDefault) e.preventDefault();
-    submitExam();
+    submitExam(false);
   });
 }
 
 // --- KEYBOARD SHORTCUT SYSTEM ---
 document.addEventListener("keydown", (e) => {
-  // If focused in input/textarea, ignore shortcuts
   const activeEl = document.activeElement;
   if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA" || activeEl.isContentEditable)) {
     return;
@@ -476,11 +511,10 @@ document.addEventListener("keydown", (e) => {
   const key = e.key.toUpperCase();
   const isModalActive = submitModal && submitModal.classList.contains("active");
 
-  // When Submit Modal is open
   if (isModalActive) {
     if (e.key === "Enter" || key === "S" || key === "Y") {
       e.preventDefault();
-      submitExam();
+      submitExam(false);
     } else if (e.key === "Escape" || key === "C") {
       e.preventDefault();
       closeSubmitModal();
@@ -488,7 +522,6 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
-  // Active Exam Shortcuts
   switch (key) {
     case "N":
     case "ARROWRIGHT":
@@ -513,7 +546,6 @@ document.addEventListener("keydown", (e) => {
       toggleMarkQuestion();
       break;
 
-    // Option selections: A, B, C, D (or 1, 2, 3, 4)
     case "A":
     case "1":
       e.preventDefault();
