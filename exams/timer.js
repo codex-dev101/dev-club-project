@@ -1,37 +1,63 @@
 // ==========================================
-// MODULE 3: timer.js
-// Handles exam countdown timer display and tick
+// Smart CBT - timer.js
+// Handles reliable countdown timer with deadline verification
 // ==========================================
 
 let timerInterval = null;
 
 function formatTime(seconds) {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  const sec = Math.max(0, Math.floor(seconds));
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+
+  if (h > 0) {
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
-function initTimer({ getTime, setTime, onTick, onTimeUp }) {
+function initTimer({ getDeadline, getTime, setTime, onTick, onTimeUp }) {
   clearInterval(timerInterval);
 
-  timerInterval = setInterval(() => {
-    let current = getTime();
+  function tick() {
+    let current;
+    if (typeof getDeadline === "function") {
+      const deadline = getDeadline();
+      const now = Date.now();
+      current = Math.max(0, Math.floor((deadline - now) / 1000));
+    } else if (typeof getTime === "function") {
+      current = getTime() - 1;
+    } else {
+      current = 0;
+    }
+
+    if (typeof setTime === "function") {
+      setTime(current);
+    }
+
+    if (typeof onTick === "function") {
+      onTick(current);
+    }
 
     if (current <= 0) {
       clearInterval(timerInterval);
-      onTimeUp();
-      return;
+      if (typeof onTimeUp === "function") {
+        onTimeUp();
+      }
     }
+  }
 
-    current--;
-    setTime(current);
-    onTick(current);
-  }, 1000);
+  // Run immediate first tick
+  tick();
+  timerInterval = setInterval(tick, 1000);
 }
 
 function stopTimer() {
-  clearInterval(timerInterval);
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 }
 
 // Make accessible globally
