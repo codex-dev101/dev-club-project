@@ -902,22 +902,31 @@ body {
 }
 
 @media (max-width: 600px) {
+    .kbd-shortcut {
+        display: none !important;
+    }
+
     .navbar {
-        padding: 0.75rem 1rem;
+        padding: 0.65rem 0.85rem;
     }
 
     .navbar-container {
+        display: flex;
         flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
         gap: 0.5rem;
     }
 
     .exam-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         width: 100%;
+        margin-bottom: 2px;
     }
 
     .timer-container {
         padding: 0.35rem 0.75rem;
+        border-radius: 8px;
     }
 
     .timer-display {
@@ -925,55 +934,100 @@ body {
     }
 
     .btn-submit-exam {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border-radius: 8px;
+        background: #2563eb;
+        border: none;
+    }
+
+    .btn-submit-exam:hover {
+        background: #1d4ed8;
     }
 
     .exam-main {
-        padding: 0.75rem 0.5rem;
+        padding: 0.6rem 0.4rem;
+    }
+
+    .exam-card-wrapper {
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .question-area {
-        padding: 1.25rem 1rem;
+        padding: 1.1rem 0.85rem;
     }
 
     .question-prompt {
-        font-size: 1rem;
-        margin-bottom: 1rem;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        margin-bottom: 1.1rem;
     }
 
     .options-list {
-        gap: 0.65rem;
-        margin-bottom: 1.5rem;
+        gap: 0.6rem;
+        margin-bottom: 1.25rem;
     }
 
     .option-card {
-        padding: 0.85rem 0.9rem;
+        padding: 0.85rem 0.95rem;
+        border-radius: 10px;
+        min-height: 50px;
+    }
+
+    .option-letter {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+
+    .option-text {
+        font-size: 0.92rem;
     }
 
     .bottom-actions {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding-top: 0.75rem;
     }
 
     .btn-prev {
         order: 1;
-        flex: 1;
+        width: 100%;
+        justify-content: center;
     }
 
     .btn-next {
         order: 2;
-        flex: 1;
+        width: 100%;
+        justify-content: center;
     }
 
     .btn-mark {
         order: 3;
+        grid-column: span 2;
         width: 100%;
-        margin-top: 0.25rem;
+        justify-content: center;
+        margin-top: 2px;
+    }
+
+    .sidebar-navigation {
+        padding: 1rem 0.85rem 1.5rem;
+        background-color: #f8fafc;
     }
 
     .question-grid {
-        grid-template-columns: repeat(5, 1fr);
-        max-height: 160px;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+        max-height: 190px;
+    }
+
+    .btn-grid-num {
+        height: 38px;
+        font-size: 0.85rem;
+        border-radius: 6px;
     }
 
     .score-card {

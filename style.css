@@ -309,78 +309,118 @@ a {
 @media (max-width: 900px) {
     .container {
         flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        padding: 10px;
+        gap: 12px;
     }
 
     .left-side {
         width: 100%;
         min-height: auto;
-        padding: 30px 25px;
+        padding: 24px 20px;
+        border-radius: 16px;
     }
 
     .right-side {
         width: 100%;
         min-height: auto;
-        border-radius: 25px 25px 0 0;
-        padding: 40px 25px;
+        border-radius: 20px;
+        padding: 30px 20px;
     }
 
     .intro {
-        margin-top: 20px;
+        margin-top: 14px;
     }
 
     .illustration {
-        width: min(220px, 100%);
+        width: min(180px, 100%);
+        margin: 12px auto 0;
     }
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 8px;
+        gap: 10px;
+    }
+
     .left-side {
-        padding: 25px 20px;
+        padding: 20px 16px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .logo {
+        justify-content: center;
     }
 
     .logo h2 {
-        font-size: 19px;
+        font-size: 18px;
     }
 
     .logo-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 26px;
-    }
-
-    .intro h1 {
-        font-size: 28px;
-    }
-
-    .intro h2 {
-        font-size: 17px;
-    }
-
-    .description {
-        font-size: 14px;
-    }
-
-    .right-side {
-        padding: 30px 18px;
-    }
-
-    .login-card h1 {
+        width: 36px;
+        height: 36px;
         font-size: 24px;
     }
 
+    .intro h1 {
+        font-size: 24px;
+    }
+
+    .intro h2 {
+        font-size: 16px;
+    }
+
+    .description {
+        font-size: 13.5px;
+        line-height: 1.45;
+    }
+
+    .illustration {
+        display: none; /* Hide illustration on small phones to reduce scroll fatigue before login */
+    }
+
+    .right-side {
+        padding: 24px 16px;
+        border-radius: 18px;
+    }
+
+    .login-card {
+        max-width: 100%;
+    }
+
+    .login-card h1 {
+        font-size: 22px;
+    }
+
     .subtitle {
-        font-size: 13px;
-        margin-bottom: 24px;
+        font-size: 12.5px;
+        margin-bottom: 18px;
     }
 
     .input-box {
         height: 48px;
+        padding: 0 12px;
+    }
+
+    /* 16px font prevents iOS automatic zoom on focus */
+    .input-box input,
+    .input-box select {
+        font-size: 16px;
+    }
+
+    .auth-tab {
+        font-size: 13px;
+        padding: 8px 10px;
     }
 
     .start-btn,
     .result-btn {
         height: 48px;
-        font-size: 15px;
+        font-size: 14.5px;
+        border-radius: 10px;
     }
 }
 
