@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Step 1: Choose Subject - Smart CBT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="exam instruct/einstruct.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="select-subject.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
@@ -34,25 +33,25 @@
         </div>
     </header>
 
-    <main class="page-container" style="max-width: 960px;">
+    <main class="page-container">
         <!-- User status bar -->
         <div class="user-meta-bar">
             <div>
-                <span style="font-size: 12px; color: #64748b; font-weight: 600;">CANDIDATE</span>
-                <div style="font-size: 14px; font-weight: 700; color: #1e3a8a;">
-                    <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i>
+                <span class="candidate-label">CANDIDATE</span>
+                <div class="candidate-info">
+                    <i class="fa-solid fa-user-graduate"></i>
                     <span id="userNameDisplay">Student</span>
-                    <span id="userMatricDisplay" style="font-family: monospace; font-size: 12px; background: #dbeafe; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">CBT/2026/0001</span>
+                    <span id="userMatricDisplay" class="candidate-matric">CBT/2026/0001</span>
                 </div>
             </div>
             <div>
-                <button type="button" id="btnPageSignOut" style="background: white; border: 1px solid #cbd5e1; color: #b91c1c; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                <button type="button" id="btnPageSignOut" class="btn-signout-page">
                     <i class="fa-solid fa-right-from-bracket"></i> Sign Out
                 </button>
             </div>
         </div>
 
-        <div class="instruction-card" style="max-width: 100%;">
+        <div class="instruction-card">
             <!-- Workflow Steps -->
             <div class="workflow-steps">
                 <div class="step-item active">
@@ -79,26 +78,28 @@
             <!-- Page Title -->
             <div class="card-header">
                 <div class="icon-badge">
-                    <i class="fa-solid fa-book-open" style="color: #2563eb;"></i>
+                    <i class="fa-solid fa-book-open"></i>
                 </div>
                 <h2>Step 1: Choose Your Examination Subject</h2>
             </div>
-            <p class="subtitle" style="margin-bottom: 12px;">
+            <p class="subtitle">
                 Select the subject you want to take. Subjects are loaded dynamically from our database with eligible question counts.
             </p>
 
             <!-- Dynamic Subject Selection Grid -->
             <div class="subject-grid" id="subjectGrid">
                 <!-- Injected via JavaScript from questions-data.js -->
-                <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #64748b;">
-                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: #2563eb;"></i>
-                    <p style="margin-top: 10px;">Loading available subjects from question database...</p>
+                <div class="loading-subjects-box">
+                    <div class="loading-subjects-icon">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+                    <p>Loading available subjects from question database...</p>
                 </div>
             </div>
 
             <!-- Bottom Actions -->
             <div class="action-container">
-                <a href="index.html" style="color: #64748b; font-size: 14px; font-weight: 600;">
+                <a href="index.html" class="btn-back-dashboard">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
                 </a>
 

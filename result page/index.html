@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart CBT - Result Summary & Detailed Review</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- FontAwesome CDN for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
@@ -16,16 +15,16 @@
 
         <!-- Top Navy Header -->
         <header class="result-header">
-            <div class="header-title" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="header-title-bar">
+                <div class="brand-title-group">
                     <i class="fa-solid fa-trophy"></i>
                     <h2>Smart CBT - Result Summary</h2>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <a href="../index.html" style="color: #cbd5e1; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                <div class="header-links-group">
+                    <a href="../index.html">
                         <i class="fa-solid fa-house"></i> Home
                     </a>
-                    <a href="../creator-dashboard.html" style="color: #cbd5e1; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-left: 8px;">
+                    <a href="../creator-dashboard.html">
                         <i class="fa-solid fa-graduation-cap"></i> Creator Studio
                     </a>
                 </div>
@@ -33,27 +32,27 @@
         </header>
 
         <!-- Candidate Metadata Sub-bar -->
-        <div class="candidate-meta-bar" style="display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: center;">
+        <div class="candidate-meta-bar">
             <div class="meta-group">
-                <span style="color: #64748b; font-weight: 600;">Candidate:</span>
+                <span class="meta-label">Candidate:</span>
                 <strong id="meta-candidate-name">Student</strong>
                 <span class="meta-badge" id="meta-candidate-id">CBT-2026</span>
             </div>
             <div class="meta-group">
-                <span style="color: #64748b; font-weight: 600;">Subject:</span>
+                <span class="meta-label">Subject:</span>
                 <strong id="meta-subject-name">General Knowledge</strong>
-                <span class="meta-badge creator" id="meta-creator-tag" style="display: none;">by @creator</span>
+                <span class="meta-badge creator" id="meta-creator-tag">by @creator</span>
             </div>
             <div class="meta-group">
-                <span style="color: #64748b; font-weight: 600;">Exam Duration:</span>
+                <span class="meta-label">Exam Duration:</span>
                 <strong id="meta-exam-duration">30 Mins</strong>
             </div>
             <div class="meta-group">
-                <span style="color: #64748b; font-weight: 600;">Date & Time:</span>
-                <span id="meta-exam-date" style="font-size: 13px; color: #475569;">-</span>
+                <span class="meta-label">Date & Time:</span>
+                <span id="meta-exam-date" class="meta-exam-date">-</span>
             </div>
             <div class="meta-group">
-                <span style="color: #64748b; font-weight: 600;">Session:</span>
+                <span class="meta-label">Session:</span>
                 <span class="meta-badge attempt" id="meta-attempt-badge">Attempt #1</span>
             </div>
         </div>
@@ -112,9 +111,9 @@
                     <h4>Performance Overview</h4>
 
                     <div class="progress-bar-container">
-                        <div class="progress-segment correct" id="bar-correct" style="width: 0%;"></div>
-                        <div class="progress-segment incorrect" id="bar-incorrect" style="width: 0%;"></div>
-                        <div class="progress-segment unanswered" id="bar-unanswered" style="width: 0%;"></div>
+                        <div class="progress-segment correct" id="bar-correct"></div>
+                        <div class="progress-segment incorrect" id="bar-incorrect"></div>
+                        <div class="progress-segment unanswered" id="bar-unanswered"></div>
                     </div>
 
                     <div class="legend-container">
@@ -149,17 +148,17 @@
         </div>
 
         <!-- Action Buttons -->
-        <footer class="action-footer" style="border-top: 1px solid #e2e8f0; justify-content: space-between; flex-wrap: wrap;">
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <footer class="action-footer">
+            <div class="footer-btn-group">
                 <button class="btn btn-primary" id="btn-detailed-result">
                     <i class="fa-solid fa-table-list"></i> View Result Details & Answers
                 </button>
-                <a href="../select-subject.html" class="btn btn-outline" style="color: #2563eb; border-color: #93c5fd; background: #eff6ff;">
+                <a href="../select-subject.html" class="btn btn-outline btn-retake">
                     <i class="fa-solid fa-rotate-right"></i> Take Another Exam
                 </a>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <a href="../henry's-part/result.html" class="btn btn-outline" style="color: #475569;">
+            <div class="footer-btn-group">
+                <a href="../henry's-part/result.html" class="btn btn-outline">
                     <i class="fa-solid fa-clock-rotate-left"></i> All Results History
                 </a>
                 <button class="btn btn-outline" id="btn-print">
@@ -171,21 +170,21 @@
     </div>
 
     <!-- Review Answers Modal on Result Page -->
-    <div id="resultReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
-        <div style="background: white; border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div style="padding: 18px 24px; background: #0b1e36; color: white; display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0; font-size: 1.15rem;" id="modalResultTitle">
+    <div id="resultReviewModal" class="review-modal-backdrop">
+        <div class="review-modal-card">
+            <div class="review-modal-header">
+                <h3 id="modalResultTitle">
                     <i class="fa-solid fa-list-check"></i> Examination Questions & Answers Review
                 </h3>
-                <button type="button" id="btnCloseResultModal" style="background: none; border: none; color: white; font-size: 26px; cursor: pointer; line-height: 1;">&times;</button>
+                <button type="button" id="btnCloseResultModal" class="btn-modal-close-icon">&times;</button>
             </div>
 
-            <div style="padding: 20px 24px; overflow-y: auto; flex: 1;" id="modalResultQuestionsList">
+            <div class="review-modal-body" id="modalResultQuestionsList">
                 <!-- Question cards injected here -->
             </div>
 
-            <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
-                <button type="button" id="btnCloseResultModalBtn" style="padding: 8px 18px; background: #0b1e36; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Close Review</button>
+            <div class="review-modal-footer">
+                <button type="button" id="btnCloseResultModalBtn" class="btn-modal-close">Close Review</button>
             </div>
         </div>
     </div>
