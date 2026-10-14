@@ -100,8 +100,8 @@
                     <div class="auth-panel active" id="panelSignIn">
                         <form id="signInForm">
                             <div class="input-box">
-                                <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
-                                <input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email">
+                                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" id="loginUsername" placeholder="Username" required autocomplete="username">
                             </div>
 
                             <div class="input-box relative-box">
@@ -110,6 +110,9 @@
                                 <button type="button" class="password-toggle-btn" id="toggleLoginPassword" title="Show/Hide Password">
                                     <i class="fa-solid fa-eye"></i>
                                 </button>
+                            </div>
+                            <div class="auth-link-row">
+                                <a class="auth-link" href="forgot-password.html">Forgot Password?</a>
                             </div>
 
                             <button class="start-btn" type="submit" id="btnSubmitSignIn">
@@ -125,6 +128,11 @@
                             <div class="input-box">
                                 <span class="input-icon"><i class="fa-solid fa-user"></i></span>
                                 <input type="text" id="regFullName" placeholder="Full Name" required autocomplete="name">
+                            </div>
+
+                            <div class="input-box">
+                                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" id="regUsername" placeholder="Username (e.g. alice123)" required autocomplete="username">
                             </div>
 
                             <div class="input-box">

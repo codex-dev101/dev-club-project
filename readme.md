@@ -112,3 +112,25 @@ git commit -m "Added instructions page"
 git push origin instructions
 
 Then you guys create Pull Requests on GitHub to bring those branches into the shared branch.
+
+## Password recovery setup
+
+The recovery pages use the existing Supabase Auth client. The recovery request redirects to `reset-password.html` on the same origin that is serving the website. No service-role key or additional database is needed.
+
+Before using recovery on the deployed site:
+
+1. In the Supabase Dashboard, open **Authentication → URL Configuration**. Set **Site URL** to the deployed website's real base URL (not the Supabase project URL). Add the exact deployed reset page to **Redirect URLs**, for example `https://your-real-domain.example/reset-password.html`. For GitHub Pages, include the repository path in both URLs if the site is hosted below one.
+2. Add the local development reset page separately to **Redirect URLs** only if you use it, for example `http://localhost:5500/reset-password.html`. Do not use localhost as the production Site URL.
+3. In **Authentication → Email Templates → Reset Password**, use the subject `Reset Your Smart CBT Examination Password` and a body that links to Supabase's `{{ .ConfirmationURL }}`. Example:
+
+   ```html
+   <h2>Reset your Smart CBT Examination password</h2>
+   <p>We received a request to reset the password for your Smart CBT Examination account.</p>
+   <p><a href="{{ .ConfirmationURL }}">Reset my password</a></p>
+   <p>If you did not request this change, you can ignore this email. The link expires according to your Supabase email/OTP expiry setting and can only be used once.</p>
+   ```
+
+4. For reliable delivery, configure a custom SMTP provider in the Supabase project's email/SMTP settings. Verify the sender domain and its SPF/DKIM records with that provider. Supabase's default mail service may be restricted or rate-limited; a successful recovery request from the website does not by itself prove that an email was delivered.
+5. Review the email OTP expiry setting under **Authentication → Providers → Email** and choose an appropriate short lifetime. Supabase validates and consumes the recovery token; the reset page additionally requires the resulting recovery session before it calls `updateUser`.
+
+The project's public Auth settings currently report email authentication enabled and email confirmation required. SMTP configuration, the deployed website hostname, redirect allowlisting, and actual mailbox delivery are not available through the public client configuration and must be verified in the Dashboard.
