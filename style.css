@@ -288,6 +288,61 @@ body {
     padding-left: 4px;
 }
 
+.auth-link-row {
+    display: flex;
+    justify-content: flex-end;
+    margin: -3px 2px 13px;
+    font-size: 13px;
+}
+
+.auth-link {
+    color: var(--navy-btn);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    color: var(--navy-btn-hover);
+    text-decoration: underline;
+}
+
+.recovery-back-link {
+    margin-top: 18px;
+    font-size: 13px;
+}
+
+.recovery-password-hint {
+    margin: -5px 0 12px;
+}
+
+.recovery-spinner {
+    color: var(--navy-btn);
+    font-size: 24px;
+    margin: 8px 0;
+}
+
+.recovery-button-link {
+    text-decoration: none;
+}
+
+.start-btn:disabled {
+    cursor: wait;
+    opacity: 0.75;
+    transform: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Alerts */
 .auth-alert {
     padding: 10px 14px;
