@@ -112,3 +112,50 @@ git commit -m "Added instructions page"
 git push origin instructions
 
 Then you guys create Pull Requests on GitHub to bring those branches into the shared branch.
+
+## Creator Insight Dashboard sign-in
+
+The dashboard is plain HTML, CSS, and JavaScript. It loads the official Supabase JavaScript client from the CDN; no build tool or package installation is required.
+
+1. Create `supabase-config.js` by copying `supabase-config.example.js`.
+2. In Supabase **Project Settings → API** (or **API Keys**), copy the Project URL and the publishable key (or legacy anon key) into `projectUrl` and `anonKey`.
+3. In the Supabase SQL Editor, run [`supabase/creator-access.sql`](./supabase/creator-access.sql) to create the RLS-protected creator authorization list.
+4. In **Authentication → Users**, create or invite your account, then copy its user UUID.
+5. In the SQL Editor, authorize that account explicitly:
+
+   ```sql
+   insert into public.creator_access (user_id)
+   values ('YOUR_CREATOR_AUTH_USER_UUID');
+   ```
+
+6. Disable public sign-ups in Supabase Authentication settings if users should not create accounts in this project. If sign-ups remain enabled, new users can register, but receive no creator access unless an administrator explicitly adds their UUID to `creator_access`.
+7. Serve the project over HTTP (for example, with VS Code Live Server) and open `creator-dashboard.html`.
+
+`supabase-config.js` is ignored by Git. Never put a Supabase service-role or secret key in this file; the publishable/anon key is intended for browser use. Supabase Auth manages passwords and sessions. Registration saves only `full_name` as user metadata; it never accepts a role. Email confirmation must be enabled in Supabase Authentication settings if you want new users to verify their address.
+
+The `creator_access` row is the authorization source, not the frontend. Its RLS policy allows a signed-in user to read only their own authorization row; browser clients have no insert, update, or delete permission. Provision creator access only from the SQL Editor or trusted server-side code. Any creator-data tables added later must also have RLS enabled and policies that check membership in `creator_access`, for example:
+
+```sql
+alter table public.creator_questions enable row level security;
+
+create policy "Creators can manage questions"
+on public.creator_questions
+for all
+to authenticated
+using (
+    exists (
+        select 1
+        from public.creator_access
+        where creator_access.user_id = auth.uid()
+    )
+)
+with check (
+    exists (
+        select 1
+        from public.creator_access
+        where creator_access.user_id = auth.uid()
+    )
+);
+```
+
+Apply equivalent policies to every creator-only table. The current question packs and creator profile are still saved in browser `localStorage`, not Supabase; local data cannot be protected by RLS. Move those records to RLS-protected Supabase tables before relying on backend security for creator content.

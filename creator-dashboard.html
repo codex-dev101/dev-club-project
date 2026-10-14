@@ -4,16 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Creator Dashboard - Smart CBT</title>
+    <title>Creator Insight Dashboard - Smart CBT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="creator.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
+    <!-- Creator account login -->
+    <div id="creatorLogin">
+        <form id="creatorLoginForm" novalidate>
+            <div class="creator-login-mark" aria-hidden="true">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <p class="creator-login-eyebrow">SMART CBT</p>
+            <h2>Creator Insight</h2>
+            <p id="creatorLoginDescription">Sign in to manage your questions and question packs.</p>
 
+            <label for="creatorLoginEmail">Email address</label>
+            <input type="email" id="creatorLoginEmail" placeholder="you@example.com" autocomplete="email" required>
+
+            <label for="creatorLoginPassword">Password</label>
+            <div class="creator-password-field">
+                <input type="password" id="creatorLoginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" id="creatorPasswordToggle" class="creator-password-toggle" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <button type="submit" id="creatorAuthSubmit">
+                <span id="creatorAuthSubmitText">Log in</span>
+                <span id="creatorLoginSpinner" class="creator-login-spinner" aria-hidden="true" hidden></span>
+            </button>
+
+            <p id="creatorLoginError" role="alert" aria-live="polite" hidden></p>
+            <p class="creator-auth-switch">Don't have an account? <button type="button" id="showCreatorSignup">Create Account</button></p>
+        </form>
+
+        <form id="creatorSignupForm" novalidate hidden>
+            <div class="creator-login-mark" aria-hidden="true">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <p class="creator-login-eyebrow">SMART CBT</p>
+            <h2>Create Account</h2>
+            <p class="creator-auth-description">Create an account to get started. Creator access is granted separately.</p>
+
+            <label for="creatorSignupName">Full name</label>
+            <input type="text" id="creatorSignupName" placeholder="Your full name" autocomplete="name" maxlength="100" required>
+
+            <label for="creatorSignupEmail">Email address</label>
+            <input type="email" id="creatorSignupEmail" placeholder="you@example.com" autocomplete="email" required>
+
+            <label for="creatorSignupPassword">Password</label>
+            <div class="creator-password-field">
+                <input type="password" id="creatorSignupPassword" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required>
+                <button type="button" class="creator-password-toggle" data-password-target="creatorSignupPassword" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <label for="creatorSignupConfirmPassword">Confirm password</label>
+            <div class="creator-password-field">
+                <input type="password" id="creatorSignupConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password" required>
+                <button type="button" class="creator-password-toggle" data-password-target="creatorSignupConfirmPassword" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <button type="submit" id="creatorSignupSubmit">
+                <span id="creatorSignupSubmitText">Create Account</span>
+                <span id="creatorSignupSpinner" class="creator-login-spinner" aria-hidden="true" hidden></span>
+            </button>
+
+            <p id="creatorSignupError" role="alert" aria-live="polite" hidden></p>
+            <p id="creatorSignupSuccess" role="status" aria-live="polite" hidden></p>
+            <p class="creator-auth-switch">Already have an account? <button type="button" id="showCreatorLogin">Login</button></p>
+        </form>
+    </div>
     <!-- Header Navigation -->
-    <header class="dashboard-header">
+    <header class="dashboard-header" style="display: none;">
         <div class="header-container">
             <a href="index.html" class="brand">
                 <div class="brand-icon">
@@ -31,11 +94,14 @@
                     Exam</a>
                 <a href="henry's-part/result.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Results</a>
             </nav>
+            <div class="creator-account-actions">
+                <button type="button" id="creatorLogout">Log out</button>
+            </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="dashboard-main">
+    <main class="dashboard-main" style="display: none;">
 
         <!-- Hero Section -->
         <section class="dashboard-hero">
@@ -206,9 +272,7 @@
   }
 ]'></textarea>
 
-            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
-                <button type="button" class="btn btn-outline"
-                    onclick="document.getElementById('bulkModal').style.display='none'">Cancel</button>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">                    onclick="document.getElementById('bulkModal').style.display='none'">Cancel</button>
                 <button type="button" class="btn btn-primary" id="btnApplyBulk">Import Questions</button>
             </div>
         </div>
@@ -220,6 +284,8 @@
         <span class="toast-text">Notification message</span>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script src="creator.js"></script>
 </body>
 
