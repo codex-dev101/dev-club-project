@@ -25,11 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const signInForm = document.getElementById("signInForm");
     const registerForm = document.getElementById("registerForm");
 
-    const loginEmail = document.getElementById("loginEmail");
+    const loginUsername = document.getElementById("loginUsername");
     const loginPassword = document.getElementById("loginPassword");
     const toggleLoginPassword = document.getElementById("toggleLoginPassword");
 
     const regFullName = document.getElementById("regFullName");
+    const regUsername = document.getElementById("regUsername");
     const regEmail = document.getElementById("regEmail");
     const regPassword = document.getElementById("regPassword");
     const regConfirmPassword = document.getElementById("regConfirmPassword");
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             clearAlert();
 
-            const email = loginEmail.value.trim();
+            const usernameOrEmail = loginUsername.value.trim();
             const password = loginPassword.value;
 
             const submitBtn = document.getElementById("btnSubmitSignIn");
@@ -98,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const res = await window.signInStudent({ email, password });
+                const res = await window.signInStudent({ usernameOrEmail, password });
                 if (res.success) {
                     showAlert(res.message || "Signed in successfully!", "success");
                     setTimeout(() => {
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             clearAlert();
 
             const fullName = regFullName.value.trim();
+            const username = regUsername.value.trim();
             const email = regEmail.value.trim();
             const password = regPassword.value;
             const confirmPassword = regConfirmPassword.value;
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const res = await window.registerStudent({ fullName, email, password, confirmPassword });
+                const res = await window.registerStudent({ fullName, username, email, password, confirmPassword });
                 if (res.success) {
                     showAlert(res.message || "Account created successfully!", "success");
                     setTimeout(() => {
