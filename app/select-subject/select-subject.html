@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1: Choose Subject - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="select-subject.css">
+    <link rel="icon" type="image/svg+xml" href="../image/favicon.svg">
+</head>
+
+<body>
+    <!-- Top Navigation Header -->
+    <header class="navbar">
+        <div class="header-content">
+            <div id="logo">
+                <div class="logo-image">
+                    <img src="../image/logo.png" alt="Smart CBT Logo">
+                </div>
+                <div id="logo-text">
+                    <h3 id="Scbt">Smart CBT</h3>
+                    <p id="esystem">Examination System</p>
+                </div>
+            </div>
+
+            <nav class="links">
+                <a href="../../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="select-subject.html" class="active"><i class="fa-solid fa-book-open"></i> Choose Subject</a>
+                <a href="../creator-dashboard/creator-dashboard.html"><i class="fa-solid fa-graduation-cap"></i> Creator Studio</a>
+                <a href="../result-details/result.html"><i class="fa-solid fa-chart-column"></i> My Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <!-- User status bar -->
+        <div class="user-meta-bar">
+            <div>
+                <span class="candidate-label">CANDIDATE</span>
+                <div class="candidate-info">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span id="userNameDisplay">Student</span>
+                    <span id="userMatricDisplay" class="candidate-matric">CBT/2026/0001</span>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="btnPageSignOut" class="btn-signout-page">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
+            </div>
+        </div>
+
+        <div class="instruction-card">
+            <!-- Workflow Steps -->
+            <div class="workflow-steps">
+                <div class="step-item active">
+                    <i class="fa-solid fa-1"></i> Choose Subject
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-2"></i> Customize
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-3"></i> Instructions
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-4"></i> Examination
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-5"></i> Results
+                </div>
+            </div>
+
+            <!-- Page Title -->
+            <div class="card-header">
+                <div class="icon-badge">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h2>Step 1: Choose Your Examination Subject</h2>
+            </div>
+            <p class="subtitle">
+                Select the subject you want to take. Subjects are loaded dynamically from our database with eligible question counts.
+            </p>
+
+            <!-- Dynamic Subject Selection Grid -->
+            <div class="subject-grid" id="subjectGrid">
+                <!-- Injected via JavaScript from questions-data.js -->
+                <div class="loading-subjects-box">
+                    <div class="loading-subjects-icon">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+                    <p>Loading available subjects from question database...</p>
+                </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="action-container">
+                <a href="../../index.html" class="btn-back-dashboard">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+
+                <button type="button" class="btn-continue" id="btnContinue" disabled>
+                    <span>Continue to Customize Exam</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="select-subject.js"></script>
+</body>
+
+</html>

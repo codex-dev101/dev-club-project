@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Creator Dashboard - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="creator.css">
+    <link rel="icon" type="image/svg+xml" href="../image/favicon.svg">
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header class="dashboard-header">
+        <div class="header-container">
+            <a href="../../index.html" class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Smart CBT</h1>
+                    <p>Creator & Question Studio</p>
+                </div>
+            </a>
+
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="../select-subject/select-subject.html" class="nav-link"><i class="fa-solid fa-pen-to-square"></i> Take Exam</a>
+                <a href="../result-details/result.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+
+        <!-- Hero Section -->
+        <section class="dashboard-hero">
+            <div class="hero-text">
+                <h2>Question Creator Studio 🎓</h2>
+                <p>Upload and manage your own custom exam questions. Questions are tagged to your profile so students can practice your custom tests!</p>
+            </div>
+
+            <!-- Creator Identity Badge -->
+            <div class="hero-creator-badge">
+                <label><i class="fa-solid fa-id-badge"></i> Your Creator Profile</label>
+                <div class="creator-inputs">
+                    <input type="text" id="creatorName" placeholder="Your Name (e.g. Prof. Johnson)">
+                    <input type="text" id="creatorTag" placeholder="Tag Handle (e.g. @johnson)">
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tab-container">
+            <button class="tab-btn active" id="tabStudioBtn">
+                <i class="fa-solid fa-plus-circle"></i> Create Question Pack
+            </button>
+            <button class="tab-btn" id="tabPacksBtn">
+                <i class="fa-solid fa-layer-group"></i> My Custom Packs
+            </button>
+        </div>
+
+        <!-- VIEW 1: CREATOR STUDIO -->
+        <div id="viewStudio">
+            <div class="creator-grid">
+
+                <!-- Left Column: Pack Meta & Question Form -->
+                <div>
+                    <!-- Step 1: Pack Settings -->
+                    <div class="card mb-gap">
+                        <h3 class="card-title"><i class="fa-solid fa-sliders"></i> 1. Exam Pack Details</h3>
+                        <div class="form-group">
+                            <label>Exam Pack Title *</label>
+                            <input type="text" id="packTitle" placeholder="e.g. WAEC Chemistry">
+                        </div>
+
+                        <div class="form-row-2col">
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" id="packCategory" placeholder="Enter Subject">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Duration (Minutes)</label>
+                                <input type="number" id="packDuration" value="60" min="5" max="180">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Question Builder Form -->
+                    <div class="card">
+                        <div class="card-title-row">
+                            <h3 class="card-title"><i class="fa-solid fa-circle-question"></i> 2. Add Questions</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Question Prompt *</label>
+                            <textarea id="qPrompt" rows="3" placeholder="Enter your question text here..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Options & Select Correct Answer (Click radio to mark correct answer) *</label>
+                            <div class="options-builder">
+                                <div class="option-input-row">
+                                    <input type="radio" name="correctOpt" value="0" id="optRadio0" checked title="Mark Option A as correct">
+                                    <span class="option-letter">A:</span>
+                                    <input type="text" id="qOptA" placeholder="Option A text">
+                                </div>
+                                <div class="option-input-row">
+                                    <input type="radio" name="correctOpt" value="1" id="optRadio1" title="Mark Option B as correct">
+                                    <span class="option-letter">B:</span>
+                                    <input type="text" id="qOptB" placeholder="Option B text">
+                                </div>
+                                <div class="option-input-row">
+                                    <input type="radio" name="correctOpt" value="2" id="optRadio2" title="Mark Option C as correct">
+                                    <span class="option-letter">C:</span>
+                                    <input type="text" id="qOptC" placeholder="Option C text">
+                                </div>
+                                <div class="option-input-row">
+                                    <input type="radio" name="correctOpt" value="3" id="optRadio3" title="Mark Option D as correct">
+                                    <span class="option-letter">D:</span>
+                                    <input type="text" id="qOptD" placeholder="Option D text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Explanation / Note (Optional - Shown on result review)</label>
+                            <input type="text" id="qExplanation" placeholder="Why is this option correct?">
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-full" id="btnAddQuestion">
+                            <i class="fa-solid fa-plus"></i> Add Question to Pack
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Staged Questions & Publish -->
+                <div class="card flex-col">
+                    <div class="card-title-row">
+                        <h3 class="card-title">
+                            <i class="fa-solid fa-list-check"></i> Pack Questions (<span id="stagedCount">0</span>)
+                        </h3>
+                    </div>
+
+                    <!-- Scrollable Staged List -->
+                    <div class="staged-list" id="stagedQuestionsList">
+                        <!-- Questions will be rendered here dynamically -->
+                    </div>
+
+                    <div class="btn-save-pack-wrap">
+                        <button type="button" class="btn btn-emerald btn-full" id="btnSavePack">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save & Publish Question Pack
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- VIEW 2: MY SAVED PACKS -->
+        <div id="viewPacks" class="hidden">
+            <div class="pack-cards-grid" id="packsCardsGrid">
+                <!-- Custom packs rendered here -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bulk JSON Modal -->
+    <div id="bulkModal" class="modal-backdrop-bulk">
+        <div class="bulk-modal-card">
+            <div class="bulk-modal-header">
+                <h3><i class="fa-solid fa-file-code"></i> Bulk Import Questions (JSON)</h3>
+                <button type="button" id="btnCloseBulk" class="btn-close-bulk">&times;</button>
+            </div>
+            <p>Paste an array of question objects formatted with <code>question</code>, <code>options</code> (array of 4 strings), and <code>answer</code> (index 0 to 3).</p>
+
+            <textarea id="bulkJsonInput" rows="10" class="bulk-textarea" placeholder='[
+  {
+    "question": "What is 2 + 2?",
+    "options": ["3", "4", "5", "6"],
+    "answer": 1,
+    "explanation": "2 + 2 equals 4"
+  }
+]'></textarea>
+
+            <div class="bulk-actions-footer">
+                <button type="button" class="btn btn-outline" id="btnCancelBulk">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnApplyBulk">Import Questions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-msg" id="toastMsg">
+        <i class="fa-solid fa-circle-check toast-icon"></i>
+        <span class="toast-text">Notification message</span>
+    </div>
+
+    <script type="module" src="creator.js"></script>
+</body>
+
+</html>

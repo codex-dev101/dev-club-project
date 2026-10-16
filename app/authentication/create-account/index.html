@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="icon" type="image/svg+xml" href="../../image/favicon.svg">
+</head>
+
+<body>
+    <main class="container">
+        <section class="left-side">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="../../image/logo.png" alt="Smart CBT logo">
+                </div>
+                <div>
+                    <h2>Smart CBT</h2>
+                    <p>Examination System</p>
+                </div>
+            </div>
+
+            <div class="intro">
+                <h1>SMART CBT</h1>
+                <h2>
+                    EXAMINATION &amp; RESULT<br>
+                    MANAGEMENT SYSTEM
+                </h2>
+                <div class="yellow-line"></div>
+                <p class="description">
+                    Create your account to access computer-based tests and manage your examination results.
+                </p>
+            </div>
+
+            <div class="illustration">
+                <img src="../../image/image.png" alt="Student using the Smart CBT examination system">
+            </div>
+        </section>
+
+        <section class="right-side">
+            <div class="login-card">
+                <div id="authAlert" class="auth-alert hidden"></div>
+
+                <div id="guestAuthView">
+                    <h1>Create Account <span>🎓</span></h1>
+                    <p class="subtitle">Enter your details to get started with Smart CBT.</p>
+
+                    <div class="auth-panel active" id="panelRegister">
+                        <form id="registerForm">
+                            <div class="input-box">
+                                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" id="regFullName" placeholder="Full Name" required autocomplete="name">
+                            </div>
+
+                            <div class="input-box">
+                                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" id="regUsername" placeholder="Username (e.g. alice123)" required autocomplete="username">
+                            </div>
+
+                            <div class="input-box">
+                                <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+                                <input type="email" id="regEmail" placeholder="Email address" required autocomplete="email">
+                            </div>
+
+                            <div class="input-box relative-box">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" id="regPassword" placeholder="Create Password" required autocomplete="new-password">
+                                <button type="button" class="password-toggle-btn" id="toggleRegPassword" title="Show/Hide Password" aria-label="Show or hide password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="pwd-hint">Minimum 6 characters with both letters and numbers.</div>
+
+                            <div class="input-box relative-box">
+                                <span class="input-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                                <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
+                                <button type="button" class="password-toggle-btn" id="toggleRegConfirmPassword" title="Show/Hide Password" aria-label="Show or hide password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+
+                            <button class="start-btn" type="submit" id="btnSubmitRegister">
+                                <span>Create Account</span>
+                                <i class="fa-solid fa-user-plus arrow"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <p class="recovery-back-link"><a class="auth-link" href="../../../index.html">Already have an account? Sign in</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="../../../script.js"></script>
+</body>
+
+</html>

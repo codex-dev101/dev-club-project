@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2: Customize Examination - Smart CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="customize-exam.css">
+    <link rel="icon" type="image/svg+xml" href="../image/favicon.svg">
+</head>
+
+<body>
+    <!-- Top Navigation Header -->
+    <header class="navbar">
+        <div class="header-content">
+            <div id="logo">
+                <div class="logo-image">
+                    <img src="../image/logo.png" alt="Smart CBT Logo">
+                </div>
+                <div id="logo-text">
+                    <h3 id="Scbt">Smart CBT</h3>
+                    <p id="esystem">Examination System</p>
+                </div>
+            </div>
+
+            <nav class="links">
+                <a href="../../index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="../select-subject/select-subject.html"><i class="fa-solid fa-book-open"></i> Choose Subject</a>
+                <a href="../creator-dashboard/creator-dashboard.html"><i class="fa-solid fa-graduation-cap"></i> Creator Studio</a>
+                <a href="../result-details/result.html"><i class="fa-solid fa-chart-column"></i> My Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <!-- User Status Bar -->
+        <div class="user-meta-bar">
+            <div>
+                <span class="candidate-label">CANDIDATE</span>
+                <div class="candidate-info">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span id="userNameDisplay">Student</span>
+                    <span id="userMatricDisplay" class="candidate-matric">CBT/2026/0001</span>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="btnPageSignOut" class="btn-signout-page">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
+            </div>
+        </div>
+
+        <div class="instruction-card">
+            <!-- Workflow Steps -->
+            <div class="workflow-steps">
+                <div class="step-item">
+                    <i class="fa-solid fa-check"></i> 1. Choose Subject
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item active">
+                    <i class="fa-solid fa-2"></i> 2. Customize
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-3"></i> 3. Instructions
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-4"></i> 4. Examination
+                </div>
+                <span class="step-divider"><i class="fa-solid fa-chevron-right"></i></span>
+                <div class="step-item">
+                    <i class="fa-solid fa-5"></i> 5. Results
+                </div>
+            </div>
+
+            <div class="card-header">
+                <div class="icon-badge">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h2>Step 2: Customize Examination</h2>
+            </div>
+            <p class="subtitle">
+                Configure your question count and exam time limit before proceeding to instructions.
+            </p>
+
+            <!-- Selected Subject Summary Banner -->
+            <div class="subject-summary-banner">
+                <div>
+                    <span class="candidate-label">SELECTED SUBJECT</span>
+                    <strong id="summarySubjectTitle" class="summary-subject-title">Mathematics</strong>
+                    <div id="summarySubjectCategory" class="summary-subject-category">Category: Sciences</div>
+                </div>
+                <div>
+                    <span class="candidate-label">ELIGIBLE QUESTIONS IN BANK</span>
+                    <span id="summaryAvailableCount" class="summary-available-badge">
+                        50 Available
+                    </span>
+                </div>
+            </div>
+
+            <!-- SECTION A: NUMBER OF QUESTIONS -->
+            <div class="custom-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-list-ol"></i>
+                    <h3>A. Number of Questions</h3>
+                </div>
+                <p class="section-desc" id="questionExplanationText">
+                    Select how many questions you want to answer. Maximum available for this subject: <strong>50 questions</strong>.
+                </p>
+
+                <div class="chip-grid" id="questionChips">
+                    <button type="button" class="option-chip" data-qcount="10">10 Questions</button>
+                    <button type="button" class="option-chip selected" data-qcount="20">20 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="30">30 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="40">40 Questions</button>
+                    <button type="button" class="option-chip" data-qcount="50" id="chip50">50 Questions</button>
+                </div>
+
+                <div class="custom-input-group">
+                    <span class="custom-input-label">Or enter custom question count:</span>
+                    <div class="custom-input-box">
+                        <input type="number" id="customQInput" min="1" max="50" value="20">
+                        <span class="custom-input-max" id="customMaxLabel">/ 50 max</span>
+                    </div>
+                </div>
+
+                <div class="validation-msg" id="qValidationMsg">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="qValidationText">Invalid question count.</span>
+                </div>
+            </div>
+
+            <!-- SECTION B: EXAMINATION DURATION -->
+            <div class="custom-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-clock"></i>
+                    <h3>B. Examination Duration</h3>
+                </div>
+                <p class="section-desc">
+                    Choose the duration for this test. The maximum allowed duration is strictly <strong>60 minutes</strong>.
+                </p>
+
+                <div class="chip-grid" id="durationChips">
+                    <button type="button" class="option-chip" data-duration="10">10 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="15">15 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="20">20 Minutes</button>
+                    <button type="button" class="option-chip selected" data-duration="30">30 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="45">45 Minutes</button>
+                    <button type="button" class="option-chip" data-duration="60">60 Minutes</button>
+                </div>
+
+                <div class="custom-input-group">
+                    <span class="custom-input-label">Or enter custom duration (minutes):</span>
+                    <div class="custom-input-box">
+                        <input type="number" id="customDurationInput" min="1" max="60" value="30">
+                        <span class="custom-input-max">/ 60 mins max</span>
+                    </div>
+                </div>
+
+                <div class="validation-msg" id="durationValidationMsg">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="durationValidationText">Invalid duration.</span>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-container">
+                <a href="../select-subject/select-subject.html" class="btn-change-subject">
+                    <i class="fa-solid fa-arrow-left"></i> Change Subject
+                </a>
+
+                <button type="button" class="btn-continue" id="btnProceedToInstruct">
+                    <span>Proceed to Exam Instructions</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="customize-exam.js"></script>
+</body>
+
+</html>
